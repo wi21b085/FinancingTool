@@ -30,9 +30,9 @@ public class HelloApplication extends Application {
         resultLabel = new Label("Aktueller Wert: ");
 
         // Erstellen Sie 10 Textfelder für die Benutzereingabe
-        TextField[] userInputFields = new TextField[10];
+        TextFieldWithValidation[] userInputFields = new TextFieldWithValidation[10];
         for (int i = 0; i < 10; i++) {
-            userInputFields[i] = new TextField();
+            userInputFields[i] = new TextFieldWithValidation();
             if (i < 3) {
                 userInputFields[i].setPromptText("KB0" + i + " netto eingeben");
             } else {
@@ -41,39 +41,96 @@ public class HelloApplication extends Application {
 
         }
         // Erstellen Sie Textfelder für die Benutzereingabe für Spalte D
-        TextField userInputFieldD2 = new TextField();
+        TextFieldWithValidation userInputFieldD2 = new TextFieldWithValidation();
         userInputFieldD2.setPromptText("UST Grund");
 
-        TextField userInputFieldD3to9 = new TextField();
+        TextFieldWithValidation userInputFieldD3to9 = new TextFieldWithValidation();
         userInputFieldD3to9.setPromptText("Genereller UST");
 
-        TextField userInputFieldD10 = new TextField();
+        TextFieldWithValidation userInputFieldD10 = new TextFieldWithValidation();
         userInputFieldD10.setPromptText("UST Finanzierung");
 
         // Button hinzufügen, um den Bereich von B3 bis B10 zu aktualisieren
         javafx.scene.control.Button updateRangeButton = new javafx.scene.control.Button("Bereich aktualisieren");
         updateRangeButton.setOnAction(e -> {
+
             String[] newValues = new String[10];
+            int countNonNumeric=0;
+            String nonNumericValue=new String();
             for (int i = 0; i < 9; i++) {
-                newValues[i] = userInputFields[i].getText();
+                if (userInputFields[i].isNumeric() || userInputFields[i].getText().trim().isEmpty()) {
+                    newValues[i] = userInputFields[i].getText();
+                    updateRangeOfCells(newValues);
+                }else{
+                    countNonNumeric++;
+                    nonNumericValue=userInputFields[i].getText();
+                    System.out.println(nonNumericValue);
+                }
+
             }
-            updateRangeOfCells(newValues);
+            if(countNonNumeric>0){
+                System.out.println("Achtung: Die Werte müssen numerisch sein. Fehler bei  "+ nonNumericValue);
+                resultLabel.setText("Achtung: Die Werte müssen numerisch sein. Fehler bei"+ nonNumericValue);
+            }
 
         });
         javafx.scene.control.Button updateButtonD = new javafx.scene.control.Button("UST aktualisieren");
         updateButtonD.setOnAction(e -> {
-            String newValueD2 = userInputFieldD2.getText();
-            String newValueD3to9 = userInputFieldD3to9.getText();
-            String newValueD10 = userInputFieldD10.getText();
 
-            updateCellD(20, 1, newValueD2);
-            updateCellD(1, 3, newValueD2);
-            updateCellD(19, 1, newValueD3to9);
-            for (int i = 2; i < 9; i++) {
-                updateCellD(i, 3, newValueD3to9);
+            String newValueD2 = parsePercentageValue(userInputFieldD2.getText());
+            System.out.println(newValueD2);
+            String newValueD3to9 = parsePercentageValue(userInputFieldD3to9.getText());
+            System.out.println(newValueD3to9);
+            String newValueD10 = parsePercentageValue(userInputFieldD10.getText());
+            System.out.println(newValueD10);
+
+            boolean checkstrNewValueD2=isNumericStr(newValueD2);
+            boolean checkstrNewValueD3to9=isNumericStr(newValueD3to9);
+            boolean checkstrNewValueD10=isNumericStr(newValueD10);
+
+
+            if(checkstrNewValueD2|| userInputFieldD2.getText().trim().isEmpty()) {
+                if(testPercentageRange(newValueD2)){
+                    updateCellD(20, 1, newValueD2);
+                    updateCellD(1, 3, newValueD2);
+                }else{
+                    System.out.println("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                    resultLabel.setText("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                }
+
+
+
+            }else{
+                System.out.println("Achtung die Werte müssen numerisch sein");
+                resultLabel.setText("Achtung die Werte müssen numerisch sein");
+
+            }if(checkstrNewValueD3to9|| userInputFieldD3to9.getText().trim().isEmpty()) {
+                if(testPercentageRange(newValueD3to9)) {
+                    updateCellD(19, 1, newValueD3to9);
+                    for (int i = 2; i < 9; i++) {
+                        updateCellD(i, 3, newValueD3to9);
+                    }
+                }else{
+                    System.out.println("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                    resultLabel.setText("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                }
+            }else{
+                    System.out.println("Achtung die Werte müssen numerisch sein");
+                    resultLabel.setText("Achtung die Werte müssen numerisch sein");
+
+                }
+
+            if(checkstrNewValueD10|| userInputFieldD10.getText().trim().isEmpty()) {
+                if(testPercentageRange(newValueD10)) {
+                    updateCellD(9,3, newValueD10);
+
+                }
+            }else{
+                System.out.println("Achtung die Werte müssen numerisch sein");
+                resultLabel.setText("Achtung die Werte müssen numerisch sein");
+
             }
 
-            updateCellD(9, 3, newValueD10);
 
 
         });
@@ -92,6 +149,18 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    public static boolean isNumericStr(String str) {
+        try {
+            double numericValue = Double.parseDouble(str);
+            // Wenn die Konvertierung erfolgreich ist, ist der String numerisch
+            return true;
+        } catch (NumberFormatException e) {
+            // Wenn eine NumberFormatException auftritt, ist der String nicht numerisch
+            return false;
+        }
+    }
+
 
 
     private void updateRangeOfCells(String[] newValues) {
@@ -182,4 +251,48 @@ public class HelloApplication extends Application {
         Cell cell = row.getCell(colIdx);
         cell.setCellValue(newValue);
     }
+
+    private class TextFieldWithValidation extends TextField {
+        public boolean isNumeric() {
+            try {
+                Double.parseDouble(getText());
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+    }
+    private String parsePercentageValue(String value) {
+        value = value.trim(); // Entferne führende und abschließende Leerzeichen
+
+        if (value.endsWith("%")) {
+            try {
+                // Extrahiere den Prozentanteil und konvertiere ihn in einen Dezimalwert
+                double percentage = Double.parseDouble(value.substring(0, value.length() - 1));
+                // Teile durch 100, um den Wert in das Dezimalformat zu konvertieren
+                return String.valueOf(percentage / 100.0);
+            } catch (NumberFormatException e) {
+                // Fehler beim Parsen der Zahl
+                e.printStackTrace();
+                return "0.0"; // Standardwert oder Fehlerbehandlung nach Bedarf
+            }
+        }
+        return value;
+    }
+
+
+    private boolean testPercentageRange(String value){
+        if (!value.isEmpty()) {
+        if(Double.parseDouble(value)<=1&&Double.parseDouble(value)>=0) {
+            return true;
+        }else{
+            return false;
+        }
+        }
+            return true
+                    ;
+
+    }
+
+
 }
