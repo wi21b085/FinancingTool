@@ -2,6 +2,7 @@ package com.example.financingtool;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -11,6 +12,7 @@ import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.*;
 
@@ -74,6 +76,7 @@ public class HelloApplication extends Application {
             }
 
         });
+
         javafx.scene.control.Button updateButtonD = new javafx.scene.control.Button("UST aktualisieren");
         updateButtonD.setOnAction(e -> {
 
@@ -139,7 +142,10 @@ public class HelloApplication extends Application {
         for (int i = 0; i < 10; i++) {
             root.getChildren().add(userInputFields[i]);
         }
-        root.getChildren().addAll(resultLabel, updateRangeButton, userInputFieldD2, userInputFieldD3to9, userInputFieldD10, updateButtonD);
+        javafx.scene.control.Button weiterButton = new javafx.scene.control.Button("Weiter");
+        weiterButton.setOnAction(e -> openNewJavaFXWindow());
+        root.getChildren().addAll(resultLabel, updateRangeButton, userInputFieldD2, userInputFieldD3to9, userInputFieldD10, updateButtonD, weiterButton);
+
 
         // Setze die Szene und zeige die Bühne
         stage.setScene(scene);
@@ -201,6 +207,7 @@ public class HelloApplication extends Application {
 
             resultLabel.setText("Bereich von B2 bis B10 erfolgreich aktualisiert.");
             System.out.println("Zellen erfolgreich aktualisiert.");
+           // exportExcelToWord();
 
         } catch (NumberFormatException | IOException e) {
             e.printStackTrace();
@@ -293,6 +300,87 @@ public class HelloApplication extends Application {
                     ;
 
     }
+
+    private void openNewJavaFXWindow() {
+        Stage newStage = new Stage();
+
+        // Button für die Konvertierung in Word im neuen Fenster
+        javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in Word");
+        convertToWordButton.setOnAction(e -> ExcelToWordConverter.exportExcelToWord());
+
+        // Layout für das neue Fenster
+        VBox newRoot = new VBox(10);
+        newRoot.setAlignment(Pos.CENTER);
+        newRoot.getChildren().add(convertToWordButton);
+
+        Scene newScene = new Scene(newRoot, 300, 200);
+        newStage.setTitle("Word Konvertierung");
+        newStage.setScene(newScene);
+        newStage.show();
+    }
+   /* private void exportExcelToWord() {
+        String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+        String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.docx"; // Ändern Sie den Pfad entsprechend
+
+        try {
+            FileInputStream excelFile = new FileInputStream(new File(excelFilePath));
+            Workbook workbook = new XSSFWorkbook(excelFile);
+            Sheet sheet = workbook.getSheet("Gesamtinvestitionskosten");
+
+            XWPFDocument document = new XWPFDocument();
+            FileOutputStream out = new FileOutputStream(wordFilePath);
+
+            // Erstelle eine Tabelle im Word-Dokument
+            XWPFTable table = document.createTable();
+
+            // Füge Kopfzeile zur Tabelle hinzu
+            String[] headers = {"Name", "Netto", "Ust", "% der Ust", "Brutto", "in %"};
+            XWPFTableRow headerRow = table.getRow(0);
+            for (int i = 0; i < headers.length; i++) {
+                XWPFTableCell cell = headerRow.getCell(i);
+                if (cell == null) {
+                    cell = headerRow.createCell();
+                }
+                cell.setText(headers[i]);
+            }
+
+            // Füge Datenzeilen zur Tabelle hinzu
+            for (int rowIdx = 1; rowIdx <= 9; rowIdx++) {
+                Row row = sheet.getRow(rowIdx);
+                XWPFTableRow dataRow = table.createRow();
+
+                for (int colIdx = 0; colIdx < headers.length; colIdx++) {
+                    XWPFTableCell cell = dataRow.getCell(colIdx);
+                    if (cell == null) {
+                        cell = dataRow.createCell();
+                    }
+
+                    if (row.getCell(colIdx) != null) {
+                        if (row.getCell(colIdx).getCellType() == CellType.FORMULA) {
+                            // Wenn es sich um eine Formel handelt, setze den numerischen Wert der Zelle
+                            cell.setText(String.valueOf(row.getCell(colIdx).getNumericCellValue()));
+                        } else {
+                            // Wenn es sich nicht um eine Formel handelt, setze einfach den Zellenwert
+                            cell.setText(row.getCell(colIdx).toString());
+                        }
+                    }
+                }
+            }
+
+            document.write(out);
+            out.close();
+            workbook.close();
+
+            System.out.println("Daten erfolgreich von Excel nach Word exportiert.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+
+
+
 
 
 }
