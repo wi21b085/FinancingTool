@@ -5,12 +5,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-
+import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageSz;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STPageOrientation;
 import java.io.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDocument1;
+
 
 public class ExcelToWordConverter {
 
@@ -22,8 +23,20 @@ public class ExcelToWordConverter {
             FileInputStream excelFile = new FileInputStream(new File(excelFilePath));
             Workbook workbook = new XSSFWorkbook(excelFile);
             Sheet sheet = workbook.getSheet("Gesamtinvestitionskosten");
-
             XWPFDocument document = new XWPFDocument();
+
+            // Create a paragraph and run to add content
+            XWPFParagraph paragraph = document.createParagraph();
+            XWPFRun run = paragraph.createRun();
+            run.setText("This is a sample document content.");
+            System.out.println(15840/2);
+            double x=15840/27.94;
+            System.out.println("x= "+x);
+            System.out.println(x*29.7);
+            // Set Word document in landscape orientation
+            document.getDocument().getBody().addNewSectPr().addNewPgSz().setW(x*29.7);
+            document.getDocument().getBody().addNewSectPr().addNewPgSz().setH(x*21);
+
             FileOutputStream out = new FileOutputStream(wordFilePath);
 
             XWPFTable table = document.createTable();
@@ -50,7 +63,9 @@ public class ExcelToWordConverter {
 
                     if (row.getCell(colIdx) != null) {
                         if (row.getCell(colIdx).getCellType() == CellType.FORMULA) {
-                            cell.setText(String.valueOf(row.getCell(colIdx).getNumericCellValue()));
+                            // Round the numerical value to two decimal places
+                            double roundedValue = Math.round(row.getCell(colIdx).getNumericCellValue() * 100.0) / 100.0;
+                            cell.setText(String.format("%.2f", roundedValue));
                         } else {
                             cell.setText(row.getCell(colIdx).toString());
                         }
@@ -62,11 +77,10 @@ public class ExcelToWordConverter {
             out.close();
             workbook.close();
 
-            System.out.println("Daten erfolgreich von Excel nach Word exportiert.");
+            System.out.println("Data successfully exported from Excel to Word.");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
-
