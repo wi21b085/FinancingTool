@@ -158,11 +158,26 @@ public class ExcelToWordConverter {
                 float height = calculateCellHeight(wordCell, fontSize);
                 String text = wordCell.getText();
 
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
-                contentStream.newLineAtOffset(margin + colIdx * width + cellMargin, yPositionNew - height);
-                contentStream.showText(text);
-                contentStream.endText();
+                // Manuelle Aufteilung von langen Wörtern bei Überlappung
+                String[] words = text.split("\\s+");
+                float currentWidth = 0;
+
+                for (String word : words) {
+                    float wordWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(word) / 1000 * fontSize;
+
+                    if (currentWidth + wordWidth > width && currentWidth > 0) {
+                        yPositionNew -= fontSize; // Neue Zeile
+                        currentWidth = 0;
+                    }
+
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+                    contentStream.newLineAtOffset(margin + colIdx * width + cellMargin + currentWidth, yPositionNew - height);
+                    contentStream.showText(word);
+                    contentStream.endText();
+
+                    currentWidth += wordWidth;
+                }
 
                 maxHeight = Math.max(maxHeight, height);
             }
@@ -170,6 +185,9 @@ public class ExcelToWordConverter {
             yPositionNew -= maxHeight;
         }
     }
+
+
+
 
     private static float calculateCellHeight(XWPFTableCell cell, float fontSize) {
         // You may need to adjust this calculation based on your specific requirements
