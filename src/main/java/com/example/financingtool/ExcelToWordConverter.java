@@ -1,23 +1,27 @@
 package com.example.financingtool;
 
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageSz;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STPageOrientation;
+
 import java.io.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDocument1;
+import java.util.List;
 
 
 public class ExcelToWordConverter {
+    static String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+    static String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.docx";
+    static  String pdfFilePath= "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
 
     public static void exportExcelToWord() {
-        String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
-        String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.docx";
+
 
         try {
             FileInputStream excelFile = new FileInputStream(new File(excelFilePath));
@@ -28,7 +32,6 @@ public class ExcelToWordConverter {
             // Create a paragraph and run to add content
             XWPFParagraph paragraph = document.createParagraph();
             XWPFRun run = paragraph.createRun();
-            run.setText("This is a sample document content.");
             System.out.println(15840/2);
             double x=15840/27.94;
             System.out.println("x= "+x);
@@ -83,4 +86,104 @@ public class ExcelToWordConverter {
             e.printStackTrace();
         }
     }
+
+
+    public static void convertWordToPDF() {
+        try {
+            FileInputStream in = new FileInputStream(wordFilePath);
+            XWPFDocument document = new XWPFDocument(in);
+
+            PDDocument pdfDocument = new PDDocument();
+
+            // Erstellen Sie die PDF-Seite im Querformat
+            PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+            pdfDocument.addPage(pdfPage);
+
+            PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
+
+            try {
+                List<XWPFParagraph> paragraphs = document.getParagraphs();
+                for (XWPFParagraph paragraph : paragraphs) {
+                    String text = paragraph.getText();
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(20, pdfPage.getMediaBox().getHeight() - 20);
+                    contentStream.showText(text);
+                    contentStream.newLine();
+                    contentStream.endText();
+                }
+
+                List<XWPFTable> tables = document.getTables();
+                for (XWPFTable table : tables) {
+                    float margin = 20;
+                    float yStart = pdfPage.getMediaBox().getHeight() - margin;
+                    float tableWidth = pdfPage.getMediaBox().getWidth() - 2 * margin;
+                    float yPosition = yStart;
+                    float yBottom = margin;
+
+                    // Draw table on the PDF page
+                    drawPdfTable(contentStream, yPosition, tableWidth, yStart, yBottom, table);
+                }
+
+            } finally {
+                contentStream.close();
+
+                // Verwenden Sie die gleiche Dateipfadvariable wie für das Word-Dokument
+                pdfDocument.save(pdfFilePath);
+                pdfDocument.close();
+                in.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void drawPdfTable(PDPageContentStream contentStream, float yPosition, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
+        float margin = 20;
+        float fontSize = 12;
+        float cellMargin = 5f;
+        float yPositionNew = yPosition;
+
+        for (int rowIdx = 0; rowIdx < table.getRows().size(); rowIdx++) {
+            XWPFTableRow wordRow = table.getRow(rowIdx);
+            List<XWPFTableCell> wordCells = wordRow.getTableCells();
+
+            float maxHeight = 0;
+
+            for (int colIdx = 0; colIdx < wordCells.size(); colIdx++) {
+                XWPFTableCell wordCell = wordCells.get(colIdx);
+
+                float width = tableWidth / (float) wordCells.size();
+                float height = calculateCellHeight(wordCell, fontSize);
+                String text = wordCell.getText();
+
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+                contentStream.newLineAtOffset(margin + colIdx * width + cellMargin, yPositionNew - height);
+                contentStream.showText(text);
+                contentStream.endText();
+
+                maxHeight = Math.max(maxHeight, height);
+            }
+
+            yPositionNew -= maxHeight;
+        }
+    }
+
+    private static float calculateCellHeight(XWPFTableCell cell, float fontSize) {
+        // You may need to adjust this calculation based on your specific requirements
+        // This is a simple estimation, and the actual cell height may depend on various factors.
+        float lineSpacing = 1.5f; // Adjust as needed
+        int numberOfLines = cell.getText().split("\\r?\\n").length;
+        return numberOfLines * fontSize * lineSpacing;
+    }
+
+
+
+
+
+
+
+
 }

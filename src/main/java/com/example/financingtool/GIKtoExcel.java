@@ -119,7 +119,10 @@ public class GIKtoExcel extends Application  implements IAllExcelRegisterCards{
         javafx.scene.control.Button weiterButton = new javafx.scene.control.Button("Weiter");
         System.out.println(updateD2+" "+updateD10+" "+updateD3to9+" "+valid);
         if (updateD2 && updateD3to9 && updateD10 && valid) {
-            weiterButton.setOnAction(e -> IAllExcelRegisterCards.openNewJavaFXWindow());
+            weiterButton.setOnAction(e ->
+            {ExcelToWordConverter.exportExcelToWord();
+                IAllExcelRegisterCards.openNewJavaFXWindow();
+            });
 
 
         }else {
