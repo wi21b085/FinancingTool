@@ -38,7 +38,7 @@ public class GIKtoExcel extends Application  implements IAllExcelRegisterCards{
     private boolean updateD3to9=true;
     private boolean updateD10=true;
     private boolean valid=true;
-    private Cell [] cell;
+
 
     private String sheetName = "Gesamtinvestitionskosten";
     @Override
@@ -125,7 +125,30 @@ public class GIKtoExcel extends Application  implements IAllExcelRegisterCards{
             });
 
 
+
         }else {
+            System.out.println("Test");
+            FileInputStream fileInputStream = new FileInputStream(new File("src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx"));
+            Workbook workbook = new XSSFWorkbook(fileInputStream);
+            Sheet sheet = workbook.getSheet(sheetName);
+            Cell [] cells=new Cell[9];
+            for(int i=0;i<cells.length;i++) {
+              cells[i]=sheet.getRow(i+1).getCell(1);
+
+                if (IAllExcelRegisterCards.emptyCell(cells[i])) {
+
+
+                    System.out.println("Achtung, Sie haben nichts eingegeben und es ist kein Wert vorhanden.");
+                }
+            }
+            Cell[] cellsforUst= new Cell[3];
+            cellsforUst[0]=sheet.getRow(19).getCell(1);
+            cellsforUst[1]=sheet.getRow(20).getCell(1);
+            cellsforUst[2]=sheet.getRow(9).getCell(3);
+            for(int i=0;i<cellsforUst.length;i++){
+                System.out.println("Achtung, Sie haben nichts eingegeben und es ist kein Wert vorhanden.");
+            }
+
             weiterButton.setOnAction(e ->resultLabel.setText("Achtung, es kann keine Konvertieurng ausgeführt werden, solange die Daten nicht valide sind."));
         }
         root.getChildren().addAll(resultLabel, updateRangeButton, userInputFieldD2, userInputFieldD3to9, userInputFieldD10, updateButtonD, weiterButton);
