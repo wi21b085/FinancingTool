@@ -2,6 +2,7 @@ package com.example.financingtool;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -11,6 +12,7 @@ import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.*;
 
@@ -29,6 +31,122 @@ public class HelloApplication extends Application {
 
         resultLabel = new Label("Aktueller Wert: ");
 
+        // Erstellen Sie 10 Textfelder für die Benutzereingabe
+        TextFieldWithValidation[] userInputFields = new TextFieldWithValidation[10];
+        for (int i = 0; i < 10; i++) {
+            userInputFields[i] = new TextFieldWithValidation();
+            if (i < 3) {
+                userInputFields[i].setPromptText("KB0" + i + " netto eingeben");
+            } else {
+                userInputFields[i].setPromptText("KB0" + (i + 3) + " netto eingeben");
+            }
+
+        }
+        // Erstellen Sie Textfelder für die Benutzereingabe für Spalte D
+        TextFieldWithValidation userInputFieldD2 = new TextFieldWithValidation();
+        userInputFieldD2.setPromptText("UST Grund");
+
+        TextFieldWithValidation userInputFieldD3to9 = new TextFieldWithValidation();
+        userInputFieldD3to9.setPromptText("Genereller UST");
+
+        TextFieldWithValidation userInputFieldD10 = new TextFieldWithValidation();
+        userInputFieldD10.setPromptText("UST Finanzierung");
+
+        // Button hinzufügen, um den Bereich von B3 bis B10 zu aktualisieren
+        javafx.scene.control.Button updateRangeButton = new javafx.scene.control.Button("Bereich aktualisieren");
+        updateRangeButton.setOnAction(e -> {
+
+            String[] newValues = new String[10];
+            int countNonNumeric=0;
+            String nonNumericValue=new String();
+            for (int i = 0; i < 9; i++) {
+                if (userInputFields[i].isNumeric() || userInputFields[i].getText().trim().isEmpty()) {
+                    newValues[i] = userInputFields[i].getText();
+                    updateRangeOfCells(newValues);
+                }else{
+                    countNonNumeric++;
+                    nonNumericValue=userInputFields[i].getText();
+                    System.out.println(nonNumericValue);
+                }
+
+            }
+            if(countNonNumeric>0){
+                System.out.println("Achtung: Die Werte müssen numerisch sein. Fehler bei  "+ nonNumericValue);
+                resultLabel.setText("Achtung: Die Werte müssen numerisch sein. Fehler bei"+ nonNumericValue);
+            }
+
+        });
+
+        javafx.scene.control.Button updateButtonD = new javafx.scene.control.Button("UST aktualisieren");
+        updateButtonD.setOnAction(e -> {
+
+            String newValueD2 = parsePercentageValue(userInputFieldD2.getText());
+            System.out.println(newValueD2);
+            String newValueD3to9 = parsePercentageValue(userInputFieldD3to9.getText());
+            System.out.println(newValueD3to9);
+            String newValueD10 = parsePercentageValue(userInputFieldD10.getText());
+            System.out.println(newValueD10);
+
+            boolean checkstrNewValueD2=isNumericStr(newValueD2);
+            boolean checkstrNewValueD3to9=isNumericStr(newValueD3to9);
+            boolean checkstrNewValueD10=isNumericStr(newValueD10);
+
+
+            if(checkstrNewValueD2|| userInputFieldD2.getText().trim().isEmpty()) {
+                if(testPercentageRange(newValueD2)){
+                    updateCellD(20, 1, newValueD2);
+                    updateCellD(1, 3, newValueD2);
+                }else{
+                    System.out.println("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                    resultLabel.setText("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                }
+
+
+
+            }else{
+                System.out.println("Achtung die Werte müssen numerisch sein");
+                resultLabel.setText("Achtung die Werte müssen numerisch sein");
+
+            }if(checkstrNewValueD3to9|| userInputFieldD3to9.getText().trim().isEmpty()) {
+                if(testPercentageRange(newValueD3to9)) {
+                    updateCellD(19, 1, newValueD3to9);
+                    for (int i = 2; i < 9; i++) {
+                        updateCellD(i, 3, newValueD3to9);
+                    }
+                }else{
+                    System.out.println("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                    resultLabel.setText("Achtung die Werte müssen zwischen 0%-100% bzw zwischen 0.0-1.0 betragen.");
+                }
+            }else{
+                    System.out.println("Achtung die Werte müssen numerisch sein");
+                    resultLabel.setText("Achtung die Werte müssen numerisch sein");
+
+                }
+
+            if(checkstrNewValueD10|| userInputFieldD10.getText().trim().isEmpty()) {
+                if(testPercentageRange(newValueD10)) {
+                    updateCellD(9,3, newValueD10);
+
+                }
+            }else{
+                System.out.println("Achtung die Werte müssen numerisch sein");
+                resultLabel.setText("Achtung die Werte müssen numerisch sein");
+
+            }
+
+
+
+        });
+
+        // Füge alle UI-Elemente zum Root-VBox hinzu
+        for (int i = 0; i < 10; i++) {
+            root.getChildren().add(userInputFields[i]);
+        }
+        javafx.scene.control.Button weiterButton = new javafx.scene.control.Button("Weiter");
+        weiterButton.setOnAction(e -> openNewJavaFXWindow());
+        root.getChildren().addAll(resultLabel, updateRangeButton, userInputFieldD2, userInputFieldD3to9, userInputFieldD10, updateButtonD, weiterButton);
+
+
         // Setze die Szene und zeige die Bühne
         stage.setScene(scene);
         stage.show();
@@ -37,6 +155,18 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    public static boolean isNumericStr(String str) {
+        try {
+            double numericValue = Double.parseDouble(str);
+            // Wenn die Konvertierung erfolgreich ist, ist der String numerisch
+            return true;
+        } catch (NumberFormatException e) {
+            // Wenn eine NumberFormatException auftritt, ist der String nicht numerisch
+            return false;
+        }
+    }
+
 
 
     private void updateRangeOfCells(String[] newValues) {
@@ -77,6 +207,7 @@ public class HelloApplication extends Application {
 
             resultLabel.setText("Bereich von B2 bis B10 erfolgreich aktualisiert.");
             System.out.println("Zellen erfolgreich aktualisiert.");
+           // exportExcelToWord();
 
         } catch (NumberFormatException | IOException e) {
             e.printStackTrace();
@@ -127,4 +258,129 @@ public class HelloApplication extends Application {
         Cell cell = row.getCell(colIdx);
         cell.setCellValue(newValue);
     }
+
+    private class TextFieldWithValidation extends TextField {
+        public boolean isNumeric() {
+            try {
+                Double.parseDouble(getText());
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+    }
+    private String parsePercentageValue(String value) {
+        value = value.trim(); // Entferne führende und abschließende Leerzeichen
+
+        if (value.endsWith("%")) {
+            try {
+                // Extrahiere den Prozentanteil und konvertiere ihn in einen Dezimalwert
+                double percentage = Double.parseDouble(value.substring(0, value.length() - 1));
+                // Teile durch 100, um den Wert in das Dezimalformat zu konvertieren
+                return String.valueOf(percentage / 100.0);
+            } catch (NumberFormatException e) {
+                // Fehler beim Parsen der Zahl
+                e.printStackTrace();
+                return "0.0"; // Standardwert oder Fehlerbehandlung nach Bedarf
+            }
+        }
+        return value;
+    }
+
+
+    private boolean testPercentageRange(String value){
+        if (!value.isEmpty()) {
+        if(Double.parseDouble(value)<=1&&Double.parseDouble(value)>=0) {
+            return true;
+        }else{
+            return false;
+        }
+        }
+            return true
+                    ;
+
+    }
+
+    private void openNewJavaFXWindow() {
+        Stage newStage = new Stage();
+
+        // Button für die Konvertierung in Word im neuen Fenster
+        javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in Word");
+        convertToWordButton.setOnAction(e -> ExcelToWordConverter.exportExcelToWord());
+
+        // Layout für das neue Fenster
+        VBox newRoot = new VBox(10);
+        newRoot.setAlignment(Pos.CENTER);
+        newRoot.getChildren().add(convertToWordButton);
+
+        Scene newScene = new Scene(newRoot, 300, 200);
+        newStage.setTitle("Word Konvertierung");
+        newStage.setScene(newScene);
+        newStage.show();
+    }
+   /* private void exportExcelToWord() {
+        String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+        String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.docx"; // Ändern Sie den Pfad entsprechend
+
+        try {
+            FileInputStream excelFile = new FileInputStream(new File(excelFilePath));
+            Workbook workbook = new XSSFWorkbook(excelFile);
+            Sheet sheet = workbook.getSheet("Gesamtinvestitionskosten");
+
+            XWPFDocument document = new XWPFDocument();
+            FileOutputStream out = new FileOutputStream(wordFilePath);
+
+            // Erstelle eine Tabelle im Word-Dokument
+            XWPFTable table = document.createTable();
+
+            // Füge Kopfzeile zur Tabelle hinzu
+            String[] headers = {"Name", "Netto", "Ust", "% der Ust", "Brutto", "in %"};
+            XWPFTableRow headerRow = table.getRow(0);
+            for (int i = 0; i < headers.length; i++) {
+                XWPFTableCell cell = headerRow.getCell(i);
+                if (cell == null) {
+                    cell = headerRow.createCell();
+                }
+                cell.setText(headers[i]);
+            }
+
+            // Füge Datenzeilen zur Tabelle hinzu
+            for (int rowIdx = 1; rowIdx <= 9; rowIdx++) {
+                Row row = sheet.getRow(rowIdx);
+                XWPFTableRow dataRow = table.createRow();
+
+                for (int colIdx = 0; colIdx < headers.length; colIdx++) {
+                    XWPFTableCell cell = dataRow.getCell(colIdx);
+                    if (cell == null) {
+                        cell = dataRow.createCell();
+                    }
+
+                    if (row.getCell(colIdx) != null) {
+                        if (row.getCell(colIdx).getCellType() == CellType.FORMULA) {
+                            // Wenn es sich um eine Formel handelt, setze den numerischen Wert der Zelle
+                            cell.setText(String.valueOf(row.getCell(colIdx).getNumericCellValue()));
+                        } else {
+                            // Wenn es sich nicht um eine Formel handelt, setze einfach den Zellenwert
+                            cell.setText(row.getCell(colIdx).toString());
+                        }
+                    }
+                }
+            }
+
+            document.write(out);
+            out.close();
+            workbook.close();
+
+            System.out.println("Daten erfolgreich von Excel nach Word exportiert.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+
+
+
+
+
 }
