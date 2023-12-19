@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.financingtool.BasisinformationController" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+    <VBox alignment="CENTER" spacing="20.0" minHeight="1000" minWidth="600">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        </padding>
+
+
+        <Label fx:id="welcomeText" text="Basisinformationen" />
+        <!--- <Button onAction="#onHelloButtonClick" text="Bild wählen!" /> -->
+
+        <Label fx:id="output1" text="Kaufpreis" />
+        <TextField fx:id="kaufpreis" prefHeight="26.0" prefWidth="50.0" />
+
+        <Label fx:id="output2" text="Grundstücksgröße in m²" />
+        <TextField fx:id="groesse" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output3" text="Wohnnutzfläche in m²" />
+        <TextField fx:id="nutzflaeche" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output4" text="Wohneinheiten" />
+        <TextField fx:id="wohneinheiten" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output5" text="Garagenstellplätze" />
+        <TextField fx:id="garage" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output7" text="GIK" />
+        <TextField fx:id="gik" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output8" text="Prognostizierter Verkaufserlös" />
+        <TextField fx:id="verkaufserloes" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output6" text="Gewinn" />
+        <TextField fx:id="gewinn" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output9" text="Ziel-Baubeginn" />
+        <TextField fx:id="beginn" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output10" text="Ziel-Fertigstellung" />
+        <TextField fx:id="ende" prefHeight="26.0" prefWidth="100.0" />
+
+        <Label fx:id="output11" text="ROI" />
+        <TextField fx:id="roi" prefHeight="26.0" prefWidth="100.0" />
+        <Label fx:id="resultLabel"/>
+        <Button mnemonicParsing="false" onAction="#submit" text="Senden" />
+        <Button mnemonicParsing="false" onAction="#update" text="Aktualisieren" />
+        <Button mnemonicParsing="false" onAction="#update" text="Aktualisieren" />
+
+
+
+    </VBox>
+</ScrollPane>
+
