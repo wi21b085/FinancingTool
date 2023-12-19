@@ -4,12 +4,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Cell;
 
 public interface IAllExcelRegisterCards {
 
     // Maria P, Maria M
 
-    static public boolean testPercentageRange(String value){
+    static public boolean testPercentageRange(String value) {
         if (value.isEmpty()) {
             return true;
         }
@@ -44,7 +45,7 @@ public interface IAllExcelRegisterCards {
         return value;
     }
 
-// Maria M, Maria P, Hadi
+    // Maria M, Maria P, Hadi
     static boolean isNumericStr(String str) {
         try {
             double numericValue = Double.parseDouble(str);
@@ -76,10 +77,13 @@ public interface IAllExcelRegisterCards {
         newStage.show();
     }
 
+    static public boolean emptyCell(Cell cell) {
+        if (cell == null) {
+            return true;
+        } else {
+            return false;
+        }
 
 
-
-
-
-
+    }
 }
