@@ -4,12 +4,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Cell;
 
 public interface IAllExcelRegisterCards {
 
     // Maria P, Maria M
 
-    static public boolean testPercentageRange(String value){
+    static public boolean testPercentageRange(String value) {
         if (value.isEmpty()) {
             return true;
         }
@@ -44,7 +45,7 @@ public interface IAllExcelRegisterCards {
         return value;
     }
 
-// Maria M, Maria P, Hadi
+    // Maria M, Maria P, Hadi
     static boolean isNumericStr(String str) {
         try {
             double numericValue = Double.parseDouble(str);
@@ -62,8 +63,8 @@ public interface IAllExcelRegisterCards {
         Stage newStage = new Stage();
 
         // Button für die Konvertierung in Word im neuen Fenster
-        javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in Word");
-        convertToWordButton.setOnAction(e -> ExcelToWordConverter.exportExcelToWord());
+        javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in eine PDF");
+        convertToWordButton.setOnAction(e -> ExcelToWordConverter.convertWordToPDF());
 
         // Layout für das neue Fenster
         VBox newRoot = new VBox(10);
@@ -71,15 +72,18 @@ public interface IAllExcelRegisterCards {
         newRoot.getChildren().add(convertToWordButton);
 
         Scene newScene = new Scene(newRoot, 300, 200);
-        newStage.setTitle("Word Konvertierung");
+        newStage.setTitle("PDF Konvertierung");
         newStage.setScene(newScene);
         newStage.show();
     }
 
+    static public boolean emptyCell(Cell cell) {
+        if (cell == null) {
+            return true;
+        } else {
+            return false;
+        }
 
 
-
-
-
-
+    }
 }
