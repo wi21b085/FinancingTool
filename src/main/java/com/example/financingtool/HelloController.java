@@ -22,7 +22,7 @@ public class HelloController {
     @FXML
     protected void onHelloButtonClick() {
         //welcomeText.setText("Welcome to JavaFX Application!");
-
+        // https://www.youtube.com/watch?v=Af-hwO19AMY
         FileChooser.ExtensionFilter ex1 = new FileChooser.ExtensionFilter("Grafikdateien", "*.png", "*.jpg", "*.jpeg");
         FileChooser.ExtensionFilter ex2 = new FileChooser.ExtensionFilter("Alle Dateien", "*.*");
 
