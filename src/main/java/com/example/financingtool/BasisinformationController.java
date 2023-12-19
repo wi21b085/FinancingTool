@@ -2,6 +2,7 @@ package com.example.financingtool;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -47,6 +48,10 @@ public class BasisinformationController {
     @FXML
     private TextField roi;
 
+    //Maria M
+    @FXML
+    private Button weiterButton;
+
     private static final String FILE_NAME = "SEPJ-Rechnungen.xlsx";
     private static final String SHEET_NAME = "Basisinformationen";
 
@@ -66,13 +71,7 @@ public class BasisinformationController {
             resultLabel.setText("Daten unvollständig");
             // System.out.println("Daten unvollständig");
         }
-        else if (kaufpreis.getText() instanceof String || groesse.getText() instanceof String || nutzflaeche.getText() instanceof String
-                || wohneinheiten.getText() instanceof String || garage.getText() instanceof String || gik.getText() instanceof String
-                || verkaufserloes.getText() instanceof String || gewinn.getText() instanceof String
-                 || roi.getText() instanceof String){
-            resultLabel.setText("Ein/Mehrere Werte sind ungültig. Bitte versuchen Sie es erneut.");
 
-        }
         else {
 
             String[] newValue = new String[11];
@@ -228,6 +227,7 @@ public class BasisinformationController {
     }
 
 
-
-
+    public void weiter(ActionEvent actionEvent) {
+        Weiter.weiter(weiterButton, GIKtoExcel.class);
+    }
 }

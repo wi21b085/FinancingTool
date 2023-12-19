@@ -1,6 +1,8 @@
 package com.example.financingtool;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -19,6 +21,9 @@ public class HelloController {
 
     @FXML
     private Label output;
+
+    @FXML
+    private Button weiterButton;
     @FXML
     protected void onHelloButtonClick() {
         //welcomeText.setText("Welcome to JavaFX Application!");
@@ -41,5 +46,9 @@ public class HelloController {
     @FXML
     protected void submit(){
         output.setText("€ " + kaufpreis.getText());
+    }
+
+    public void weiter(ActionEvent actionEvent) {
+        Weiter.weiter(weiterButton, StammblattApplication.class);
     }
 }

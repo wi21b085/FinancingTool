@@ -6,7 +6,7 @@
 
 
 <ScrollPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.financingtool.BasisinformationController" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
-    <VBox alignment="CENTER" spacing="20.0" minHeight="1000" minWidth="600">
+    <VBox alignment="CENTER" spacing="20.0" minHeight="-Infinity" minWidth="600">
         <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
         </padding>
@@ -50,7 +50,10 @@
         <Label fx:id="resultLabel"/>
         <Button mnemonicParsing="false" onAction="#submit" text="Senden" />
         <Button mnemonicParsing="false" onAction="#update" text="Aktualisieren" />
+       <!--Maria M: Wozu brauchst du das doppelt oder habe ich das unabsichtlich kopiert?-->
         <Button mnemonicParsing="false" onAction="#update" text="Aktualisieren" />
+        <!-- Maria M -->
+        <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiter" text="Weiter" />
 
 
 

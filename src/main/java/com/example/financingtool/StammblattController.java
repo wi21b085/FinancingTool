@@ -2,16 +2,23 @@ package com.example.financingtool;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 
 public class StammblattController {
+
+
+    //Maria M
+    @FXML
+    private Button weiterButton;
 
     //Label für Error Text??
     @FXML
@@ -123,14 +130,14 @@ public class StammblattController {
           //  resultLabel.setText("Fehler bei der Aktualisierung von Zelle D" + 6);
         }
     }
-
+//Kommentar Maria M: updateCellValue in Updateklasse hier aufrufen
     private static void updateCellValue(Sheet sheet, int rowIdx, int colIdx, String newValue) {
         Row row = sheet.getRow(rowIdx);
         Cell cell = row.getCell(colIdx);
         cell.setCellValue(newValue);
     }
 
-
+// Kommentar Maria M: updateRangeofCells in UpdateKlasse hier stattdessen idealerweise aufrufen
    //Werte aktualisieren
     public void update(ActionEvent actionEvent) throws IOException {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
@@ -179,5 +186,10 @@ public class StammblattController {
             }
         }
 
+    //Maria M
+    public void weiter(ActionEvent actionEvent) {
+     //   BasisinformationApplication basisinformationApplication = new BasisinformationApplication();
+       Weiter.weiter(weiterButton, BasisinformationApplication.class);
+    }
 
 }

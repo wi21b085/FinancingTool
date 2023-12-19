@@ -17,6 +17,7 @@
     <TextField fx:id="kaufpreis" prefHeight="26.0" prefWidth="100.0" />
     <Label fx:id="output" text="Kaufpreis" />
     <Button mnemonicParsing="false" onAction="#submit" text="PDF erstellen" />
+    <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiter" text="Weiter" />
 
   </VBox>
 </ScrollPane>
