@@ -29,61 +29,6 @@ public class HelloApplication extends Application {
 
         resultLabel = new Label("Aktueller Wert: ");
 
-        // Erstellen Sie 10 Textfelder für die Benutzereingabe
-        TextField[] userInputFields = new TextField[10];
-        for (int i = 0; i < 10; i++) {
-            userInputFields[i] = new TextField();
-            if (i < 3) {
-                userInputFields[i].setPromptText("KB0" + i + " netto eingeben");
-            } else {
-                userInputFields[i].setPromptText("KB0" + (i + 3) + " netto eingeben");
-            }
-
-        }
-        // Erstellen Sie Textfelder für die Benutzereingabe für Spalte D
-        TextField userInputFieldD2 = new TextField();
-        userInputFieldD2.setPromptText("UST Grund");
-
-        TextField userInputFieldD3to9 = new TextField();
-        userInputFieldD3to9.setPromptText("Genereller UST");
-
-        TextField userInputFieldD10 = new TextField();
-        userInputFieldD10.setPromptText("UST Finanzierung");
-
-        // Button hinzufügen, um den Bereich von B3 bis B10 zu aktualisieren
-        javafx.scene.control.Button updateRangeButton = new javafx.scene.control.Button("Bereich aktualisieren");
-        updateRangeButton.setOnAction(e -> {
-            String[] newValues = new String[10];
-            for (int i = 0; i < 9; i++) {
-                newValues[i] = userInputFields[i].getText();
-            }
-            updateRangeOfCells(newValues);
-
-        });
-        javafx.scene.control.Button updateButtonD = new javafx.scene.control.Button("UST aktualisieren");
-        updateButtonD.setOnAction(e -> {
-            String newValueD2 = userInputFieldD2.getText();
-            String newValueD3to9 = userInputFieldD3to9.getText();
-            String newValueD10 = userInputFieldD10.getText();
-
-            updateCellD(20, 1, newValueD2);
-            updateCellD(1, 3, newValueD2);
-            updateCellD(19, 1, newValueD3to9);
-            for (int i = 2; i < 9; i++) {
-                updateCellD(i, 3, newValueD3to9);
-            }
-
-            updateCellD(9, 3, newValueD10);
-
-
-        });
-
-        // Füge alle UI-Elemente zum Root-VBox hinzu
-        for (int i = 0; i < 10; i++) {
-            root.getChildren().add(userInputFields[i]);
-        }
-        root.getChildren().addAll(resultLabel, updateRangeButton, userInputFieldD2, userInputFieldD3to9, userInputFieldD10, updateButtonD);
-
         // Setze die Szene und zeige die Bühne
         stage.setScene(scene);
         stage.show();
