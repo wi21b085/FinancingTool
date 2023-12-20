@@ -37,41 +37,41 @@ public class MV_MH_Controller extends Application implements IAllExcelRegisterCa
     @FXML
     private ChoiceBox<String> tranche = new ChoiceBox<>();
 
-    public MV_MH_Controller() throws Exception {
-    }
+
 
     @FXML
     protected void continueClick() {
-        if(tranche.getValue().isEmpty()){
+        try {
+            if(!tranche.getValue().isEmpty()){
+                String sheet = "Mittelverwendung - Mittelherkun";
+                //aktuell nur mit 1 oder 2 Tranchen machbar
+                String[] vals1 = new String[1];
+                vals1[0] = ik.getText();
+                Update.updateRangeOfCells(vals1, 1, 1, 1, new Label(), sheet);
+
+                int tranchen = Integer.parseInt(tranche.getValue());
+                String[] vals2 = new String[2+tranchen];
+                vals2[0] = ek.getText();
+                vals2[1] = btvg.getText();
+
+                for (int i = 0; i < tranchen; i++) {
+                    for (Node node : pane.getChildren()) {
+                        if(node instanceof TextField){
+                            TextField text = (TextField) node;
+                            if(text.getId().contains("text"+i)){
+                                vals2[i+2] = text.getText();
+                            }
+                        }
+                    }
+                }
+
+                Update.updateRangeOfCells(vals2, 1, 4, 4, new Label(), sheet);
+
+            }
+        } catch (Exception e) {
             System.out.println("Tranchen müssen ausgewählt sein!");;
         }
-        System.out.println(ik.getText());
-        ek.getText();
-        fk.getText();
 
-        TextField[] userInputFields = new TextField[10];
-        String[] newValues = new String[10];
-        int countNonNumeric = 0;
-        String nonNumericValue = "";
-        for (int i = 0; i < 10; i++) {
-            if (IAllExcelRegisterCards.isNumericStr(userInputFields[i].getText()) || userInputFields[i].getText().trim().isEmpty()) {
-                newValues[i] = userInputFields[i].getText();
-                // Setze das Fehlerlabel auf leer, da keine Fehlermeldung vorliegt
-                //errorLabels[i].setText("");
-                //valid=true;
-            } else {
-
-                countNonNumeric++;
-                nonNumericValue = userInputFields[i].getText();
-                //errorLabels[i].setText("Achtung: Die Werte müssen numerisch sein. Fehler bei " + nonNumericValue);
-            }
-        }
-        if (countNonNumeric > 0) {
-            //resultLabel.setText("Ein oder mehrere Werte sind ungültig.");
-            //valid=false;
-        } else {
-            //updateRangeOfCells(newValues);
-        }
     }
 
     @FXML
@@ -148,21 +148,6 @@ public class MV_MH_Controller extends Application implements IAllExcelRegisterCa
 
     @Override
     public void start(Stage stage) throws Exception {
-//        tranche.setValue("1");
-//        if(tranche.getValue().equals("1")) {
-//            Label lt0 = new Label("Tranche 1");
-//            lt0.setLayoutX(300);
-//            lt0.setLayoutY(128+30);
-//            //lt[i].setId("label"+i);
-//
-//            TextField tt0 = new TextField();
-//            tt0.setLayoutX(400.0);
-//            tt0.setLayoutY(120+30);
-//            tt0.setId("text0");
-//
-//            pane.getChildren().add(lt0);
-//            pane.getChildren().add(tt0);
-//        }
 
 
     }
