@@ -3,8 +3,10 @@ package com.example.financingtool;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -36,6 +38,10 @@ public class MV_MH_Controller extends Application implements IAllExcelRegisterCa
     private TextField btvg;
     @FXML
     private ChoiceBox<String> tranche = new ChoiceBox<>();
+
+    //Maria M
+    @FXML
+    private Button weiterButton;
 
 
 
@@ -153,4 +159,9 @@ public class MV_MH_Controller extends Application implements IAllExcelRegisterCa
     }
 
 
+
+
+    public void weiterMariaM(ActionEvent actionEvent) {
+        Weiter.weiter(weiterButton, MainApplication.class);
+    }
 }

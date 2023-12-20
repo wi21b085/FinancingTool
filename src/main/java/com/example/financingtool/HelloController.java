@@ -49,6 +49,6 @@ public class HelloController {
     }
 
     public void weiter(ActionEvent actionEvent) {
-        Weiter.weiter(weiterButton, StammblattApplication.class);
+        Weiter.weiter(weiterButton, MV_MH.class);
     }
 }
