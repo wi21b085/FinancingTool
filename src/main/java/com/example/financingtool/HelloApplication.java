@@ -16,7 +16,7 @@ import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.*;
 
-public class HelloApplication extends Application {
+/*public class HelloApplication extends Application {
 
     private Label resultLabel;
 
@@ -306,7 +306,8 @@ public class HelloApplication extends Application {
 
         // Button für die Konvertierung in Word im neuen Fenster
         javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in Word");
-        convertToWordButton.setOnAction(e -> ExcelToWordConverter.exportExcelToWord());
+       // convertToWordButton.setOnAction(e ->
+                /*ExcelToWordConverter.exportExcelToWord("Gesamtinvestitionskosten"));
 
         // Layout für das neue Fenster
         VBox newRoot = new VBox(10);
@@ -316,8 +317,8 @@ public class HelloApplication extends Application {
         Scene newScene = new Scene(newRoot, 300, 200);
         newStage.setTitle("Word Konvertierung");
         newStage.setScene(newScene);
-        newStage.show();
-    }
+        newStage.show()*/;
+   // }
    /* private void exportExcelToWord() {
         String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
         String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.docx"; // Ändern Sie den Pfad entsprechend
@@ -383,4 +384,4 @@ public class HelloApplication extends Application {
 
 
 
-}
+//}

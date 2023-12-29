@@ -18,7 +18,7 @@ public class BasisinformationApplication extends Application {
     private Label resultLabel;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("basisinformation.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BasisinformationApplication.class.getResource("basisinformation.fxml"));
         ScrollPane scrollPane = fxmlLoader.load();
         VBox root = (VBox) scrollPane.getContent();
 

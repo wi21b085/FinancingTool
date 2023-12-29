@@ -1,84 +1,179 @@
 package com.example.financingtool;
 
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.*;
 
 import java.io.*;
 import java.util.List;
 
-
 public class ExcelToWordConverter {
-    static String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
-    static String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.docx";
-    static  String pdfFilePath= "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
+    private static String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+    private static String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.docx";
+    private static String pdfFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
+    private static XWPFDocument document;
+
+    public static void initializeDocument() {
+        document = new XWPFDocument();
+    }
 
     public static void exportExcelToWord() {
-
-
         try {
             FileInputStream excelFile = new FileInputStream(new File(excelFilePath));
             Workbook workbook = new XSSFWorkbook(excelFile);
-            Sheet sheet = workbook.getSheet("Gesamtinvestitionskosten");
-            XWPFDocument document = new XWPFDocument();
 
-            // Create a paragraph and run to add content
-            XWPFParagraph paragraph = document.createParagraph();
-            XWPFRun run = paragraph.createRun();
-            System.out.println(15840/2);
-            double x=15840/27.94;
-            System.out.println("x= "+x);
-            System.out.println(x*29.7);
-            // Set Word document in landscape orientation
-            document.getDocument().getBody().addNewSectPr().addNewPgSz().setW(x*29.7);
-            document.getDocument().getBody().addNewSectPr().addNewPgSz().setH(x*21);
-
-            FileOutputStream out = new FileOutputStream(wordFilePath);
-
-            XWPFTable table = document.createTable();
-
-            String[] headers = {"Name", "Netto", "Ust", "% der Ust", "Brutto", "in %"};
-            XWPFTableRow headerRow = table.getRow(0);
-            for (int i = 0; i < headers.length; i++) {
-                XWPFTableCell cell = headerRow.getCell(i);
-                if (cell == null) {
-                    cell = headerRow.createCell();
-                }
-                cell.setText(headers[i]);
+            if (document == null) {
+                initializeDocument();
             }
 
-            for (int rowIdx = 1; rowIdx <= 9; rowIdx++) {
-                Row row = sheet.getRow(rowIdx);
-                XWPFTableRow dataRow = table.createRow();
+            // Export Basisinformation
+            exportSheetToWord(workbook, "Basisinformation");
 
-                for (int colIdx = 0; colIdx < headers.length; colIdx++) {
-                    XWPFTableCell cell = dataRow.getCell(colIdx);
-                    if (cell == null) {
-                        cell = dataRow.createCell();
-                    }
+            // Add a newline between the two tables
+            document.createParagraph();
 
-                    if (row.getCell(colIdx) != null) {
-                        if (row.getCell(colIdx).getCellType() == CellType.FORMULA) {
-                            // Round the numerical value to two decimal places
-                            double roundedValue = Math.round(row.getCell(colIdx).getNumericCellValue() * 100.0) / 100.0;
-                            cell.setText(String.format("%.2f", roundedValue));
-                        } else {
-                            cell.setText(row.getCell(colIdx).toString());
-                        }
-                    }
-                }
-            }
+            // Export Gesamtinvestitionskosten
+            exportSheetToWord(workbook, "Gesamtinvestitionskosten");
 
+            workbook.close();
+
+            // Save the document to file
+            saveDocument();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void exportSheetToWord(Workbook workbook, String sheetName) throws FileNotFoundException {
+        Sheet sheet = workbook.getSheet(sheetName);
+
+        // Create a paragraph and run to add content
+        XWPFParagraph paragraph = document.createParagraph();
+        XWPFRun run = paragraph.createRun();
+        double x = 15840 / 27.94;
+
+
+        // Set Word document in landscape orientation
+        document.getDocument().getBody().addNewSectPr().addNewPgSz().setW(x * 29.7);
+        document.getDocument().getBody().addNewSectPr().addNewPgSz().setH(x * 21);
+
+        FileOutputStream out = new FileOutputStream(wordFilePath);
+        if(sheetName.equals("Mittelverwendung")){
+            System.out.println("Mittelverwendung - Mittelherkun");
+            createBasisinformationTable(document,sheet,0,5);
+        }
+
+        if (sheetName.equals("Basisinformation")) {
+            // Export columns A-C to Word
+            createBasisinformationTable(document, sheet, 0, 2);
+
+            // Add a newline between the two tables
+            document.createParagraph().setPageBreak(true);
+            System.out.println("Bas");
+
+            // Export columns H-I to Word
+            createBasisinformationTable(document, sheet, 7, 8);
+        }if (sheetName.equals("Gesamtinvestitionskosten")) {
+            System.out.println("Ges");
+            createGIKtable(sheet);
+        }
+
+        // Write Word document to output file
+        try {
             document.write(out);
             out.close();
-            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void createGIKtable(Sheet sheet){
+        document.createParagraph().setPageBreak(true);
+        XWPFTable table = document.createTable();
+        String[] headers = {"Name", "Netto", "Ust", "% der Ust", "Brutto", "in %"};
+        XWPFTableRow headerRow = table.getRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            XWPFTableCell cell = headerRow.getCell(i);
+            if (cell == null) {
+                cell = headerRow.createCell();
+            }
+            cell.setText(headers[i]);
+        }
+
+        for (int rowIdx = 1; rowIdx <= 9; rowIdx++) {
+            Row row = sheet.getRow(rowIdx);
+            XWPFTableRow dataRow = table.createRow();
+
+            for (int colIdx = 0; colIdx < headers.length; colIdx++) {
+                XWPFTableCell cell = dataRow.getCell(colIdx);
+                if (cell == null) {
+                    cell = dataRow.createCell();
+                }
+
+                if (row.getCell(colIdx) != null) {
+                    if (row.getCell(colIdx).getCellType() == CellType.FORMULA) {
+                        // Round the numerical value to two decimal places
+                        double roundedValue = Math.round(row.getCell(colIdx).getNumericCellValue() * 100.0) / 100.0;
+                        cell.setText(String.format("%.2f", roundedValue));
+                    } else {
+                        cell.setText(row.getCell(colIdx).toString());
+                    }
+                }
+            }
+        }
+    }
+
+    private static void createBasisinformationTable(XWPFDocument document, Sheet sheet, int startColumn, int endColumn) {
+        // Create table in Word
+        XWPFTable table = document.createTable();
+        XWPFTableRow headerRow = table.getRow(0);
+
+        // Populate table header
+        for (int i = startColumn; i <= endColumn; i++) {
+            XWPFTableCell cell = headerRow.getCell(i - startColumn);
+            if (cell == null) {
+                cell = headerRow.createCell();
+            }
+            cell.setText(sheet.getRow(0).getCell(i).getStringCellValue());
+        }
+
+        // Populate table with Excel data
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            XWPFTableRow tableRow = table.createRow();
+            for (int j = startColumn; j <= endColumn; j++) {
+                Cell excelCell = sheet.getRow(i).getCell(j);
+                XWPFTableCell cell = tableRow.getCell(j - startColumn);
+
+                if (excelCell != null && excelCell.getCellType() == CellType.STRING) {
+                    String cellValue = excelCell.getStringCellValue();
+                    if (!cellValue.isEmpty()) {
+                        if (cell == null) {
+                            cell = tableRow.createCell();
+                        }
+                        cell.setText(cellValue);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void saveDocument() {
+        try {
+            // Write the entire document to the file
+            FileOutputStream out = new FileOutputStream(wordFilePath);
+            document.write(out);
+            out.close();
 
             System.out.println("Data successfully exported from Excel to Word.");
 
@@ -86,7 +181,6 @@ public class ExcelToWordConverter {
             e.printStackTrace();
         }
     }
-
 
     public static void convertWordToPDF() {
         try {
@@ -197,11 +291,22 @@ public class ExcelToWordConverter {
         return numberOfLines * fontSize * lineSpacing;
     }
 
+    static public void openNewJavaFXWindow() {
+        Stage newStage = new Stage();
 
+        // Button für die Konvertierung in Word im neuen Fenster
+        javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in eine PDF");
+        convertToWordButton.setOnAction(e -> ExcelToWordConverter.convertWordToPDF());
 
+        // Layout für das neue Fenster
+        VBox newRoot = new VBox(10);
+        newRoot.setAlignment(Pos.CENTER);
+        newRoot.getChildren().add(convertToWordButton);
 
-
-
-
+        Scene newScene = new Scene(newRoot, 300, 200);
+        newStage.setTitle("PDF Konvertierung");
+        newStage.setScene(newScene);
+        newStage.show();
+    }
 
 }

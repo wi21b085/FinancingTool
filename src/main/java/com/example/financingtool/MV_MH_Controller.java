@@ -162,6 +162,8 @@ public class MV_MH_Controller extends Application implements IAllExcelRegisterCa
 
 
     public void weiterMariaM(ActionEvent actionEvent) {
+        ExcelToWordConverter.exportExcelToWord();
+
         Weiter.weiter(weiterButton, MainApplication.class);
     }
 }

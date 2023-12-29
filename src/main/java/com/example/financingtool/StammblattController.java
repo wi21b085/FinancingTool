@@ -188,8 +188,11 @@ public class StammblattController {
 
     //Maria M
     public void weiter(ActionEvent actionEvent) {
-     //   BasisinformationApplication basisinformationApplication = new BasisinformationApplication();
        Weiter.weiter(weiterButton, BasisinformationApplication.class);
     }
+
+
+
+
 
 }

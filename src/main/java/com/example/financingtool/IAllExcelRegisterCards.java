@@ -59,23 +59,7 @@ public interface IAllExcelRegisterCards {
     }
 
     // letztes
-    static public void openNewJavaFXWindow() {
-        Stage newStage = new Stage();
 
-        // Button für die Konvertierung in Word im neuen Fenster
-        javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in eine PDF");
-        convertToWordButton.setOnAction(e -> ExcelToWordConverter.convertWordToPDF());
-
-        // Layout für das neue Fenster
-        VBox newRoot = new VBox(10);
-        newRoot.setAlignment(Pos.CENTER);
-        newRoot.getChildren().add(convertToWordButton);
-
-        Scene newScene = new Scene(newRoot, 300, 200);
-        newStage.setTitle("PDF Konvertierung");
-        newStage.setScene(newScene);
-        newStage.show();
-    }
 
     static public boolean emptyCell(Cell cell) {
         if (cell == null) {

@@ -120,8 +120,11 @@ public class GIKtoExcel extends Application  implements IAllExcelRegisterCards{
         System.out.println(updateD2+" "+updateD10+" "+updateD3to9+" "+valid);
         if (updateD2 && updateD3to9 && updateD10 && valid) {
             weiterButton.setOnAction(e ->
-            {ExcelToWordConverter.exportExcelToWord();
-                IAllExcelRegisterCards.openNewJavaFXWindow();
+
+            {
+                Weiter.weiter(weiterButton, MV_MH.class);
+                //ExcelToWordConverter.exportExcelToWord("Gesamtinvestitionskosten");
+                //ExcelToWordConverter.openNewJavaFXWindow();
             });
 
 
