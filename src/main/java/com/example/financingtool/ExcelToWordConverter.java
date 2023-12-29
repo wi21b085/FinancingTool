@@ -216,9 +216,8 @@ public class ExcelToWordConverter {
 
             PDDocument pdfDocument = new PDDocument();
 
-            // Erstellen Sie die PDF-Seite im Querformat
             PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-            pdfDocument.addPage(pdfPage);
+
 
             PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
 
@@ -243,7 +242,7 @@ public class ExcelToWordConverter {
                     float yBottom = margin;
 
                     // Draw table on the PDF page
-                    yPosition = drawPdfTable(pdfDocument, contentStream, yPosition, tableWidth, yStart, yBottom, table);
+                    drawPdfTable(pdfDocument, tableWidth, yStart, yBottom, table);
 
                 }
 
@@ -260,18 +259,32 @@ public class ExcelToWordConverter {
         }
     }
 
-
-    private static float drawPdfTable(PDDocument document, PDPageContentStream contentStream, float yPosition, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
+    private static void drawPdfTable(PDDocument document, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
         float margin = 20;
         float fontSize = 12;
         float cellMargin = 5f;
         float pageHeight = PDRectangle.A4.getHeight() - 2 * margin;
 
-        for (int rowIdx = 0; rowIdx < table.getRows().size(); rowIdx++) {
+        float yPosition = yStart;
+        float currentYPosition = yPosition;
+
+        int rowIdx = 0;
+        PDPageContentStream contentStream = null;
+
+        while (rowIdx < table.getRows().size()) {
             XWPFTableRow wordRow = table.getRow(rowIdx);
             List<XWPFTableCell> wordCells = wordRow.getTableCells();
 
             float maxHeight = 0;
+
+            // Erstellen Sie einen neuen contentStream für die erste Zeile
+            if (contentStream == null) {
+                PDPage newPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                document.addPage(newPage);
+                contentStream = new PDPageContentStream(document, newPage, true, true);
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+                yPosition = yStart;
+            }
 
             for (int colIdx = 0; colIdx < wordCells.size(); colIdx++) {
                 XWPFTableCell wordCell = wordCells.get(colIdx);
@@ -285,7 +298,7 @@ public class ExcelToWordConverter {
                 float currentWidth = 0;
 
                 for (String word : words) {
-                    float wordWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(word) / 1000 * fontSize;
+                    float wordWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(word) / 990 * fontSize;
 
                     if (currentWidth + wordWidth > width && currentWidth > 0) {
                         yPosition -= maxHeight; // Neue Zeile
@@ -295,8 +308,10 @@ public class ExcelToWordConverter {
                     // Prüfen, ob eine neue Seite benötigt wird
                     if (yPosition - height < yBottom) {
                         // Neue Seite erstellen und zum Dokument hinzufügen
-                        PDPage newPage = new PDPage(PDRectangle.A4);
+                        PDPage newPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
                         document.addPage(newPage);
+
+                        // Schließen Sie den vorherigen contentStream und erstellen Sie einen neuen für die neue Seite
                         contentStream.close();
                         contentStream = new PDPageContentStream(document, newPage, true, true);
                         contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
@@ -314,15 +329,30 @@ public class ExcelToWordConverter {
                 maxHeight = Math.max(maxHeight, height);
             }
 
-            // Aktualisiere die y-Position für die nächste Zeile
+            // Aktualisieren Sie die y-Position für die nächste Zeile
             yPosition -= maxHeight;
+
+            // Überprüfen, ob eine neue Seite benötigt wird (falls die Zeile nicht vollständig auf die aktuelle Seite passt)
+            if (yPosition < yBottom && rowIdx + 1 < table.getRows().size()) {
+                // Neue Seite erstellen und zum Dokument hinzufügen
+                PDPage newPage = new PDPage(PDRectangle.A4);
+                document.addPage(newPage);
+
+                // Schließen Sie den vorherigen contentStream und erstellen Sie einen neuen für die neue Seite
+                contentStream.close();
+                contentStream = new PDPageContentStream(document, newPage, true, true);
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+                yPosition = yStart;
+            } else {
+                rowIdx++;
+            }
         }
 
-        return yPosition;
+        // Schließen Sie den contentStream am Ende der Methode
+        if (contentStream != null) {
+            contentStream.close();
+        }
     }
-
-
-
 
 
 
