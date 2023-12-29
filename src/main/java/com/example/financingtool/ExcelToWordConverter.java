@@ -43,6 +43,12 @@ public class ExcelToWordConverter {
 
             // Export Gesamtinvestitionskosten
             exportSheetToWord(workbook, "Gesamtinvestitionskosten");
+            document.createParagraph();
+            exportSheetToWord(workbook,"Mittelverwendung - Mittelherkun");
+            document.createParagraph();
+            exportSheetToWord(workbook, "Wirtschaftlichkeitsrechnung");
+            document.createParagraph();
+            openNewJavaFXWindow();
 
             workbook.close();
 
@@ -68,12 +74,12 @@ public class ExcelToWordConverter {
         document.getDocument().getBody().addNewSectPr().addNewPgSz().setH(x * 21);
 
         FileOutputStream out = new FileOutputStream(wordFilePath);
-        if(sheetName.equals("Mittelverwendung")){
-            System.out.println("Mittelverwendung - Mittelherkun");
+        if(sheetName.equals("Mittelverwendung - Mittelherkun")){
+            System.out.println("Mittelverwendung");
             createBasisinformationTable(document,sheet,0,5);
         }
 
-        if (sheetName.equals("Basisinformation")) {
+        else if (sheetName.equals("Basisinformation")) {
             // Export columns A-C to Word
             createBasisinformationTable(document, sheet, 0, 2);
 
@@ -83,9 +89,14 @@ public class ExcelToWordConverter {
 
             // Export columns H-I to Word
             createBasisinformationTable(document, sheet, 7, 8);
-        }if (sheetName.equals("Gesamtinvestitionskosten")) {
+        }else if (sheetName.equals("Gesamtinvestitionskosten")) {
             System.out.println("Ges");
             createGIKtable(sheet);
+            document.createParagraph().setPageBreak(true);
+            createBasisinformationTable(document, sheet,0,5);
+        }else if(sheetName.equals("Wirtschaftlichkeitsrechnung")){
+            document.createParagraph().setPageBreak(true);
+            createBasisinformationTable(document, sheet, 0,7);
         }
 
         // Write Word document to output file
@@ -150,23 +161,39 @@ public class ExcelToWordConverter {
 
         // Populate table with Excel data
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-            XWPFTableRow tableRow = table.createRow();
-            for (int j = startColumn; j <= endColumn; j++) {
-                Cell excelCell = sheet.getRow(i).getCell(j);
-                XWPFTableCell cell = tableRow.getCell(j - startColumn);
+            Row row = sheet.getRow(i);
+            if (row != null) { // Überprüfen, ob die Zeile nicht null ist
+                XWPFTableRow tableRow = table.createRow();
+                for (int j = startColumn; j <= endColumn; j++) {
+                    Cell excelCell = row.getCell(j);
+                    XWPFTableCell cell = tableRow.getCell(j - startColumn);
 
-                if (excelCell != null && excelCell.getCellType() == CellType.STRING) {
-                    String cellValue = excelCell.getStringCellValue();
-                    if (!cellValue.isEmpty()) {
-                        if (cell == null) {
-                            cell = tableRow.createCell();
+                    if (excelCell != null) {
+                        if (excelCell.getCellType() == CellType.STRING) {
+                            // String-Wert
+                            String cellValue = excelCell.getStringCellValue();
+                            if (!cellValue.isEmpty()) {
+                                if (cell == null) {
+                                    cell = tableRow.createCell();
+                                }
+                                cell.setText(cellValue);
+                            }
+                        } else if (excelCell.getCellType() == CellType.NUMERIC) {
+                            // Numerischer Wert
+                            double numericValue = excelCell.getNumericCellValue();
+                            if (cell == null) {
+                                cell = tableRow.createCell();
+                            }
+                            cell.setText(String.valueOf(numericValue));
                         }
-                        cell.setText(cellValue);
+                        // Hier können weitere Bedingungen für andere Zellentypen hinzugefügt werden
                     }
                 }
             }
         }
     }
+
+
 
     public static void saveDocument() {
         try {
@@ -216,7 +243,8 @@ public class ExcelToWordConverter {
                     float yBottom = margin;
 
                     // Draw table on the PDF page
-                    drawPdfTable(contentStream, yPosition, tableWidth, yStart, yBottom, table);
+                    yPosition = drawPdfTable(pdfDocument, contentStream, yPosition, tableWidth, yStart, yBottom, table);
+
                 }
 
             } finally {
@@ -233,11 +261,11 @@ public class ExcelToWordConverter {
     }
 
 
-    private static void drawPdfTable(PDPageContentStream contentStream, float yPosition, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
+    private static float drawPdfTable(PDDocument document, PDPageContentStream contentStream, float yPosition, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
         float margin = 20;
         float fontSize = 12;
         float cellMargin = 5f;
-        float yPositionNew = yPosition;
+        float pageHeight = PDRectangle.A4.getHeight() - 2 * margin;
 
         for (int rowIdx = 0; rowIdx < table.getRows().size(); rowIdx++) {
             XWPFTableRow wordRow = table.getRow(rowIdx);
@@ -260,13 +288,23 @@ public class ExcelToWordConverter {
                     float wordWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(word) / 1000 * fontSize;
 
                     if (currentWidth + wordWidth > width && currentWidth > 0) {
-                        yPositionNew -= fontSize; // Neue Zeile
+                        yPosition -= maxHeight; // Neue Zeile
                         currentWidth = 0;
                     }
 
+                    // Prüfen, ob eine neue Seite benötigt wird
+                    if (yPosition - height < yBottom) {
+                        // Neue Seite erstellen und zum Dokument hinzufügen
+                        PDPage newPage = new PDPage(PDRectangle.A4);
+                        document.addPage(newPage);
+                        contentStream.close();
+                        contentStream = new PDPageContentStream(document, newPage, true, true);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+                        yPosition = yStart;
+                    }
+
                     contentStream.beginText();
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
-                    contentStream.newLineAtOffset(margin + colIdx * width + cellMargin + currentWidth, yPositionNew - height);
+                    contentStream.newLineAtOffset(margin + colIdx * width + cellMargin + currentWidth, yPosition - height);
                     contentStream.showText(word);
                     contentStream.endText();
 
@@ -276,9 +314,17 @@ public class ExcelToWordConverter {
                 maxHeight = Math.max(maxHeight, height);
             }
 
-            yPositionNew -= maxHeight;
+            // Aktualisiere die y-Position für die nächste Zeile
+            yPosition -= maxHeight;
         }
+
+        return yPosition;
     }
+
+
+
+
+
 
 
 
