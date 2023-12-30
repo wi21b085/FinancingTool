@@ -76,27 +76,27 @@ public class ExcelToWordConverter {
         FileOutputStream out = new FileOutputStream(wordFilePath);
         if(sheetName.equals("Mittelverwendung - Mittelherkun")){
             System.out.println("Mittelverwendung");
-            createBasisinformationTable(document,sheet,0,5);
+            createTable(document,sheet,0,5);
         }
 
         else if (sheetName.equals("Basisinformation")) {
             // Export columns A-C to Word
-            createBasisinformationTable(document, sheet, 0, 2);
+            createTable(document, sheet, 0, 2);
 
             // Add a newline between the two tables
             document.createParagraph().setPageBreak(true);
             System.out.println("Bas");
 
             // Export columns H-I to Word
-            createBasisinformationTable(document, sheet, 7, 8);
+            createTable(document, sheet, 7, 8);
         }else if (sheetName.equals("Gesamtinvestitionskosten")) {
             System.out.println("Ges");
             createGIKtable(sheet);
             document.createParagraph().setPageBreak(true);
-            createBasisinformationTable(document, sheet,0,5);
+            createTable(document, sheet,0,5);
         }else if(sheetName.equals("Wirtschaftlichkeitsrechnung")){
             document.createParagraph().setPageBreak(true);
-            createBasisinformationTable(document, sheet, 0,7);
+            createTable(document, sheet, 0,7);
         }
 
         // Write Word document to output file
@@ -145,7 +145,7 @@ public class ExcelToWordConverter {
         }
     }
 
-    private static void createBasisinformationTable(XWPFDocument document, Sheet sheet, int startColumn, int endColumn) {
+    private static void createTable(XWPFDocument document, Sheet sheet, int startColumn, int endColumn) {
         // Create table in Word
         XWPFTable table = document.createTable();
         XWPFTableRow headerRow = table.getRow(0);
