@@ -18,7 +18,7 @@ public class StammblattApplication extends Application {
     private Label resultLabel;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("stammblatt.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StammblattApplication.class.getResource("stammblatt.fxml"));
         ScrollPane scrollPane = fxmlLoader.load();
         VBox root = (VBox) scrollPane.getContent();
 
@@ -31,8 +31,5 @@ public class StammblattApplication extends Application {
         // Setze die Szene und zeige die Bühne
         stage.setScene(scene);
         stage.show();
-
-
-
     }
 }

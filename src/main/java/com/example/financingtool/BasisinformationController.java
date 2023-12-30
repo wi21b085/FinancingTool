@@ -60,10 +60,7 @@ public class BasisinformationController {
 
     //firmennamen in das excel eintragen
     public void submit() {
-        //Submit nur möglich, wenn alle Felder befüllt.
-
-        //Parse the values.
-
+        //leere werte
         if(kaufpreis.getText().isEmpty() || groesse.getText().isEmpty() || nutzflaeche.getText().isEmpty()
                 || wohneinheiten.getText().isEmpty() || garage.getText().isEmpty() || gik.getText().isEmpty()
                 || verkaufserloes.getText().isEmpty() || gewinn.getText().isEmpty() || beginn.getText().isEmpty()
@@ -71,7 +68,20 @@ public class BasisinformationController {
             resultLabel.setText("Daten unvollständig");
             // System.out.println("Daten unvollständig");
         }
-
+        //ungültige werte
+        else if (!IAllExcelRegisterCards.isNumericStr(kaufpreis.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(groesse.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(garage.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(gik.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())
+        ){
+            resultLabel.setText("Achtung, bitte geben Sie gültige Daten an");
+            return;
+        }
+        //gültige werte
         else {
 
             String[] newValue = new String[11];
@@ -162,51 +172,94 @@ public class BasisinformationController {
                 sheet = workbook.createSheet(sheetName);
                 System.out.println("Sheet == NULL");
             }
-            //Überprüfen, ob die Datentypen stimmen:
-            else if (kaufpreis.getText() instanceof String || groesse.getText() instanceof String || nutzflaeche.getText() instanceof String
-                    || wohneinheiten.getText() instanceof String || garage.getText() instanceof String || gik.getText() instanceof String
-                    || verkaufserloes.getText() instanceof String || gewinn.getText() instanceof String
-                    || roi.getText() instanceof String  ){
-                resultLabel.setText("Ein/Mehrere Werte sind ungültig. Bitte versuchen Sie es erneut.");
+
+            //alle daten leer
+            if (kaufpreis.getText().isEmpty() && groesse.getText().isEmpty() && nutzflaeche.getText().isEmpty() &&
+                    wohneinheiten.getText().isEmpty() && garage.getText().isEmpty() && gik.getText().isEmpty()
+                    && verkaufserloes.getText().isEmpty() && gewinn.getText().isEmpty() && beginn.getText().isEmpty()
+                    && ende.getText().isEmpty() && roi.getText().isEmpty()) {
+                resultLabel.setText("Daten erforderlich zum Aktualisieren");
+                System.out.println("Alle Felder leer");
+                return;
+            }
+
+            // Überprüfen, ob leer + Datentyp stimmt
+            if (!kaufpreis.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
+                updateCellValue(sheet, 1, 1, kaufpreis.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
+            }
+
+            if (!groesse.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(groesse.getText())) {
+                updateCellValue(sheet, 2, 1, groesse.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(groesse.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
+            }
+
+            if (!nutzflaeche.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText())) {
+                updateCellValue(sheet, 3, 1, nutzflaeche.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
+            }
+
+            if (!wohneinheiten.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText())) {
+                updateCellValue(sheet, 4, 1, wohneinheiten.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
+            }
+
+            if (!garage.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(garage.getText())) {
+                updateCellValue(sheet, 5, 1, garage.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(garage.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
+            }
+
+            if (!gik.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(gik.getText())) {
+                updateCellValue(sheet, 6, 1, gik.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(gik.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
+            }
+
+            if (!verkaufserloes.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())) {
+                updateCellValue(sheet, 7, 1, verkaufserloes.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
+            }
+
+            if (!gewinn.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(gewinn.getText())) {
+                updateCellValue(sheet, 8, 1, gewinn.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(gewinn.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
                 return;
             }
 
 
-            if (!kaufpreis.getText().isEmpty()) {
-                updateCellValue(sheet, 1, 1, kaufpreis.getText());
-            }
-            if (!groesse.getText().isEmpty()) {
-                updateCellValue(sheet, 2, 1, groesse.getText());
-            }
-            if (!nutzflaeche.getText().isEmpty()) {
-                updateCellValue(sheet, 3, 1, nutzflaeche.getText());
-            }
-            if (!wohneinheiten.getText().isEmpty()) {
-                updateCellValue(sheet, 4, 1, wohneinheiten.getText());
-            }
-            if (!garage.getText().isEmpty()) {
-                updateCellValue(sheet, 5, 1, garage.getText());
-            }
-            if (!gik.getText().isEmpty()) {
-                updateCellValue(sheet, 6, 1, gik.getText());
-            }
-            if (!verkaufserloes.getText().isEmpty()) {
-                updateCellValue(sheet, 7, 1, verkaufserloes.getText());
-            }
-            if (!gewinn.getText().isEmpty()) {
-                updateCellValue(sheet, 8, 1, gewinn.getText());
-            }
-            if (!beginn.getText().isEmpty()) {
+            if (!beginn.getText().isEmpty()) { // Datum kann String + Double sein
                 updateCellValue(sheet, 9, 1, beginn.getText());
             }
-            if (!ende.getText().isEmpty()) {
+
+            if (!ende.getText().isEmpty()) { // Datum kann String + Double sein
                 updateCellValue(sheet, 10, 1, ende.getText());
             }
-            if (!roi.getText().isEmpty()) {
-                updateCellValue(sheet, 11, 1, ende.getText());
+
+            if (!roi.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(roi.getText())) {
+                updateCellValue(sheet, 11, 1, roi.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(roi.getText())) {
+                resultLabel.setText("Gültige Daten erforderlich");
+                return;
             }
 
-            // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
+
+
+
+                // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
             FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
             evaluator.evaluateAll();
 

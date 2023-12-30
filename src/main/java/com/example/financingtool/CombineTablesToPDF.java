@@ -4,6 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -30,12 +31,17 @@ public class CombineTablesToPDF {
             // Füge eine neue Seite hinzu
             document.addPage(new PDPage());
 
+            //-n füge ein bild hinzu:
+            PDImageXObject image = PDImageXObject.createFromFile("src\\main\\resources\\com\\example\\financingtool\\tree.jpg", document);
+            contentStream.drawImage(image, 100, 100);
+
+
             // Lese die Daten aus dem zweiten Excel-Blatt ("Gesamtinvestitionskosten") ein
             readExcelData("Gesamtinvestitionskosten", contentStream,page,document);
 
             // Schließe den Content Stream und das Dokument
             contentStream.close();
-            document.save("combined_tables.pdf");
+            document.save("src\\main\\resources\\com\\example\\financingtool\\combined_tables.pdf");
             document.close();
 
         } catch (IOException e) {
@@ -43,7 +49,7 @@ public class CombineTablesToPDF {
         }
     }
 
-    private static void readExcelData(String sheetName, PDPageContentStream contentStream, PDPage page, PDDocument document) throws IOException {
+    static void readExcelData(String sheetName, PDPageContentStream contentStream, PDPage page, PDDocument document) throws IOException {
         String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
         FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
         Workbook workbook = new XSSFWorkbook(fileInputStream);
