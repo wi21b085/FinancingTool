@@ -50,8 +50,7 @@
         <Label fx:id="resultLabel"/>
         <Button mnemonicParsing="false" onAction="#submit" text="Senden" />
         <Button mnemonicParsing="false" onAction="#update" text="Aktualisieren" />
-       <!--Maria M: Wozu brauchst du das doppelt oder habe ich das unabsichtlich kopiert?-->
-        <Button mnemonicParsing="false" onAction="#update" text="Aktualisieren" />
+
         <!-- Maria M -->
         <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiter" text="Weiter" />
 

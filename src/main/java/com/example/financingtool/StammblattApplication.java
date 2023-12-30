@@ -31,8 +31,5 @@ public class StammblattApplication extends Application {
         // Setze die Szene und zeige die Bühne
         stage.setScene(scene);
         stage.show();
-
-
-
     }
 }

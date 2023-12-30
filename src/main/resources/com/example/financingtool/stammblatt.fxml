@@ -43,6 +43,8 @@
 
         <Button mnemonicParsing="false" onAction="#submit" text="Senden" />
         <Button mnemonicParsing="false" onAction="#update" text="Aktualisieren" />
+        <Button mnemonicParsing="false" onAction="#uploadImage" text="Bild wählen" />
+
         <!-- Maria M -->
         <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiter" text="Weiter" />
 

@@ -9,6 +9,7 @@ module com.example.financingtool {
     requires kernel;
     requires org.apache.pdfbox;
 
+
     opens com.example.financingtool to javafx.fxml;
     exports com.example.financingtool;
 
