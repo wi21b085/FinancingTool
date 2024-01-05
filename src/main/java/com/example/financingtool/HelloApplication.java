@@ -22,7 +22,7 @@ import java.io.*;
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("gik.fxml"));
         ScrollPane scrollPane = fxmlLoader.load();
         VBox root = (VBox) scrollPane.getContent();
 

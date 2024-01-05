@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -19,10 +20,22 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        // Lade das FXML-Layout
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindowController.fxml"));
+        Parent root = loader.load();
 
-        Scene scene = new Scene(root, 250, 250);
+        // Holen Sie den Controller, um auf das TabPane zuzugreifen
+        MainWindowController controller = loader.getController();
 
+        // Erstellen Sie den Tab mit dem Inhalt des Stammdaten-FXMLs
+        Tab stammblattTab = new Tab("Stammdaten");
+        stammblattTab.setContent(FXMLLoader.load(getClass().getResource("stammblatt.fxml")));
+
+        // Füge den Tab zum TabPane hinzu
+
+
+        // Setze die Szene
+        Scene scene = new Scene(root, 1000, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
