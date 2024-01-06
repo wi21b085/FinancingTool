@@ -1,14 +1,17 @@
 from selenium import webdriver
+from PIL import Image
+#from Screenshot import Screenshot_clipping
 import time
 import sys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
-driver = webdriver.Firefox()
+driver = webdriver.Edge()
+#driver.maximize_window()
 
 url="https://www.wien.gv.at/flaechenwidmung/public/search.aspx?__jumpie#magwienscroll"
 
-driver.get(url) 
+driver.get(url)
 
 time.sleep (1)
 
@@ -28,16 +31,42 @@ addr_button.click()
 
 time.sleep(2)
 
+oList=driver.find_element(By.ID, "searchResult_oList")
+oList.find_element(By.XPATH, "./li[1]").click()
+
+time.sleep(1)
+
 driver.find_element(By.ID, "GroupOfButtons1_btnSearch_input").click()
 
-time.sleep(3)
+time.sleep(4)
 
 list_item=driver.find_element(By.CLASS_NAME, "vieobjlistitem1")
 list_item.find_element(By.XPATH, "./td[5]/a").click()
 
-time.sleep(2)
+time.sleep(4)
 
 messageBox=driver.find_element(By.CLASS_NAME, "viennaGisMessageBox")
 messageBox.find_element(By.XPATH, "./div[4]/input").click()
+mapImage=driver.find_element(By.ID, "mapImage")
+time.sleep(2)
 
-#driver.close()
+driver.execute_script("document.querySelector('#smap').style.display = 'none';")
+driver.execute_script("document.querySelector('#mapResize').style.display = 'none';")
+driver.execute_script("document.querySelector('#headerResize').style.display = 'none';")
+driver.execute_script("document.querySelector('.map-buttons').style.display = 'none';")
+driver.execute_script("document.querySelector('#kachelButtons').style.display = 'none';")
+driver.execute_script("document.querySelector('#gugContainer').style.display = 'none';")
+#driver.execute_script("document.querySelector('body').style.pointerEvents = 'none';")
+body=driver.find_element(By.TAG_NAME, "body")
+driver.execute_script("arguments[0].style.pointerEvents='none'", body)
+
+time.sleep(2)
+
+driver.find_element(By.ID, "mapImage").screenshot("src\\main\\resources\\com\\example\\financingtool\\adresse.png")
+
+time.sleep(1)
+
+screenshot=Image.open("src\\main\\resources\\com\\example\\financingtool\\adresse.png")
+screenshot.show()
+
+driver.close()

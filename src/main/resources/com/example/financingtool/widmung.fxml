@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.financingtool.WidmungController">
+    <Pane fx:id="pane" prefHeight="300.0" prefWidth="200.0">
+        <children>
+            <Label fx:id="mv" layoutX="80.0" layoutY="6.0" text="Flächenwidmung – laut BWO" />
+
+            <Label layoutX="10.0" layoutY="33.0" text="Flächenwidmung:" />
+            <ChoiceBox fx:id="fw" layoutX="160.0" layoutY="30.0" prefWidth="140.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="W" />
+                        <String fx:value="WGV" />
+                        <String fx:value="GS" />
+                        <String fx:value="GB" />
+                        <String fx:value="GBGV" />
+                        <String fx:value="GBGG" />
+                        <String fx:value="IG" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+
+            <Label layoutX="10.0" layoutY="83.0" text="Bauklasse:" />
+            <ChoiceBox fx:id="bk" layoutX="160.0" layoutY="80.0" prefWidth="140.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="I" />
+                        <String fx:value="II" />
+                        <String fx:value="III" />
+                        <String fx:value="IV" />
+                        <String fx:value="V" />
+                        <String fx:value="VI" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+
+            <Label layoutX="10.0" layoutY="133.0" text="Bauweise:" />
+            <ChoiceBox fx:id="bw" layoutX="160.0" layoutY="130.0" prefWidth="140.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="o" />
+                        <String fx:value="gk" />
+                        <String fx:value="g" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+
+            <Label layoutX="10.0" layoutY="183.0" text="Bebauungsbestimmungen:" />
+
+            <ChoiceBox fx:id="bb1" layoutX="160.0" layoutY="180.0" prefWidth="140.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="" />
+                        <String fx:value="Ekz" />
+                        <String fx:value="ÖZ" />
+                        <String fx:value="Str" />
+                        <String fx:value="G" />
+                        <String fx:value="BB" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+
+            <ChoiceBox fx:id="bb2" layoutX="310.0" layoutY="180.0" prefWidth="140.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="" />
+                        <String fx:value="Ekz" />
+                        <String fx:value="ÖZ" />
+                        <String fx:value="Str" />
+                        <String fx:value="G" />
+                        <String fx:value="BB" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+
+            <Label layoutX="10.0" layoutY="233.0" text="Beschränkung:" />
+            <TextField fx:id="bs" layoutX="160.0" layoutY="230.0" prefWidth="140.0" />
+
+            <Label layoutX="310.0" layoutY="33.0" text="Adresse:" />
+            <Text fx:id="ad" layoutX="370.0" layoutY="46.0" />
+        </children>
+    </Pane>
+    <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
+        <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
+        <!--Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiterMariaM" text="WeiterMariaM" /-->
+    </Pane>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

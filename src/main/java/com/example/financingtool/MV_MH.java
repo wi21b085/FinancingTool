@@ -29,7 +29,7 @@ public class MV_MH extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(MV_MH.class.getResource("MV_MH.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 700, 500);
-        stage.setTitle("Test");
+        stage.setTitle("Mittelverwendung & Mittelherkunft");
         stage.setScene(scene);
         stage.show();
 //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("MV_MH.fxml"));
