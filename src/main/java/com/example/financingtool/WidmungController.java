@@ -1,7 +1,6 @@
 package com.example.financingtool;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -36,7 +35,7 @@ public class WidmungController implements IAllExcelRegisterCards {
 
     @FXML
     protected void continueClick() {
-        check(fw);
+        //check(fw);
         /*try {
             if(!tranche.getValue().isEmpty()){
                 String sheet = "Mittelverwendung - Mittelherkun";
@@ -153,10 +152,10 @@ public class WidmungController implements IAllExcelRegisterCards {
     public void executePy(String name) {
         String s = null;
         try {
-            //ProcessBuilder pb = new ProcessBuilder("python","", name);
-            //Process p = pb.start();
-            String[] cmd = { "python", "src\\main\\resources\\com\\example\\financingtool\\widmung.py", name};
-            Process p = Runtime.getRuntime().exec(cmd);
+            //Runtime.getRuntime().exec("src\\main\\resources\\com\\example\\financingtool\\script.bat");
+            //String[] cmd = { "python", "src\\main\\resources\\com\\example\\financingtool\\widmung.py", name};
+            //Process p = Runtime.getRuntime().exec(cmd);
+            Process p = Runtime.getRuntime().exec("cmd /C start src\\main\\resources\\com\\example\\financingtool\\script.bat \""+name+"\"");
 
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(p.getInputStream()));
