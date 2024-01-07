@@ -50,26 +50,8 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         try {
             if(!tranche.getValue().isEmpty()){
                 String sheet = "Mittelverwendung - Mittelherkun";
-                //aktuell nur mit 1 oder 2 Tranchen machbar
+
                 int tranchen = Integer.parseInt(tranche.getValue());
-
-//                String[] ik = new String[1];
-//                if (IAllExcelRegisterCards.isNumericStr(this.ik.getText()) || this.ik.getText().trim().isEmpty()) {
-//                    ik[0] = this.ik.getText();
-//                    Update.updateRangeOfCells(ik, 1, 1, 1, new Label(), sheet);
-//                }
-
-//                String[] ek = new String[1];
-//                if (IAllExcelRegisterCards.isNumericStr(this.ek.getText()) || this.ek.getText().trim().isEmpty()) {
-//                    ek[0] = this.ek.getText();
-//                    Update.updateRangeOfCells(ek, 1, 1, 4, new Label(), sheet);
-//                }
-
-//                String[] btvg = new String[1];
-//                if (IAllExcelRegisterCards.isNumericStr(this.btvg.getText()) || this.btvg.getText().trim().isEmpty()) {
-//                    btvg[0] = this.btvg.getText();
-//                    Update.updateRangeOfCells(btvg, tranchen+2, 4, 4, new Label(), sheet);
-//                }
 
                 String[] vals = new String[tranchen];
                 String[] bez = new String[tranchen];
@@ -132,7 +114,6 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                             Update.updateRangeOfCellsString(bez, 40, 44, 3, new Label(), sheet);
                             break;
                     }
-                    //Update.updateRangeOfCells(bez, 2, tranchen, 3, new Label(), sheet);
                 }
             }
         } catch (Exception e) {

@@ -60,7 +60,6 @@
                         <String fx:value="" />
                         <String fx:value="Ekz" />
                         <String fx:value="ÖZ" />
-                        <String fx:value="Str" />
                         <String fx:value="G" />
                         <String fx:value="BB" />
                     </FXCollections>
@@ -73,7 +72,6 @@
                         <String fx:value="" />
                         <String fx:value="Ekz" />
                         <String fx:value="ÖZ" />
-                        <String fx:value="Str" />
                         <String fx:value="G" />
                         <String fx:value="BB" />
                     </FXCollections>
@@ -88,6 +86,8 @@
         </children>
     </Pane>
     <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
+        <Label fx:id="resultLabel" layoutX="10.0" />
+
         <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
         <!--Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiterMariaM" text="WeiterMariaM" /-->
     </Pane>
