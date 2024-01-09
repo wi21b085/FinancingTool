@@ -18,7 +18,7 @@
          <Label layoutX="300.0" layoutY="33.0" text="Eigenkapital:" />
          <TextField fx:id="ek" layoutX="400.0" layoutY="30.0" />
          <Label layoutX="15.0" layoutY="83.0" text="Finanzierungskosten:" />
-         <Text fx:id="fk" layoutX="249.0" layoutY="97.0" text="text" />
+         <Text fx:id="fk" layoutX="249.0" layoutY="97.0" text="text" id="specificfkID" />
          <Label layoutX="300.0" layoutY="83.0" text="BTVG Erlöse:" />
          <TextField fx:id="btvg" layoutX="400.0" layoutY="80.0" />
          <Label layoutX="220.0" layoutY="125.0" text="Fremdkapital Tranchen-Anzahl:" />
@@ -37,7 +37,7 @@
    </Pane>
    <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
       <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
-      <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiterMariaM" text="WeiterMariaM" />
+     <!-- <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiterMariaM" text="WeiterMariaM" />-->
    </Pane>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

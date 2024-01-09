@@ -47,7 +47,7 @@ public class ExcelToWordConverter {
 
             // Export Gesamtinvestitionskosten
             exportSheetToWord(workbook, "Gesamtinvestitionskosten");
-            document.createParagraph();
+            //document.createParagraph();
             exportSheetToWord(workbook,"Mittelverwendung - Mittelherkun");
             document.createParagraph();
             exportSheetToWord(workbook, "Wirtschaftlichkeitsrechnung");
@@ -96,8 +96,8 @@ public class ExcelToWordConverter {
         }else if (sheetName.equals("Gesamtinvestitionskosten")) {
             System.out.println("Ges");
             createGIKtable(sheet);
-            document.createParagraph().setPageBreak(true);
-            createTable(document, sheet,0,5);
+            //document.createParagraph().setPageBreak(true);
+           // createTable(document, sheet,0,5);
         }else if(sheetName.equals("Wirtschaftlichkeitsrechnung")){
             document.createParagraph().setPageBreak(true);
             createTable(document, sheet, 0,7);

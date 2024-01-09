@@ -1,12 +1,16 @@
 package com.example.financingtool;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,18 +22,32 @@ public class MainWindowController implements Initializable {
     @FXML
     private AnchorPane mainAnchorPane;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Erstellen Sie eine Instanz der GIKtoExcel-Klasse
-        GIKtoExcel gikToExcel = new GIKtoExcel();
+    @FXML
+    private VBox dynamicElementsContainer;
 
-        // Rufen Sie die Methode start auf, um das GIKtoExcel-Fenster zu starten
-        try {
-            gikToExcel.start(new Stage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @FXML
+    private TabPane tabPane; // Füge diese Zeile hinzu
+    @FXML
+    private GIKController gikController;
+    @FXML
+    private MV_MH_Controller mvMhController;
+
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("Initializing MainWindowController...");
+
+        // Print statements or debugging code...
+
+        System.out.println("Initialization complete.");
+        gikController.setMV_MH_Controller(mvMhController);
     }
+
+    public void convert(ActionEvent actionEvent) {
+        ExcelToWordConverter.exportExcelToWord();
+    }
+
 
     // Rest des Codes für den MainWindowController...
 }

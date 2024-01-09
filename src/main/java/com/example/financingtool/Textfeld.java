@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Textfeld extends Application {
+/*public class Textfeld extends Application {
     @FXML
     private TextField textField;
 
@@ -45,5 +45,5 @@ public class Textfeld extends Application {
     public void weiter(ActionEvent actionEvent) {
         Weiter.weiter(weiterButton, StammblattApplication.class);
     }
-}
+}*/
 

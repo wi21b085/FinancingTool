@@ -4,10 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,10 +23,10 @@ public class MainApplication extends Application {
         // Holen Sie den Controller, um auf das TabPane zuzugreifen
         MainWindowController controller = loader.getController();
 
-        // Erstellen Sie den Tab mit dem Inhalt des Stammdaten-FXMLs
+       /* // Erstellen Sie den Tab mit dem Inhalt des Stammdaten-FXMLs
         Tab stammblattTab = new Tab("Stammdaten");
         stammblattTab.setContent(FXMLLoader.load(getClass().getResource("stammblatt.fxml")));
-
+*/
         // Füge den Tab zum TabPane hinzu
 
 
