@@ -52,7 +52,7 @@ public class WidmungController implements IAllExcelRegisterCards {
                     val += " beschränkt auf " + bs.getText();
 
                 System.out.println(val);
-                setCell(val, 15, 0);
+                setCell(val, 1, 14);
                 resultLabel.setText("");
             } else {
                 resultLabel.setText("Hinweis: Flächenwidmung oder Bauklasse nicht ausgewählt");
@@ -67,7 +67,7 @@ public class WidmungController implements IAllExcelRegisterCards {
                     default -> null;
                 };
                 System.out.println(bauweise);
-                setCell(bauweise, 16, 0);
+                setCell(bauweise, 2, 14);
                 resultLabel.setText("");
             } else {
                 resultLabel.setText("Hinweis: Bauweise nicht ausgewählt");
@@ -76,9 +76,9 @@ public class WidmungController implements IAllExcelRegisterCards {
 
             if (bb1.getValue() != null) {
                 String bb = bbVal(bb1);
-                setCell(bb, 17, 0);
+                setCell(bb, 3, 14);
             } else {
-                setCell("\n", 17, 0);
+                setCell("\n", 3, 14);
             }
 
             if (bb2.getValue() != null) {
@@ -86,15 +86,15 @@ public class WidmungController implements IAllExcelRegisterCards {
 
                 if(bb1.getValue() != null && !bb1.getValue().isEmpty()){
                     if(bb1.getValue().contains(bb2.getValue()))
-                        setCell("\n", 18, 0);
+                        setCell("\n", 4, 14);
                     else
-                        setCell(bb, 18, 0);
+                        setCell(bb, 4, 14);
                 } else {
-                    setCell(bb, 17, 0);
-                    setCell("\n", 18, 0);
+                    setCell(bb, 3, 14);
+                    setCell("\n", 4, 14);
                 }
             } else {
-                setCell("\n", 18, 0);
+                setCell("\n", 4, 14);
             }
             return true;
         } catch (Exception e) {
@@ -131,7 +131,7 @@ public class WidmungController implements IAllExcelRegisterCards {
     public void executePy(String name) {
         String s = null;
         try {
-            //Runtime.getRuntime().exec("src\\main\\resources\\com\\example\\financingtool\\script.bat");
+            //Runtime.getRuntime().exec("src\\main\\resources\\com\ \example\\financingtool\\script.bat");
             //String[] cmd = { "python", "src\\main\\resources\\com\\example\\financingtool\\widmung.py", name};
             //Process p = Runtime.getRuntime().exec(cmd);
             Process p = Runtime.getRuntime().exec("cmd /C start src\\main\\resources\\com\\example\\financingtool\\script.bat widmung.py \"" + name + "\"");

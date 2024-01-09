@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
 driver = webdriver.Edge()
-#driver.maximize_window()
+driver.maximize_window()
 
 url="https://www.wien.gv.at/flaechenwidmung/public/search.aspx?__jumpie#magwienscroll"
 
@@ -56,17 +56,31 @@ driver.execute_script("document.querySelector('#headerResize').style.display = '
 driver.execute_script("document.querySelector('.map-buttons').style.display = 'none';")
 driver.execute_script("document.querySelector('#kachelButtons').style.display = 'none';")
 driver.execute_script("document.querySelector('#gugContainer').style.display = 'none';")
-#driver.execute_script("document.querySelector('body').style.pointerEvents = 'none';")
+driver.execute_script("document.querySelector('#scale').style.display = 'none';")
+driver.execute_script("document.querySelector('body').style.pointerEvents = 'none';")
 body=driver.find_element(By.TAG_NAME, "body")
 driver.execute_script("arguments[0].style.pointerEvents='none'", body)
 
 time.sleep(2)
 
-driver.find_element(By.ID, "mapImage").screenshot("src\\main\\resources\\com\\example\\financingtool\\adresse.png")
+element=driver.find_element(By.ID, "mapImage")
+filename='src\\main\\resources\\com\\example\\financingtool\\adresse.png'
+element.screenshot(filename)
 
 time.sleep(1)
 
-screenshot=Image.open("src\\main\\resources\\com\\example\\financingtool\\adresse.png")
+def bounding_box_screenshot(bounding_box, filename):
+    base_image = Image.open(filename)
+    cropped_image = base_image.crop(bounding_box)
+    base_image = base_image.resize(cropped_image.size)
+    base_image.paste(cropped_image, (0, 0))
+    base_image.save(filename)
+    return base_image
+
+bounding_box = (400, 000, 800, 485)
+bounding_box_screenshot(bounding_box, filename) # Screenshot the bounding box (400, 000, 800, 485)
+
+screenshot=Image.open(filename)
 screenshot.show()
 
 driver.close()
