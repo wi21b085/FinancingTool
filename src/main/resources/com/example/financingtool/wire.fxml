@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.financingtool.WireController">
+    <Pane fx:id="pane" prefHeight="300.0" prefWidth="200.0">
+        <children>
+            <Label fx:id="wohnung" layoutX="80.0" layoutY="1.0" text="Wohnungen" />
+            <Label fx:id="parkplatz" layoutX="349.0" layoutY="1.0" text="Parkplätze" />
+
+            <Label layoutX="15.0" layoutY="33.0" text="Eigennutzer Verhältnis:" />
+            <TextField fx:id="ev" layoutX="150.0" layoutY="30.0" />
+            <Label layoutX="310.0" layoutY="33.0" text="Eigennutzer Plätze:" />
+            <TextField fx:id="eplz" layoutX="430.0" layoutY="30.0" />
+            <Label layoutX="15.0" layoutY="83.0" text="Anleger Verhältnis:" />
+            <TextField fx:id="av" layoutX="150.0" layoutY="80.0" />
+            <Label layoutX="310.0" layoutY="83.0" text="Anleger Plätze:" />
+            <TextField fx:id="aplz" layoutX="430.0" layoutY="80.0" />
+            <Label layoutX="15.0" layoutY="133.0" text="Eigennutzerpreis:" />
+            <TextField fx:id="wepr" layoutX="150.0" layoutY="130.0" />
+            <Label layoutX="15.0" layoutY="183.0" text="Anlegerpreis:" />
+            <TextField fx:id="wapr" layoutX="150.0" layoutY="180.0" />
+            <Label layoutX="310.0" layoutY="133.0" text="Eigennutzerpreis:" />
+            <TextField fx:id="pepr" layoutX="430.0" layoutY="130.0" />
+            <Label layoutX="310.0" layoutY="183.0" text="Anlegerpreis:" />
+            <TextField fx:id="papr" layoutX="430.0" layoutY="180.0" />
+
+        </children>
+    </Pane>
+    <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
+    <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
+    </Pane>
+</VBox>
+

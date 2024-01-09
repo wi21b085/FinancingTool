@@ -12,6 +12,10 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
+
 
 import java.io.*;
 import java.util.List;
@@ -43,7 +47,7 @@ public class ExcelToWordConverter {
 
             // Export Gesamtinvestitionskosten
             exportSheetToWord(workbook, "Gesamtinvestitionskosten");
-            document.createParagraph();
+            //document.createParagraph();
             exportSheetToWord(workbook,"Mittelverwendung - Mittelherkun");
             document.createParagraph();
             exportSheetToWord(workbook, "Wirtschaftlichkeitsrechnung");
@@ -92,8 +96,8 @@ public class ExcelToWordConverter {
         }else if (sheetName.equals("Gesamtinvestitionskosten")) {
             System.out.println("Ges");
             createGIKtable(sheet);
-            document.createParagraph().setPageBreak(true);
-            createTable(document, sheet,0,5);
+            //document.createParagraph().setPageBreak(true);
+           // createTable(document, sheet,0,5);
         }else if(sheetName.equals("Wirtschaftlichkeitsrechnung")){
             document.createParagraph().setPageBreak(true);
             createTable(document, sheet, 0,7);
@@ -192,6 +196,33 @@ public class ExcelToWordConverter {
             }
         }
     }
+
+    public static void addTextToFirstPage(String text) {
+        if (document == null) {
+            initializeDocument();
+        }
+
+        // Erstellen Sie einen Absatz und einen Run, um den Inhalt hinzuzufügen
+        XWPFParagraph paragraph = document.createParagraph();
+        XWPFRun run = paragraph.createRun();
+        run.setText(text);
+
+        // Setzen Sie den Absatz auf die erste Seite
+        paragraph.setPageBreak(true);
+
+        // Verschieben Sie den restlichen Inhalt um eine Seite nach unten
+        for (int i = document.getParagraphs().size() - 1; i >= 0; i--) {
+            XWPFParagraph currentParagraph = document.getParagraphs().get(i);
+            if (!currentParagraph.equals(paragraph)) {
+                // Verschieben Sie den Absatz auf die nächste Seite
+                document.setParagraph(currentParagraph, i + 1);
+            }
+        }
+        saveDocument();
+    }
+
+
+
 
 
 
