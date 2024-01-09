@@ -240,7 +240,8 @@ public class StammblattController implements IAllExcelRegisterCards {
 
     //Maria M
     public void weiter(ActionEvent actionEvent) {
-        //   BasisinformationApplication basisinformationApplication = new BasisinformationApplication();
+
+        BasisinformationApplication basisinformationApplication = new BasisinformationApplication();
         Weiter.weiter(weiterButton, BasisinformationApplication.class);
     }
 

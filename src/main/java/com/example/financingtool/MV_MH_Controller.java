@@ -1,6 +1,7 @@
 package com.example.financingtool;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,7 +33,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     @FXML
     private TextField ek;
     @FXML
-    private Text fk;
+    private Text fk=new Text();
 
     @FXML
     private TextField btvg;
@@ -43,6 +44,8 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     @FXML
     private Button weiterButton;
 
+    String newvalue="Kein FK";
+
 
 
     @FXML
@@ -50,26 +53,8 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         try {
             if(!tranche.getValue().isEmpty()){
                 String sheet = "Mittelverwendung - Mittelherkun";
-                //aktuell nur mit 1 oder 2 Tranchen machbar
+
                 int tranchen = Integer.parseInt(tranche.getValue());
-
-//                String[] ik = new String[1];
-//                if (IAllExcelRegisterCards.isNumericStr(this.ik.getText()) || this.ik.getText().trim().isEmpty()) {
-//                    ik[0] = this.ik.getText();
-//                    Update.updateRangeOfCells(ik, 1, 1, 1, new Label(), sheet);
-//                }
-
-//                String[] ek = new String[1];
-//                if (IAllExcelRegisterCards.isNumericStr(this.ek.getText()) || this.ek.getText().trim().isEmpty()) {
-//                    ek[0] = this.ek.getText();
-//                    Update.updateRangeOfCells(ek, 1, 1, 4, new Label(), sheet);
-//                }
-
-//                String[] btvg = new String[1];
-//                if (IAllExcelRegisterCards.isNumericStr(this.btvg.getText()) || this.btvg.getText().trim().isEmpty()) {
-//                    btvg[0] = this.btvg.getText();
-//                    Update.updateRangeOfCells(btvg, tranchen+2, 4, 4, new Label(), sheet);
-//                }
 
                 String[] vals = new String[tranchen];
                 String[] bez = new String[tranchen];
@@ -132,7 +117,6 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                             Update.updateRangeOfCellsString(bez, 40, 44, 3, new Label(), sheet);
                             break;
                     }
-                    //Update.updateRangeOfCells(bez, 2, tranchen, 3, new Label(), sheet);
                 }
             }
         } catch (Exception e) {
@@ -192,39 +176,59 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         }
     }
 
-    public void initialize() throws Exception {
-        getFK();
+    public void updateFKValue(String newValue) {
+        System.out.println("In MV_MH " + newValue);
+        this.fk.setText(newValue);
     }
 
-    public void getFK() throws Exception {
+    public void setFKValue(String fkValue) {
+        updateFKValue(fkValue);
+    }
+
+    public void initialize() throws Exception {
+        EventBus.getInstance().subscribe("updateFK", this::updateFKValue);
+    }
+
+    private void updateFKValue(Object newValue) {
+        this.fk.setText(newValue.toString());
+
+    }
+
+/*    public void getFK() throws Exception {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Gesamtinvestitionskosten";
             int rowIdx = 9;
             int colIdx = 1;
 
-            FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
-            Workbook workbook = new XSSFWorkbook(fileInputStream);
+            // FileInputStream und Workbook hier erstellen
+            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
 
-            Sheet sheet = workbook.getSheet(sheetName);
+                Sheet sheet = workbook.getSheet(sheetName);
 
-            Row row = sheet.getRow(rowIdx);
-            Cell cell = row.getCell(colIdx);
-            String fkCell = Double.toString(cell.getNumericCellValue());
-            System.out.println(fkCell);
-            fk.setText(fkCell);
-            fileInputStream.close();
-
-            workbook.close();
-
-
-        } catch (NumberFormatException | IOException e) {
-            e.printStackTrace();
-            //resultLabel.setText("Fehler bei der Aktualisierung.");
+                Row row = sheet.getRow(rowIdx);
+                Cell cell = row.getCell(colIdx);
+                String fkCell = Double.toString(cell.getNumericCellValue());
+                System.out.println(fkCell);
+                fk.setText(fkCell);
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+                //resultLabel.setText("Fehler bei der Aktualisierung.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-    }
+    }*/
+
+
 
     public void weiterMariaM(ActionEvent actionEvent) {
+        //Weiter.weiter(weiterButton,Textfeld.class);
         ExcelToWordConverter.exportExcelToWord();
+    }
+
+ public void setCon() {
+        GIKController.setMV_MH_Controller(this);
     }
 }

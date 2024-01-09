@@ -6,7 +6,7 @@
 
 
 <ScrollPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.financingtool.StammblattController" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
-    <VBox alignment="CENTER" spacing="10.0" minHeight="2000" minWidth="600">
+    <VBox alignment="TOP_CENTER" spacing="10.0" minHeight="1500" minWidth="600">
         <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
         </padding>
@@ -46,7 +46,7 @@
         <Button mnemonicParsing="false" onAction="#uploadImage" text="Bild wählen" />
 
         <!-- Maria M -->
-        <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiter" text="Weiter" />
+       <!-- <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiter" text="Weiter" />-->
 
     </VBox>
 </ScrollPane>
