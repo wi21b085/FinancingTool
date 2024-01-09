@@ -10,6 +10,8 @@ public class CombinePDF {
     static String file2 = "src/main/resources/com/example/financingtool/B.pdf";
     static String outputFile ="src/main/resources/com/example/financingtool/C.pdf";
 
+
+
     public static void combinePdf() {
         //zweiPDF kombinieren
         try {

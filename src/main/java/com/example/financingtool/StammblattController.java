@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class StammblattController implements IAllExcelRegisterCards {
 
@@ -288,39 +290,56 @@ public class StammblattController implements IAllExcelRegisterCards {
     //-nn pdf generieren nur für bilder
     public static void generatePdf(String imagePath) {
         try {
-            // Pfad zur vorhandenen PDF-Datei
             String existingPdfPath = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
-
-            // Pfad zur Ausgabedatei
             String outputPdfPath = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
+            String logoPath = "src/main/resources/com/example/financingtool/logo.jpg";
 
-            // Lade die vorhandene PDF
-            PDDocument document = PDDocument.load(new File(existingPdfPath));
+            PDDocument document;
 
-            // Füge eine neue Seite hinzu (optional, wenn du das Bild auf einer bestehenden Seite platzieren möchtest)
-            PDPage page = new PDPage();
-            document.addPage(page);
+            // Erstelle ein neues Dokument, wenn es nicht existiert
+            if (Files.exists(Paths.get(existingPdfPath))) {
+                // Lade die vorhandene PDF
+                document = PDDocument.load(new File(existingPdfPath));
+            } else {
+                document = new PDDocument();
+            }
 
-            // Lade das Bild
-            PDImageXObject image = PDImageXObject.createFromFile(imagePath, document);
+            try {
+                // Füge eine neue Seite hinzu
+                PDPage page = new PDPage();
+                document.addPage(page);
 
-            // Füge das Bild auf der Seite hinzu
-            PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                // Lade das Bild
+                PDImageXObject image = PDImageXObject.createFromFile(imagePath, document);
+                PDImageXObject logo = PDImageXObject.createFromFile(logoPath, document);
+                // Überprüfe, ob das Bild erfolgreich geladen wurde
+                if (image != null) {
+                    // Füge das Bild auf der Seite hinzu
+                    try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
+                        // image.getHeight(), image.getWidth()
+                        contentStream.drawImage(image, 50, 100, 500, 500);
+                        contentStream.drawImage(logo, 430, 630, 100, 100);
+                    }
 
-            //image.getHeight(), image.getWidth()
-            contentStream.drawImage(image, 50, 150, 500, 500);
-            contentStream.close();
+                    // Speichere das aktualisierte PDF-Dokument
+                    document.save(outputPdfPath);
+                    System.out.println("Bild erfolgreich zu vorhandener/neuer PDF hinzugefügt.");
+                } else {
+                    System.out.println("Fehler beim Laden des Bildes.");
+                }
 
-            // Speichere das aktualisierte PDF-Dokument
-            document.save(outputPdfPath);
-            document.close();
-
-            System.out.println("Bild erfolgreich zu vorhandener PDF hinzugefügt.");
+            } finally {
+                // Schließe das Dokument
+                document.close();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+
 
     //excel to word
     public static void ExceltoWord() {

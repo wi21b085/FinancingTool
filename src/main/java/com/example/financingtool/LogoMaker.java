@@ -18,6 +18,9 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class LogoMaker extends Application {
 
@@ -38,12 +41,22 @@ public class LogoMaker extends Application {
         try {
             // Pfad zur vorhandenen PDF-Datei
             String existingPdfPath = "src/main/resources/com/example/financingtool/empty.pdf";
-
             // Pfad zur Ausgabedatei
             String outputPdfPath = "src/main/resources/com/example/financingtool/logo.pdf";
 
             // Lade die vorhandene PDF
-            PDDocument document = PDDocument.load(new File(existingPdfPath));
+            PDDocument document;
+            File existingPdfFile = new File(existingPdfPath);
+
+            /*if(existingPdfFile.exists()){    -- ist ja eig. egal, wir wollen in jedem fall ein neues dokument.
+                //Lade die vorhandene pdf:
+                document = PDDocument.load(existingPdfFile);
+            }
+            */
+
+
+             //Erstelle ein neues Dokument
+                document = new PDDocument();
 
             // Füge eine neue Seite hinzu (optional, wenn du das Bild auf einer bestehenden Seite platzieren möchtest)
             PDPage page = new PDPage();
@@ -71,42 +84,32 @@ public class LogoMaker extends Application {
     }
 
 
-
     public void submit(ActionEvent actionEvent) {
         // Erstelle eine Instanz von FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Bild auswählen");
 
-        // Füge eine Filteroption für Bilddateien hinzu (optional)
-        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Bilder", "*.png", "*.jpg", "*.gif");
+        // Füge eine Filteroption für JPEG-Bilddateien hinzu
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("JPEG-Bilder", "*.jpg", "*.jpeg");
         fileChooser.getExtensionFilters().add(imageFilter);
 
         // Zeige den FileChooser und erhalte das ausgewählte Bild
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            // Lade das ausgewählte Bild
-            Image image = new Image(selectedFile.toURI().toString());
+            try {
+                // Kopiere das ausgewählte Bild unter dem Namen "logo.jpg" nach "Pfad1"
+                String destinationPath = "src/main/resources/com/example/financingtool/logo.jpg";
+                Files.copy(selectedFile.toPath(), Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING);
 
-            // Erstelle ein ImageView und setze das Bild
-            ImageView imageView = new ImageView(image);
+                // Hier kannst du die generatePdf-Methode aufrufen und den Bildpfad übergeben
+                //generatePdf(destinationPath);
+                System.out.println("Logo erfolgreich gespeichert");
 
-            // Setze das ImageView in einen StackPane (oder einen anderen Container deiner Wahl)
-            StackPane stackPane = new StackPane();
-            stackPane.getChildren().add(imageView);
-
-            // Erstelle die Szene und füge das StackPane hinzu
-            Scene scene = new Scene(stackPane, 600, 400);
-
-            // Setze die Szene für die Bühne (Stage)
-            Stage stage = new Stage();
-            stage.setScene(scene);
-
-            // Setze den Titel und zeige die Bühne
-            stage.setTitle("Hochgeladenes Bild");
-            stage.show();
-
-            // Hier kannst du die generatepdf-Methode aufrufen und den Bildpfad übergeben
-            generatePdf(selectedFile.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-}}
+    }
+
+}
