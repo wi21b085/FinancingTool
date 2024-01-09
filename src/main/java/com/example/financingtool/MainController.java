@@ -9,9 +9,9 @@ public class MainController {
 
     @FXML
     private Button weiterButton;
-    public void weiter(ActionEvent actionEvent) {
+   /* public void weiter(ActionEvent actionEvent) {
         Weiter.weiter(weiterButton, StammblattApplication.class);
 
-    }
+    }*/
 
 }

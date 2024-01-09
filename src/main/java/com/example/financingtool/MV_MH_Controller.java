@@ -1,6 +1,7 @@
 package com.example.financingtool;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,7 +33,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     @FXML
     private TextField ek;
     @FXML
-    private Text fk;
+    private Text fk=new Text();
 
     @FXML
     private TextField btvg;
@@ -42,6 +43,8 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     //Maria M
     @FXML
     private Button weiterButton;
+
+    String newvalue="Kein FK";
 
 
 
@@ -173,39 +176,59 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         }
     }
 
-    public void initialize() throws Exception {
-        getFK();
+    public void updateFKValue(String newValue) {
+        System.out.println("In MV_MH " + newValue);
+        this.fk.setText(newValue);
     }
 
-    public void getFK() throws Exception {
+    public void setFKValue(String fkValue) {
+        updateFKValue(fkValue);
+    }
+
+    public void initialize() throws Exception {
+        EventBus.getInstance().subscribe("updateFK", this::updateFKValue);
+    }
+
+    private void updateFKValue(Object newValue) {
+        this.fk.setText(newValue.toString());
+
+    }
+
+/*    public void getFK() throws Exception {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Gesamtinvestitionskosten";
             int rowIdx = 9;
             int colIdx = 1;
 
-            FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
-            Workbook workbook = new XSSFWorkbook(fileInputStream);
+            // FileInputStream und Workbook hier erstellen
+            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
 
-            Sheet sheet = workbook.getSheet(sheetName);
+                Sheet sheet = workbook.getSheet(sheetName);
 
-            Row row = sheet.getRow(rowIdx);
-            Cell cell = row.getCell(colIdx);
-            String fkCell = Double.toString(cell.getNumericCellValue());
-            System.out.println(fkCell);
-            fk.setText(fkCell);
-            fileInputStream.close();
-
-            workbook.close();
-
-
-        } catch (NumberFormatException | IOException e) {
-            e.printStackTrace();
-            //resultLabel.setText("Fehler bei der Aktualisierung.");
+                Row row = sheet.getRow(rowIdx);
+                Cell cell = row.getCell(colIdx);
+                String fkCell = Double.toString(cell.getNumericCellValue());
+                System.out.println(fkCell);
+                fk.setText(fkCell);
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+                //resultLabel.setText("Fehler bei der Aktualisierung.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-    }
+    }*/
+
+
 
     public void weiterMariaM(ActionEvent actionEvent) {
+        //Weiter.weiter(weiterButton,Textfeld.class);
         ExcelToWordConverter.exportExcelToWord();
+    }
+
+ public void setCon() {
+        GIKController.setMV_MH_Controller(this);
     }
 }
