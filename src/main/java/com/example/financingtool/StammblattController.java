@@ -239,11 +239,11 @@ public class StammblattController implements IAllExcelRegisterCards {
     }
 
     //Maria M
-    public void weiter(ActionEvent actionEvent) {
+    /*public void weiter(ActionEvent actionEvent) {
 
         BasisinformationApplication basisinformationApplication = new BasisinformationApplication();
         Weiter.weiter(weiterButton, BasisinformationApplication.class);
-    }
+    }*/
 
 
     //-n Wenn ein Bild hochgeladen wird, wird eine pdf nur mit bildern erstellt. die pdfs werden beim weiter

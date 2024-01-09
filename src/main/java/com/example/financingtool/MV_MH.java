@@ -1,3 +1,4 @@
+
 package com.example.financingtool;
 
 import javafx.event.ActionEvent;
@@ -32,6 +33,10 @@ public class MV_MH extends Application {
         stage.setTitle("Mittelverwendung & Mittelherkunft");
         stage.setScene(scene);
         stage.show();
+
+
+
+
 //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("MV_MH.fxml"));
 //        ScrollPane scrollPane = fxmlLoader.load();
 //        VBox root = (VBox) scrollPane.getContent();

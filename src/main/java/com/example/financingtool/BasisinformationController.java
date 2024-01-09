@@ -280,9 +280,9 @@ public class BasisinformationController {
     }
 
 
-    public void weiter(ActionEvent actionEvent) {
+  /*  public void weiter(ActionEvent actionEvent) {
         //ExcelToWordConverter.exportExcelToWord("Basisinformation");
 
         Weiter.weiter(weiterButton, GIKtoExcel.class);
-    }
+    }*/
 }

@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+/*
 import java.io.*;
 
 public class BasisinformationApplication extends Application {
@@ -32,4 +32,4 @@ public class BasisinformationApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-}
+}*/

@@ -1,7 +1,7 @@
 package com.example.financingtool;
 
 import com.itextpdf.kernel.color.Lab;
-import javafx.application.Application;
+/*import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,3 +41,4 @@ public class GIKtoExcel extends Application  implements IAllExcelRegisterCards{
     }
 
 }
+*/
