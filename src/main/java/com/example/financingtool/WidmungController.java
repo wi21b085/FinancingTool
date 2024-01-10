@@ -30,7 +30,7 @@ public class WidmungController implements IAllExcelRegisterCards {
     private TextField bs;
 
     @FXML
-    private Text ad;
+    private Text adresse;
     private String adCell;
     @FXML
     private Label resultLabel;
@@ -68,7 +68,7 @@ public class WidmungController implements IAllExcelRegisterCards {
                 };
                 System.out.println(bauweise);
                 setCell(bauweise, 2, 14);
-                resultLabel.setText("");
+                resultLabel.setText("Daten aktualisiert");
             } else {
                 resultLabel.setText("Hinweis: Bauweise nicht ausgewählt");
                 return false;
@@ -181,7 +181,7 @@ public class WidmungController implements IAllExcelRegisterCards {
             Cell cell = row.getCell(colIdx);
             adCell = cell.getStringCellValue();
             //System.out.println(adCell);
-            ad.setText(adCell);
+            adresse.setText(adCell);
             fileInputStream.close();
 
             workbook.close();
