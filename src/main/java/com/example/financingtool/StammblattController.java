@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -305,8 +306,9 @@ public class StammblattController implements IAllExcelRegisterCards {
             }
 
             try {
-                // Füge eine neue Seite hinzu
-                PDPage page = new PDPage();
+                // Füge eine neue Seite hinzu im Querformat hinzu
+                 PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+               // PDPage page = new PDPage();
                 document.addPage(page);
 
                 // Lade das Bild
@@ -317,8 +319,8 @@ public class StammblattController implements IAllExcelRegisterCards {
                     // Füge das Bild auf der Seite hinzu
                     try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
                         // image.getHeight(), image.getWidth()
-                        contentStream.drawImage(image, 50, 100, 500, 500);
-                        contentStream.drawImage(logo, 430, 630, 100, 100);
+                        contentStream.drawImage(image, 50, 50, 500, 500);
+                        contentStream.drawImage(logo, 680, 450, 100, 100);
                     }
 
                     // Speichere das aktualisierte PDF-Dokument

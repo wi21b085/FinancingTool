@@ -234,12 +234,45 @@ public class ExcelToWordConverter {
             out.close();
 
             System.out.println("Data successfully exported from Excel to Word.");
+            mergePDFs();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    //-- nazia - bilder und rechnungspdf miteinander verbinden.
+    public static void mergePDFs(){
+         String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
+         String file2 = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
+         String outputFile ="src/main/resources/com/example/financingtool/final.pdf";
+
+
+        try {
+            // Laden der ersten PDF-Datei
+            PDDocument pdfDocument1 = PDDocument.load(new java.io.File(file1));
+
+            // Laden der zweiten PDF-Datei
+            PDDocument pdfDocument2 = PDDocument.load(new java.io.File(file2));
+
+            // Kopieren aller Seiten von der ersten PDF-Datei zur Ausgabedatei
+            for (int i = 0; i < pdfDocument1.getNumberOfPages(); i++) {
+                PDPage page = pdfDocument1.getPage(i);
+                pdfDocument2.addPage(page);
+            }
+
+            // Speichern des Ergebnisses
+            pdfDocument2.save(outputFile);
+            System.out.println("Erfolgreiche Kombination der pdf's");
+
+            // Schließen der geöffneten Dokumente
+            pdfDocument1.close();
+            pdfDocument2.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void convertWordToPDF() {
         try {
             FileInputStream in = new FileInputStream(wordFilePath);
