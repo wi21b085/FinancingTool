@@ -26,7 +26,15 @@ public class ExcelToWordConverter {
     private static String pdfFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
     private static XWPFDocument document;
 
+    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
+
+
+    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
+        ExcelToWordConverter.executiveSummary=executiveSummary;
+    }
+
     public static void initializeDocument() {
+
         document = new XWPFDocument();
     }
 
@@ -90,9 +98,12 @@ public class ExcelToWordConverter {
             // Add a newline between the two tables
             document.createParagraph().setPageBreak(true);
             System.out.println("Bas");
-
             // Export columns H-I to Word
             createTable(document, sheet, 7, 8);
+
+            System.out.println("Widmung");
+            createTable(document,sheet,14,14);
+            document.createParagraph().setPageBreak(true);
         }else if (sheetName.equals("Gesamtinvestitionskosten")) {
             System.out.println("Ges");
             createGIKtable(sheet);
@@ -404,6 +415,7 @@ public class ExcelToWordConverter {
         // Button für die Konvertierung in Word im neuen Fenster
         javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in eine PDF");
         convertToWordButton.setOnAction(e -> ExcelToWordConverter.convertWordToPDF());
+
 
         // Layout für das neue Fenster
         VBox newRoot = new VBox(10);
