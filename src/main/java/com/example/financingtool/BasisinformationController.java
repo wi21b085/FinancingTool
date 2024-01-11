@@ -102,9 +102,9 @@ public class BasisinformationController {
             newValue[8] = beginn.getText();
             newValue[9] = ende.getText();
             newValue[10] = roi.getText();
-            setExecutiveSummary(executiveSummary);
+          //  setExecutiveSummary(executiveSummary);
             System.out.println("Daten aus Basisinformation gesendet gesendet: ");
-            executiveSummary.setDatenausBas(kaufpreis.getText(),groesse.getText(),wohneinheiten.getText(),garage.getText(),beginn.getText(),ende.getText());
+           // executiveSummary.setDatenausBas(kaufpreis.getText(),groesse.getText(),wohneinheiten.getText(),garage.getText(),beginn.getText(),ende.getText());
 
             writeToExcel(newValue);
         }

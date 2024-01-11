@@ -136,49 +136,41 @@ public class GIKController implements IAllExcelRegisterCards{
 
         if (updateD2 && updateD3to9 && updateD10&valid==true) {
             resultLabel.setText("Daten erfolgreich aktualisiert.");
-            String gik=getCellData(14,5);
-            executiveSummary.setDatenausGIK(gik);
+          getCellData();
+
+         //   executiveSummary.setDatenausGIK(gik);
 
         }
 
 
     }
-
-
-    private String getCellData(int rowIdx, int colIdx) {
+    private void getCellData() {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
-            FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
-            Workbook workbook = new XSSFWorkbook(fileInputStream);
+            String sheetName = "Gesamtinvestitionskosten";
+            int rowIdx = 13;
+            int colIdx = 4;
 
-            Sheet sheet = workbook.getSheet(sheetName);
-            Row row = sheet.getRow(rowIdx - 1); // Zeilenindex in Apache POI ist 0-basiert
-            Cell cell = row.getCell(colIdx - 1); // Spaltenindex in Apache POI ist 0-basiert
+            // FileInputStream und Workbook hier erstellen
+            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
 
-            String cellData = "";
+                Sheet sheet = workbook.getSheet(sheetName);
 
-            if (cell != null) {
-                switch (cell.getCellType()) {
-                    case STRING:
-                        cellData = cell.getStringCellValue();
-                        break;
-                    case NUMERIC:
-                        cellData = String.valueOf(cell.getNumericCellValue());
-                        break;
-                    // Weitere Fälle für andere Zellentypen, falls notwendig
-                }
+                Row row = sheet.getRow(rowIdx);
+                Cell cell = row.getCell(colIdx);
+                String gikCell = Double.toString(cell.getNumericCellValue());
+                System.out.println(gikCell);
+                //fk.setText(fkCell);
+             // executiveSummary.setDatenausGIK(gikCell);
+              //  executiveSummary.setDaten();
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+                //resultLabel.setText("Fehler bei der Aktualisierung.");
             }
-
-            fileInputStream.close();
-            workbook.close();
-
-            return cellData;
-        } catch (IOException e) {
-            e.printStackTrace();
-            resultLabel.setText("Fehler beim Lesen der Zelle E" + rowIdx);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        return "";
     }
 //Funktion von hier nach oben hinzugefügt zusätzlich
     public void updateD(ActionEvent actionEvent) {

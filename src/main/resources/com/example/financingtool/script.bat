@@ -23,4 +23,4 @@ IF NOT EXIST "src\\main\\resources\\com\\example\\financingtool\\pre.txt" (
 echo Taking screenshot...
 python src\\main\\resources\\com\\example\\financingtool\\%arg1% %arg2%
 
-exit
+REM exit

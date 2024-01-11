@@ -60,7 +60,7 @@ public class WidmungController implements IAllExcelRegisterCards {
 
                 System.out.println(val);
                 setCell(val, 1, 14);
-                executiveSummary.setDatenausWidmung(val);
+              //  executiveSummary.setDatenausWidmung(val);
                 resultLabel.setText("");
             } else {
                 resultLabel.setText("Hinweis: Flächenwidmung oder Bauklasse nicht ausgewählt");
