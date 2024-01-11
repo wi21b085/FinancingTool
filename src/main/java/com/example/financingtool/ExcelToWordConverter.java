@@ -447,8 +447,7 @@ public class ExcelToWordConverter {
 
         // Button für die Konvertierung in Word im neuen Fenster
         javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in eine PDF");
-        convertToWordButton.setOnAction(e -> ExcelToWordConverter.convertWordToPDF());
-
+        convertToWordButton.setOnAction(e ->handleConvertToWordButtonClick());
 
         // Layout für das neue Fenster
         VBox newRoot = new VBox(10);
@@ -459,6 +458,14 @@ public class ExcelToWordConverter {
         newStage.setTitle("PDF Konvertierung");
         newStage.setScene(newScene);
         newStage.show();
+    }
+    private static void handleConvertToWordButtonClick() {
+        ExcelToWordConverter.convertWordToPDF();
+        executiveSummary.getBasDaten();
+        executiveSummary.getGikData();
+        executiveSummary.getWIODaten();
+        executiveSummary.getWireData();
+        executiveSummary.setDaten();
     }
 
 }
