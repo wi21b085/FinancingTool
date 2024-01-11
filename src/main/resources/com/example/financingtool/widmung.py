@@ -67,6 +67,9 @@ element=driver.find_element(By.ID, "mapImage")
 filename='src\\main\\resources\\com\\example\\financingtool\\adresse.png'
 element.screenshot(filename)
 
+bild=Image.open(filename)
+w, h = bild.size
+
 time.sleep(1)
 
 def bounding_box_screenshot(bounding_box, filename):
@@ -77,7 +80,7 @@ def bounding_box_screenshot(bounding_box, filename):
     base_image.save(filename)
     return base_image
 
-bounding_box = (400, 000, 800, 485)
+bounding_box = (1/4*w, 000, 3/4*w, h)
 bounding_box_screenshot(bounding_box, filename) # Screenshot the bounding box (400, 000, 800, 485)
 
 screenshot=Image.open(filename)

@@ -30,10 +30,17 @@ public class WidmungController implements IAllExcelRegisterCards {
     private TextField bs;
 
     @FXML
-    private Text ad;
+    private Text adresse;
     private String adCell;
     @FXML
     private Label resultLabel;
+
+    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
+
+
+    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
+        BasisinformationController.executiveSummary=executiveSummary;
+    }
 
     @FXML
     protected void continueClick() {
@@ -53,6 +60,7 @@ public class WidmungController implements IAllExcelRegisterCards {
 
                 System.out.println(val);
                 setCell(val, 1, 14);
+                executiveSummary.setDatenausWidmung(val);
                 resultLabel.setText("");
             } else {
                 resultLabel.setText("Hinweis: Flächenwidmung oder Bauklasse nicht ausgewählt");
@@ -68,7 +76,7 @@ public class WidmungController implements IAllExcelRegisterCards {
                 };
                 System.out.println(bauweise);
                 setCell(bauweise, 2, 14);
-                resultLabel.setText("");
+                resultLabel.setText("Daten aktualisiert");
             } else {
                 resultLabel.setText("Hinweis: Bauweise nicht ausgewählt");
                 return false;
@@ -161,8 +169,13 @@ public class WidmungController implements IAllExcelRegisterCards {
     }
 
     public void initialize() {
-        getAddress();
+        //getAddress();
+        EventBus.getInstance().subscribe("updateAddress", this::updateAddress);
         bs.setPromptText("40% und/oder 45m");
+    }
+
+    private void updateAddress(Object newValue) {
+        this.adresse.setText(newValue.toString());
     }
 
     public void getAddress() {
@@ -181,7 +194,7 @@ public class WidmungController implements IAllExcelRegisterCards {
             Cell cell = row.getCell(colIdx);
             adCell = cell.getStringCellValue();
             //System.out.println(adCell);
-            ad.setText(adCell);
+            adresse.setText(adCell);
             fileInputStream.close();
 
             workbook.close();

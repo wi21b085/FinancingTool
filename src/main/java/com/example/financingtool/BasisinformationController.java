@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -55,6 +54,13 @@ public class BasisinformationController {
     private static final String FILE_NAME = "SEPJ-Rechnungen.xlsx";
     private static final String SHEET_NAME = "Basisinformationen";
 
+    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
+
+
+    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
+       BasisinformationController.executiveSummary=executiveSummary;
+    }
+
     public void onHelloButtonClick(ActionEvent actionEvent) {
     }
 
@@ -96,6 +102,9 @@ public class BasisinformationController {
             newValue[8] = beginn.getText();
             newValue[9] = ende.getText();
             newValue[10] = roi.getText();
+            setExecutiveSummary(executiveSummary);
+            System.out.println("Daten aus Basisinformation gesendet gesendet: ");
+            executiveSummary.setDatenausBas(kaufpreis.getText(),groesse.getText(),wohneinheiten.getText(),garage.getText(),beginn.getText(),ende.getText());
 
             writeToExcel(newValue);
         }
@@ -186,6 +195,8 @@ public class BasisinformationController {
             // Überprüfen, ob leer + Datentyp stimmt
             if (!kaufpreis.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
                 updateCellValue(sheet, 1, 1, kaufpreis.getText());
+
+
             } else if (!IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
                 resultLabel.setText("Gültige Daten erforderlich");
                 return;
@@ -278,6 +289,7 @@ public class BasisinformationController {
 
 
     }
+
 
 
   /*  public void weiter(ActionEvent actionEvent) {

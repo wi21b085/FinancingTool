@@ -65,6 +65,12 @@ public class StammblattController implements IAllExcelRegisterCards {
     private static final String FILE_NAME = "SEPJ-Rechnungen.xlsx";
     private static final String SHEET_NAME = "Basisinformationen";
 
+    static WidmungController widmungController=new WidmungController();
+
+    public static void setWidmungController(WidmungController widmungController){
+        StammblattController.widmungController=widmungController;
+    }
+
     public void onHelloButtonClick(ActionEvent actionEvent) {
     }
 
@@ -102,9 +108,13 @@ public class StammblattController implements IAllExcelRegisterCards {
             newValue[4] = schule.getText();
             newValue[5] = lage.getText();
             newValue[6] = oeffi.getText();
+            String strasseValue=strasse.getText();
+            setWidmungController(widmungController);
+            EventBus.getInstance().publish("updateAddress",strasseValue);
             writeToExcel(newValue);
             resultLabel.setText("Werte erfolgreich eingefügt.");
         }
+
     }
 
     public void writeToExcel(String[] newValue) {

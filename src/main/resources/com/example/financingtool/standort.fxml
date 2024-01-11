@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.financingtool.StandortController">
+    <Pane fx:id="pane" prefHeight="350.0" prefWidth="200.0">
+        <children>
+            <Label fx:id="dist" layoutX="80.0" layoutY="5.0" text="Distanzen zu (Zahlen in Minuten):" />
+
+            <Label layoutX="20.0" layoutY="33.0" text="Schulen:" />
+            <TextField fx:id="schFus" layoutX="160.0" layoutY="30.0" prefWidth="140.0" />
+            <TextField fx:id="schRad" layoutX="310.0" layoutY="30.0" prefWidth="140.0" />
+
+            <Label layoutX="20.0" layoutY="63.0" text="Restaurants:" />
+            <TextField fx:id="rstFus" layoutX="160.0" layoutY="60.0" prefWidth="140.0" />
+            <TextField fx:id="rstRad" layoutX="310.0" layoutY="60.0" prefWidth="140.0" />
+
+            <Label layoutX="20.0" layoutY="93.0" text="Öffis:" />
+            <TextField fx:id="oefFus" layoutX="160.0" layoutY="90.0" prefWidth="140.0" />
+            <TextField fx:id="oefRad" layoutX="310.0" layoutY="90.0" prefWidth="140.0" />
+
+            <Label layoutX="20.0" layoutY="123.0" text="Einzelhandel:" />
+            <TextField fx:id="ezFus" layoutX="160.0" layoutY="120.0" prefWidth="140.0" />
+            <TextField fx:id="ezRad" layoutX="310.0" layoutY="120.0" prefWidth="140.0" />
+
+            <Label layoutX="20.0" layoutY="153.0" text="Lagebeschreibungen:" />
+            <TextField fx:id="L1" layoutX="20.0" layoutY="180.0" prefWidth="430.0" />
+            <TextField fx:id="L2" layoutX="20.0" layoutY="210.0" prefWidth="430.0" />
+            <TextField fx:id="L3" layoutX="20.0" layoutY="240.0" prefWidth="430.0" />
+            <TextField fx:id="L4" layoutX="20.0" layoutY="270.0" prefWidth="430.0" />
+            <TextField fx:id="L5" layoutX="20.0" layoutY="300.0" prefWidth="430.0" />
+            <TextField fx:id="L6" layoutX="20.0" layoutY="330.0" prefWidth="430.0" />
+        </children>
+    </Pane>
+    <Pane fx:id="pane2" prefHeight="50.0" prefWidth="600.0">
+        <Label fx:id="resultLabel" layoutX="20.0" />
+
+        <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
+    </Pane>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

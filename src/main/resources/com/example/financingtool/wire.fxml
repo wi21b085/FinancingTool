@@ -14,26 +14,40 @@
             <Label fx:id="parkplatz" layoutX="349.0" layoutY="1.0" text="Parkplätze" />
 
             <Label layoutX="15.0" layoutY="33.0" text="Eigennutzer Verhältnis:" />
-            <TextField fx:id="ev" layoutX="150.0" layoutY="30.0" />
+            <TextField fx:id="ev" layoutX="150.0" layoutY="30.0" promptText="Bitte in Prozent angeben"/>
+
             <Label layoutX="310.0" layoutY="33.0" text="Eigennutzer Plätze:" />
             <TextField fx:id="eplz" layoutX="430.0" layoutY="30.0" />
+
             <Label layoutX="15.0" layoutY="83.0" text="Anleger Verhältnis:" />
-            <TextField fx:id="av" layoutX="150.0" layoutY="80.0" />
+            <TextField fx:id="av" layoutX="150.0" layoutY="80.0" promptText="Bitte in Prozent angeben"/>
+
             <Label layoutX="310.0" layoutY="83.0" text="Anleger Plätze:" />
             <TextField fx:id="aplz" layoutX="430.0" layoutY="80.0" />
+
             <Label layoutX="15.0" layoutY="133.0" text="Eigennutzerpreis:" />
             <TextField fx:id="wepr" layoutX="150.0" layoutY="130.0" />
+
             <Label layoutX="15.0" layoutY="183.0" text="Anlegerpreis:" />
             <TextField fx:id="wapr" layoutX="150.0" layoutY="180.0" />
+
             <Label layoutX="310.0" layoutY="133.0" text="Eigennutzerpreis:" />
             <TextField fx:id="pepr" layoutX="430.0" layoutY="130.0" />
+
             <Label layoutX="310.0" layoutY="183.0" text="Anlegerpreis:" />
             <TextField fx:id="papr" layoutX="430.0" layoutY="180.0" />
 
         </children>
     </Pane>
+
     <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
     <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
     </Pane>
+
+    <Label fx:id="resultLabel" />
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
 </VBox>
 

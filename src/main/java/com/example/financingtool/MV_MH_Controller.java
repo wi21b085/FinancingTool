@@ -176,10 +176,10 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         }
     }
 
-    public void updateFKValue(String newValue) {
+    /*public void updateFKValue(String newValue) {
         System.out.println("In MV_MH " + newValue);
         this.fk.setText(newValue);
-    }
+    }*/
 
     public void setFKValue(String fkValue) {
         updateFKValue(fkValue);
