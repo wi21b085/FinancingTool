@@ -175,7 +175,7 @@ public class WidmungController implements IAllExcelRegisterCards {
     }
 
     private void updateAddress(Object newValue) {
-        this.ad.setText(newValue.toString());
+        this.adresse.setText(newValue.toString());
     }
 
     public void getAddress() {
