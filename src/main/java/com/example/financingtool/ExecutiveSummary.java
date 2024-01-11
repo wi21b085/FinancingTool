@@ -44,9 +44,6 @@ public class ExecutiveSummary {
             "Ziel-Fertigstellung: ${zielfertigstellung} ";
 
     private String kaufpreis;
-    private String w;
-    private String i;
-    private String o;
     private String grundstuecksgroesse;
     private String wohneinheiten;
     private String garagenstellplaetze;
