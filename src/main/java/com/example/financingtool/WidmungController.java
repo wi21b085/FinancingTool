@@ -35,6 +35,13 @@ public class WidmungController implements IAllExcelRegisterCards {
     @FXML
     private Label resultLabel;
 
+    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
+
+
+    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
+        BasisinformationController.executiveSummary=executiveSummary;
+    }
+
     @FXML
     protected void continueClick() {
         boolean fwb = check();
@@ -53,6 +60,7 @@ public class WidmungController implements IAllExcelRegisterCards {
 
                 System.out.println(val);
                 setCell(val, 1, 14);
+                executiveSummary.setDatenausWidmung(val);
                 resultLabel.setText("");
             } else {
                 resultLabel.setText("Hinweis: Flächenwidmung oder Bauklasse nicht ausgewählt");
@@ -161,8 +169,13 @@ public class WidmungController implements IAllExcelRegisterCards {
     }
 
     public void initialize() {
-        getAddress();
+        //getAddress();
+        EventBus.getInstance().subscribe("updateAddress", this::updateAddress);
         bs.setPromptText("40% und/oder 45m");
+    }
+
+    private void updateAddress(Object newValue) {
+        this.ad.setText(newValue.toString());
     }
 
     public void getAddress() {

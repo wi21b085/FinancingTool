@@ -34,14 +34,49 @@ public class MainWindowController implements Initializable {
 
 
 
+    @FXML
+    private Tab stammblatt;
+
+    @FXML
+    private Tab basisinformation;
+
+    @FXML
+    private Tab gik;
+
+    @FXML
+    private Tab mvMh;
+
+    @FXML
+    private Tab wire;
+
+    @FXML
+    private Tab widmung;
+
+    @FXML
+    private Tab logoMaker;
+
+    @FXML
+    private Tab converter;
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Initializing MainWindowController...");
 
+       /* stammblatt.setClosable(false);
+        basisinformation.setClosable(false);
+        gik.setClosable(false);
+        mvMh.setClosable(false);
+        wire.setClosable(false);
+        widmung.setClosable(false);
+        logoMaker.setClosable(false);
+        converter.setClosable(false);
         // Print statements or debugging code...
-
+        gikController.setMV_MH_Controller(mvMhController);*/
         System.out.println("Initialization complete.");
-        gikController.setMV_MH_Controller(mvMhController);
+
+
     }
 
     public void convert(ActionEvent actionEvent) {

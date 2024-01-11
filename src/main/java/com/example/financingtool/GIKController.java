@@ -6,9 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
@@ -78,10 +76,14 @@ public class GIKController implements IAllExcelRegisterCards{
     private String sheetName = "Gesamtinvestitionskosten";
 
     static MV_MH_Controller mvMhController = new MV_MH_Controller();
+    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
 
 
     public static void setMV_MH_Controller(MV_MH_Controller mvMhController) {
         GIKController.mvMhController = mvMhController;
+    }
+    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
+        BasisinformationController.executiveSummary=executiveSummary;
     }
 
     @FXML
@@ -125,19 +127,60 @@ public class GIKController implements IAllExcelRegisterCards{
         String newValue = userInputField9.getText();
         System.out.println(userInputField9.getText());
         setMV_MH_Controller(mvMhController);
-
-        // Übergebe den Wert an die MV_MH_Controller-Instanz
-      /*  if (mvMhController != null) {
-            System.out.println("test");
-            mvMhController.updateFKValue(newValue);
-            //System.out.println(newValue.getClass().getSimpleName());
-            System.out.println(newValue);
-        }*/
         EventBus.getInstance().publish("updateFK", newValue);
+
+        updateD2 = validateAndUpdate(userInputFieldD2.getText(), 20, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 1, 3,resultLabel);
+        updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 19, 1, resultLabel);
+        updateD10 = validateAndUpdate(userInputFieldD10.getText(), 9, 3, resultLabel);
+
+
+        if (updateD2 && updateD3to9 && updateD10&valid==true) {
+            resultLabel.setText("Daten erfolgreich aktualisiert.");
+            String gik=getCellData(14,5);
+            executiveSummary.setDatenausGIK(gik);
+
+        }
 
 
     }
 
+
+    private String getCellData(int rowIdx, int colIdx) {
+        try {
+            String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+            FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+            Workbook workbook = new XSSFWorkbook(fileInputStream);
+
+            Sheet sheet = workbook.getSheet(sheetName);
+            Row row = sheet.getRow(rowIdx - 1); // Zeilenindex in Apache POI ist 0-basiert
+            Cell cell = row.getCell(colIdx - 1); // Spaltenindex in Apache POI ist 0-basiert
+
+            String cellData = "";
+
+            if (cell != null) {
+                switch (cell.getCellType()) {
+                    case STRING:
+                        cellData = cell.getStringCellValue();
+                        break;
+                    case NUMERIC:
+                        cellData = String.valueOf(cell.getNumericCellValue());
+                        break;
+                    // Weitere Fälle für andere Zellentypen, falls notwendig
+                }
+            }
+
+            fileInputStream.close();
+            workbook.close();
+
+            return cellData;
+        } catch (IOException e) {
+            e.printStackTrace();
+            resultLabel.setText("Fehler beim Lesen der Zelle E" + rowIdx);
+        }
+
+        return "";
+    }
+//Funktion von hier nach oben hinzugefügt zusätzlich
     public void updateD(ActionEvent actionEvent) {
 
          updateD2 = validateAndUpdate(userInputFieldD2.getText(), 20, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 1, 3,resultLabel);
@@ -217,7 +260,7 @@ public class GIKController implements IAllExcelRegisterCards{
                 return false;
             }
         }catch (NumberFormatException e) {
-            // Handle the case where parsing to double fails
+            // Handle the case where parsing to double fail
             errorLabel.setText("Achtung: Die Eingabe ist keine gültige Zahl.");
             resultLabel.setText("Achtung: Die Eingabe ist keine gültige Zahl.");
             System.out.println("Achtung: Die Eingabe ist keine gültige Zahl.");
