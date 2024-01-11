@@ -10,7 +10,7 @@ public class Wire extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Wire.class.getResource("wire.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 700, 360);
+        Scene scene = new Scene(fxmlLoader.load(), 700, 500);
         stage.setTitle("Wirtschaftlichkeitsrechnung");
         stage.setScene(scene);
         stage.show();
