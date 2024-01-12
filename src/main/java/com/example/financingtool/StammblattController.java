@@ -108,7 +108,7 @@ public class StammblattController implements IAllExcelRegisterCards {
             newValue[4] = schule.getText();
             newValue[5] = lage.getText();
             newValue[6] = oeffi.getText();
-            String strasseValue=strasse.getText();
+            String strasseValue= strasse.getText();
             setWidmungController(widmungController);
             EventBus.getInstance().publish("updateAddress",strasseValue);
             writeToExcel(newValue);
@@ -116,6 +116,7 @@ public class StammblattController implements IAllExcelRegisterCards {
         }
 
     }
+
 
     public void writeToExcel(String[] newValue) {
         try {

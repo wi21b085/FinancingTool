@@ -72,6 +72,37 @@ public class ExcelToWordConverter {
         }
     }
 
+    public static double getTranche() {
+        double trancheCell = 0;
+
+        try {
+            String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+            String sheetName = "Mittelverwendung - Mittelherkun";
+            int rowIdx = 10;
+            int colIdx = 7;
+
+            // FileInputStream und Workbook hier erstellen
+            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+
+                Sheet sheet = workbook.getSheet(sheetName);
+
+                Row row = sheet.getRow(rowIdx);
+                Cell cell = row.getCell(colIdx);
+                trancheCell =  cell.getNumericCellValue();
+                System.out.println(trancheCell);
+                //fk.setText(fkCell);
+
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+                //resultLabel.setText("Fehler bei der Aktualisierung.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return trancheCell;
+    }
+
     private static void exportSheetToWord(Workbook workbook, String sheetName) throws FileNotFoundException {
         Sheet sheet = workbook.getSheet(sheetName);
 
@@ -88,7 +119,58 @@ public class ExcelToWordConverter {
         FileOutputStream out = new FileOutputStream(wordFilePath);
         if(sheetName.equals("Mittelverwendung - Mittelherkun")){
             System.out.println("Mittelverwendung");
-            createTable(document,sheet,0,5);
+            /*if(getTranche()==2) {
+                System.out.println("MVMH: 2");
+                createTable(document, sheet, 0, 5);
+            } else if (getTranche()==1) {
+                System.out.println("MVMH:1");
+                createTable(document,sheet,8,13);
+            }else if (getTranche()==3){
+                System.out.println("MVMH: 3");
+                createTable(document,sheet, 16, 21);
+            } else if (getTranche()==4) {
+                System.out.println("MVMH: 4");
+                createTable(document,sheet,24,29);
+            }else if (getTranche()==5){
+                System.out.println("MVMH: 5");
+                createTable(document,sheet,32,37);
+            }else{
+                System.out.println("Entschuldigung, etwas ist beim Generieren der Tabelle schiefgegeangen.");
+            }*/
+
+            double tranche = getTranche();
+            int startRow;
+            int endRow;
+
+            switch ((int) tranche) {
+                case 2:
+                    startRow = 0;
+                    endRow= 5;
+                    break;
+                case 1:
+                    startRow = 8;
+                    endRow=13;
+                    break;
+                case 3:
+                    startRow = 16;
+                    endRow=21;
+                    break;
+                case 4:
+                    startRow = 24;
+                    endRow=29;
+                    break;
+                case 5:
+                    startRow = 32;
+                    endRow=37;
+                    break;
+                default:
+                    System.out.println("Entschuldigung, etwas ist beim Generieren der Tabelle schiefgegangen.");
+                    return; // Hier könntest du weiteren Code hinzufügen oder die Methode verlassen, je nach Bedarf
+            }
+
+            createTable(document, sheet, startRow, endRow);
+
+
         }
 
         else if (sheetName.equals("Basisinformation")) {

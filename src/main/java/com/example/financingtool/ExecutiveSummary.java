@@ -254,17 +254,17 @@ public class ExecutiveSummary {
 
     public void setDaten() {
         Map<String, String> dynamicValues = new HashMap<>();
-        dynamicValues.put("kaufpreis", Objects.requireNonNullElse(this.kaufpreis, ""));
-        dynamicValues.put("grundstuecksgroesse", Objects.requireNonNullElse(this.grundstuecksgroesse, ""));
-        dynamicValues.put("wohneinheiten", Objects.requireNonNullElse(this.wohneinheiten, ""));
-        dynamicValues.put("garagenstellplaetze", Objects.requireNonNullElse(this.garagenstellplaetze, ""));
-        dynamicValues.put("zielbaubeginn", Objects.requireNonNullElse(this.zielbaubeginn, ""));
-        dynamicValues.put("zielfertigstellung", Objects.requireNonNullElse(this.zielfertigstellung, ""));
-        dynamicValues.put("wio", Objects.requireNonNullElse(this.wio, ""));
-        dynamicValues.put("gik", Objects.requireNonNullElse(this.gik, ""));
-        dynamicValues.put("gewinn", Objects.requireNonNullElse(this.gewinn, ""));
-        dynamicValues.put("roi", Objects.requireNonNullElse(this.roi, ""));
-        dynamicValues.put("verkaufserloes",Objects.requireNonNullElse(this.verkaufserloes,""));
+        dynamicValues.put("kaufpreis", Objects.requireNonNullElse(this.kaufpreis, "kaufpreis"));
+        dynamicValues.put("grundstuecksgroesse", Objects.requireNonNullElse(this.grundstuecksgroesse, "grundstuecksgroesse"));
+        dynamicValues.put("wohneinheiten", Objects.requireNonNullElse(this.wohneinheiten, "wohneinheiten"));
+        dynamicValues.put("garagenstellplaetze", Objects.requireNonNullElse(this.garagenstellplaetze, "garagenstellplaetze"));
+        dynamicValues.put("zielbaubeginn", Objects.requireNonNullElse(this.zielbaubeginn, "zielbaubeginn"));
+        dynamicValues.put("zielfertigstellung", Objects.requireNonNullElse(this.zielfertigstellung, "zielfertigstellung"));
+        dynamicValues.put("wio", Objects.requireNonNullElse(this.wio, "wio"));
+        dynamicValues.put("gik", Objects.requireNonNullElse(this.gik, "gik"));
+        dynamicValues.put("gewinn", Objects.requireNonNullElse(this.gewinn, "gewinn"));
+        dynamicValues.put("roi", Objects.requireNonNullElse(this.roi, "roi"));
+        dynamicValues.put("verkaufserloes",Objects.requireNonNullElse(this.verkaufserloes,"verkaufserloes"));
 
 
         createDocument(dynamicValues);

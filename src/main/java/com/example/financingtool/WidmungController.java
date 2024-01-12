@@ -169,13 +169,22 @@ public class WidmungController implements IAllExcelRegisterCards {
     }
 
     public void initialize() {
-        //getAddress();
+        getAddress();
         EventBus.getInstance().subscribe("updateAddress", this::updateAddress);
         bs.setPromptText("40% und/oder 45m");
+
+
+
+
     }
 
     private void updateAddress(Object newValue) {
-        this.adresse.setText(newValue.toString());
+        System.out.println(newValue.toString());
+        if(newValue.toString().isEmpty()){
+            getAddress();
+        }else {
+            this.adresse.setText(newValue.toString());
+        }
     }
 
     public void getAddress() {
@@ -212,4 +221,34 @@ public class WidmungController implements IAllExcelRegisterCards {
         field[0] = tf;
         Update.updateRangeOfCellsString(field, row, row, coll, new Label(), sheet);
     }
+
+   /*public String getAddress() {
+        String addressCell = null;
+        try {
+            String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+            String sheetName = "Basisinformation";
+            int rowIdx = 2;
+            int colIdx = 8;
+
+            // FileInputStream und Workbook hier erstellen
+            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+
+                Sheet sheet = workbook.getSheet(sheetName);
+
+                Row row = sheet.getRow(rowIdx);
+                Cell cell = row.getCell(colIdx);
+                addressCell = cell.getStringCellValue();
+                System.out.println(addressCell);
+
+                //fk.setText(fkCell);
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+                //resultLabel.setText("Fehler bei der Aktualisierung.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return addressCell;
+    }*/
 }
