@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
@@ -373,47 +374,60 @@ public class ExcelToWordConverter {
 
             PDDocument pdfDocument = new PDDocument();
 
-            PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+            List<XWPFParagraph> paragraphs = document.getParagraphs();
+            List<XWPFTable> tables = document.getTables();
 
+            for (int pageIndex = 0; pageIndex < Math.max(paragraphs.size(), tables.size()); pageIndex++) {
+                PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                pdfDocument.addPage(pdfPage);
 
-            PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
+                PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
 
-            try {
-                List<XWPFParagraph> paragraphs = document.getParagraphs();
-                for (XWPFParagraph paragraph : paragraphs) {
-                    String text = paragraph.getText();
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-                    contentStream.beginText();
-                    contentStream.newLineAtOffset(20, pdfPage.getMediaBox().getHeight() - 20);
-                    contentStream.showText(text);
-                    contentStream.newLine();
-                    contentStream.endText();
+                try {
+                    // Zeichne das Logo oben rechts auf jeder Seite (ersetze "logo.jpg" durch den tatsächlichen Pfad zu deinem Bild)
+                    PDImageXObject logo = PDImageXObject.createFromFile("logo.jpg", pdfDocument);
+                    float logoX = pdfPage.getMediaBox().getWidth() - 120;
+                    float logoY = pdfPage.getMediaBox().getHeight() - 50;
+                    float logoWidth = 100;
+                    float logoHeight = 30;
+                    contentStream.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+
+                    if (pageIndex < paragraphs.size()) {
+                        // Verarbeite den Text auf der aktuellen Seite
+                        String text = paragraphs.get(pageIndex).getText();
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(20, pdfPage.getMediaBox().getHeight() - 20);
+                        contentStream.showText(text);
+                        contentStream.newLine();
+                        contentStream.endText();
+                    }
+
+                    if (pageIndex < tables.size()) {
+                        // Verarbeite die Tabelle auf der aktuellen Seite
+                        XWPFTable table = tables.get(pageIndex);
+                        float margin = 20;
+                        float yStart = pdfPage.getMediaBox().getHeight() - margin;
+                        float tableWidth = pdfPage.getMediaBox().getWidth() - 2 * margin;
+                        float yPosition = yStart;
+                        float yBottom = margin;
+
+                        // Draw table on the PDF page
+                        drawPdfTable(pdfDocument, tableWidth, yStart, yBottom, table);
+                    }
+                } finally {
+                    contentStream.close();
                 }
-
-                List<XWPFTable> tables = document.getTables();
-                for (XWPFTable table : tables) {
-                    float margin = 20;
-                    float yStart = pdfPage.getMediaBox().getHeight() - margin;
-                    float tableWidth = pdfPage.getMediaBox().getWidth() - 2 * margin;
-                    float yPosition = yStart;
-                    float yBottom = margin;
-
-                    // Draw table on the PDF page
-                    drawPdfTable(pdfDocument, tableWidth, yStart, yBottom, table);
-
-                }
-
-            } finally {
-                contentStream.close();
-
-                // Verwenden Sie die gleiche Dateipfadvariable wie für das Word-Dokument
-                pdfDocument.save(pdfFilePath);
-                pdfDocument.close();
-                in.close();
             }
+
+            // Verwenden Sie die gleiche Dateipfadvariable wie für das Word-Dokument
+            pdfDocument.save(pdfFilePath);
+            pdfDocument.close();
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private static void drawPdfTable(PDDocument document, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
