@@ -73,37 +73,6 @@ public class ExcelToWordConverter {
         }
     }
 
-    public static double getTranche() {
-        double trancheCell = 0;
-
-        try {
-            String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
-            String sheetName = "Mittelverwendung - Mittelherkun";
-            int rowIdx = 10;
-            int colIdx = 7;
-
-            // FileInputStream und Workbook hier erstellen
-            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
-                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
-
-                Sheet sheet = workbook.getSheet(sheetName);
-
-                Row row = sheet.getRow(rowIdx);
-                Cell cell = row.getCell(colIdx);
-                trancheCell =  cell.getNumericCellValue();
-                System.out.println(trancheCell);
-                //fk.setText(fkCell);
-
-            } catch (NumberFormatException | IOException e) {
-                e.printStackTrace();
-                //resultLabel.setText("Fehler bei der Aktualisierung.");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return trancheCell;
-    }
-
     private static void exportSheetToWord(Workbook workbook, String sheetName) throws FileNotFoundException {
         Sheet sheet = workbook.getSheet(sheetName);
 
@@ -120,58 +89,7 @@ public class ExcelToWordConverter {
         FileOutputStream out = new FileOutputStream(wordFilePath);
         if(sheetName.equals("Mittelverwendung - Mittelherkun")){
             System.out.println("Mittelverwendung");
-            /*if(getTranche()==2) {
-                System.out.println("MVMH: 2");
-                createTable(document, sheet, 0, 5);
-            } else if (getTranche()==1) {
-                System.out.println("MVMH:1");
-                createTable(document,sheet,8,13);
-            }else if (getTranche()==3){
-                System.out.println("MVMH: 3");
-                createTable(document,sheet, 16, 21);
-            } else if (getTranche()==4) {
-                System.out.println("MVMH: 4");
-                createTable(document,sheet,24,29);
-            }else if (getTranche()==5){
-                System.out.println("MVMH: 5");
-                createTable(document,sheet,32,37);
-            }else{
-                System.out.println("Entschuldigung, etwas ist beim Generieren der Tabelle schiefgegeangen.");
-            }*/
-
-            double tranche = getTranche();
-            int startRow;
-            int endRow;
-
-            switch ((int) tranche) {
-                case 2:
-                    startRow = 0;
-                    endRow= 5;
-                    break;
-                case 1:
-                    startRow = 8;
-                    endRow=13;
-                    break;
-                case 3:
-                    startRow = 16;
-                    endRow=21;
-                    break;
-                case 4:
-                    startRow = 24;
-                    endRow=29;
-                    break;
-                case 5:
-                    startRow = 32;
-                    endRow=37;
-                    break;
-                default:
-                    System.out.println("Entschuldigung, etwas ist beim Generieren der Tabelle schiefgegangen.");
-                    return; // Hier könntest du weiteren Code hinzufügen oder die Methode verlassen, je nach Bedarf
-            }
-
-            createTable(document, sheet, startRow, endRow);
-
-
+            createTable(document,sheet,0,5);
         }
 
         else if (sheetName.equals("Basisinformation")) {
@@ -191,7 +109,7 @@ public class ExcelToWordConverter {
             System.out.println("Ges");
             createGIKtable(sheet);
             //document.createParagraph().setPageBreak(true);
-           // createTable(document, sheet,0,5);
+            // createTable(document, sheet,0,5);
         }else if(sheetName.equals("Wirtschaftlichkeitsrechnung")){
             document.createParagraph().setPageBreak(true);
             createTable(document, sheet, 0,7);
@@ -337,9 +255,9 @@ public class ExcelToWordConverter {
 
     //-- nazia - bilder und rechnungspdf miteinander verbinden.
     public static void mergePDFs(){
-         String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
-         String file2 = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
-         String outputFile ="src/main/resources/com/example/financingtool/final.pdf";
+        String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
+        String file2 = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
+        String outputFile ="src/main/resources/com/example/financingtool/final.pdf";
 
 
         try {
@@ -384,13 +302,8 @@ public class ExcelToWordConverter {
                 PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
 
                 try {
-                    // Zeichne das Logo oben rechts auf jeder Seite (ersetze "logo.jpg" durch den tatsächlichen Pfad zu deinem Bild)
-                    PDImageXObject logo = PDImageXObject.createFromFile("logo.jpg", pdfDocument);
-                    float logoX = pdfPage.getMediaBox().getWidth() - 120;
-                    float logoY = pdfPage.getMediaBox().getHeight() - 50;
-                    float logoWidth = 100;
-                    float logoHeight = 30;
-                    contentStream.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+
+
 
                     if (pageIndex < paragraphs.size()) {
                         // Verarbeite den Text auf der aktuellen Seite
@@ -543,7 +456,8 @@ public class ExcelToWordConverter {
 
         // Button für die Konvertierung in Word im neuen Fenster
         javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in eine PDF");
-        convertToWordButton.setOnAction(e ->handleConvertToWordButtonClick());
+        convertToWordButton.setOnAction(e -> ExcelToWordConverter.convertWordToPDF());
+
 
         // Layout für das neue Fenster
         VBox newRoot = new VBox(10);
@@ -554,14 +468,6 @@ public class ExcelToWordConverter {
         newStage.setTitle("PDF Konvertierung");
         newStage.setScene(newScene);
         newStage.show();
-    }
-    private static void handleConvertToWordButtonClick() {
-        ExcelToWordConverter.convertWordToPDF();
-        executiveSummary.getBasDaten();
-        executiveSummary.getGikData();
-        executiveSummary.getWIODaten();
-        executiveSummary.getWireData();
-        executiveSummary.setDaten();
     }
 
 }
