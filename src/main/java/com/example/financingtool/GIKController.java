@@ -83,7 +83,7 @@ public class GIKController implements IAllExcelRegisterCards{
         GIKController.mvMhController = mvMhController;
     }
     public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-        BasisinformationController.executiveSummary=executiveSummary;
+       GIKController.executiveSummary=executiveSummary;
     }
 
     @FXML
