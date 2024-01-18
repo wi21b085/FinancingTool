@@ -31,7 +31,6 @@ public class WidmungController implements IAllExcelRegisterCards {
 
     @FXML
     private Text adresse;
-    private String adCell;
     @FXML
     private Label resultLabel;
 
@@ -43,12 +42,12 @@ public class WidmungController implements IAllExcelRegisterCards {
     }
 
     @FXML
-    protected void continueClick() {
+    protected void continueClick() { // button-klick führt check der eingaben durch und startet python-skript
         boolean fwb = check();
 
         System.out.println(fwb);
         if(fwb)
-            executePy(adCell);
+            executePy(adresse.getText());
     }
 
     private boolean check() {
@@ -171,11 +170,7 @@ public class WidmungController implements IAllExcelRegisterCards {
     public void initialize() {
         getAddress();
         EventBus.getInstance().subscribe("updateAddress", this::updateAddress);
-        bs.setPromptText("40% und/oder 45m");
-
-
-
-
+        bs.setPromptText("z.B. 40% und/oder 45m");
     }
 
     private void updateAddress(Object newValue) {
@@ -201,9 +196,9 @@ public class WidmungController implements IAllExcelRegisterCards {
 
             Row row = sheet.getRow(rowIdx);
             Cell cell = row.getCell(colIdx);
-            adCell = cell.getStringCellValue();
+
             //System.out.println(adCell);
-            adresse.setText(adCell);
+            adresse.setText(cell.getStringCellValue());
             fileInputStream.close();
 
             workbook.close();
