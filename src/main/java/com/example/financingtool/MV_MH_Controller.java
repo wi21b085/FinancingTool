@@ -9,7 +9,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,6 +192,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     }
 
     public void initialize() throws Exception {
+        getFK();
         EventBus.getInstance().subscribe("updateFK", this::updateFKValue);
     }
 
@@ -192,7 +201,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
 
     }
 
-/*    public void getFK() throws Exception {
+  public void getFK() throws Exception {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Gesamtinvestitionskosten";
@@ -217,7 +226,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 
 
 

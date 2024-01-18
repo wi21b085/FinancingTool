@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class StammblattController implements IAllExcelRegisterCards {
@@ -32,38 +33,61 @@ public class StammblattController implements IAllExcelRegisterCards {
     static String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
     static String wordFilePath = "src/main/resources/com/example/financingtool/SEPJ_Stammblatt.docx";
     static String pdfFilePath = "src/main/resources/com/example/financingtool/SEPJ_Stammblatt.pdf";
+
     //wird das mit dem pdf ein problem werden, wenn es noch nicht existiert?
 
     //Maria M
     @FXML
     private Button weiterButton;
-
-    //Label für Error Text??
     @FXML
-    private Label resultLabel;
-    //User inputs
+    private Label resultLabelBasisinformation;
+    @FXML
+    private Label resultLabelStammdaten;
+    //stammdaten userinput
     @FXML
     private TextField firmenname;
     @FXML
     private TextField strasse;
-
     @FXML
     private TextField plz;
-
     @FXML
     private TextField ort;
-
-    @FXML
-    private TextField schule;
-
     @FXML
     private TextField oeffi;
-
     @FXML
     private TextField lage;
 
+    //basisinformation userinput
+    @FXML
+    private TextField kaufpreis;
+    @FXML
+    private TextField groesse;
+
+    @FXML
+    private TextField nutzflaeche;
+    @FXML
+    private TextField wohneinheiten;
+    @FXML
+    private TextField garage;
+    @FXML
+    private TextField aussenflaeche;
+    @FXML
+    private TextField verkaufserloes;
+    @FXML
+    private TextField gewinn;
+    @FXML
+    private TextField beginn;
+    @FXML
+    private TextField ende;
+    @FXML
+    private TextField roi;
+
+    //pfade
     private static final String FILE_NAME = "SEPJ-Rechnungen.xlsx";
     private static final String SHEET_NAME = "Basisinformationen";
+
+    //basisinformation
+    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
 
     static WidmungController widmungController=new WidmungController();
 
@@ -78,10 +102,12 @@ public class StammblattController implements IAllExcelRegisterCards {
     public void submit() {
         //Submit nur möglich, wenn alle Felder befüllt.
 
+        submitBasisInformation();
+
         //leere Eingabe
         if (firmenname.getText().isEmpty() || strasse.getText().isEmpty() || plz.getText().isEmpty()
-                || ort.getText().isEmpty() || lage.getText().isEmpty() || schule.getText().isEmpty() || oeffi.getText().isEmpty()) {
-            resultLabel.setText("Daten unvollständig");
+                || ort.getText().isEmpty() || lage.getText().isEmpty()  || oeffi.getText().isEmpty()) {
+            resultLabelStammdaten.setText("Stammdaten unvollständig");
             return;
         }
         //ungültige eingabe
@@ -90,31 +116,129 @@ public class StammblattController implements IAllExcelRegisterCards {
                 IAllExcelRegisterCards.isNumericStr(ort.getText()) ||
                 IAllExcelRegisterCards.isNumericStr(lage.getText()) ||
                 IAllExcelRegisterCards.isNumericStr(oeffi.getText()) ||
-                !IAllExcelRegisterCards.isNumericStr(plz.getText()) ||
-                !IAllExcelRegisterCards.isNumericStr(schule.getText())
+                !IAllExcelRegisterCards.isNumericStr(plz.getText())
         ) {
-            resultLabel.setText("Achtung, bitte geben Sie gültige Daten an");
+            resultLabelStammdaten.setText("Achtung, bitte geben Sie gültige Daten an");
             return;
         }
         //richtige Werte
         else {
             //    boolean str = IAllExcelRegisterCards.isNumericStr(firmenname.getText());
 
-            String[] newValue = new String[7];
+            String[] newValue = new String[6];
             newValue[0] = firmenname.getText();
             newValue[1] = strasse.getText();
             newValue[2] = plz.getText();
             newValue[3] = ort.getText();
-            newValue[4] = schule.getText();
-            newValue[5] = lage.getText();
-            newValue[6] = oeffi.getText();
+            newValue[4] = lage.getText();
+            newValue[5] = oeffi.getText();
             String strasseValue=strasse.getText();
             setWidmungController(widmungController);
             EventBus.getInstance().publish("updateAddress",strasseValue);
             writeToExcel(newValue);
-            resultLabel.setText("Werte erfolgreich eingefügt.");
+            resultLabelStammdaten.setText("Stammdaten erfolgreich eingefügt");
         }
 
+    }
+
+    private void submitBasisInformation() {
+
+        //leere werte
+        if(kaufpreis.getText().isEmpty() || groesse.getText().isEmpty() || nutzflaeche.getText().isEmpty()
+                || wohneinheiten.getText().isEmpty() || garage.getText().isEmpty() || aussenflaeche.getText().isEmpty()
+                || verkaufserloes.getText().isEmpty() || gewinn.getText().isEmpty() || beginn.getText().isEmpty()
+                ||ende.getText().isEmpty() || roi.getText().isEmpty() ){
+            resultLabelBasisinformation.setText("Basisinformation unvollständig");
+            // System.out.println("Daten unvollständig");
+        }
+        //ungültige werte
+        else if (!IAllExcelRegisterCards.isNumericStr(kaufpreis.getText()) ||
+                !IAllExcelRegisterCards.isNumericStr(groesse.getText()) ||
+                !IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText()) ||
+                !IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText()) ||
+                !IAllExcelRegisterCards.isNumericStr(garage.getText()) ||
+                !IAllExcelRegisterCards.isNumericStr(aussenflaeche.getText()) ||
+                !IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText()) ||
+                !IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())
+        ){
+            resultLabelBasisinformation.setText("Achtung, bitte geben Sie gültige Daten an");
+            return;
+        }
+        //gültige werte
+        else {
+
+            String[] newValue = new String[11];
+            newValue[0] = kaufpreis.getText();
+            newValue[1] = groesse.getText();
+            newValue[2] = nutzflaeche.getText();
+            newValue[3] = wohneinheiten.getText();
+            newValue[4] = garage.getText();
+            newValue[5] = aussenflaeche.getText();
+            newValue[6] = verkaufserloes.getText();
+            newValue[7] = gewinn.getText();
+            newValue[8] = beginn.getText();
+            newValue[9] = ende.getText();
+            newValue[10] = roi.getText();
+            setExecutiveSummary(executiveSummary);
+            System.out.println("Daten aus Basisinformation gesendet gesendet: ");
+            executiveSummary.setDatenausBas(kaufpreis.getText(),groesse.getText(),wohneinheiten.getText(),garage.getText(),beginn.getText(),ende.getText());
+
+            writeToBasisInformationExcel(newValue);
+        }
+    }
+
+    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
+        BasisinformationController.executiveSummary=executiveSummary;
+    }
+
+    private void writeToBasisInformationExcel(String[] newValue) {
+        try {
+            String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+            String sheetName = "Basisinformation";
+
+            FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+            Workbook workbook = new XSSFWorkbook(fileInputStream);
+
+            Sheet sheet = workbook.getSheet(sheetName);
+
+            // Überprüfen Sie, ob die Zeichenkette nicht leer ist und nicht null ist, bevor Sie sie parsen
+            if (newValue != null && !newValue[0].isEmpty()) {
+                updateCellValue(sheet, 1, 1, newValue[0]); //Reihenfolge:
+                updateCellValue(sheet,2, 1, newValue[1]);
+                updateCellValue(sheet, 3, 1, newValue[2]);
+                updateCellValue(sheet, 4,1, newValue[3]);
+                updateCellValue(sheet, 5,1, newValue[4]);
+                updateCellValue(sheet, 6,1, newValue[5]);
+                updateCellValue(sheet, 7,1, newValue[6]);
+                updateCellValue(sheet, 8,1, newValue[7]);
+                updateCellValue(sheet, 9,1, newValue[8]);
+                updateCellValue(sheet, 10,1, newValue[9]);
+                updateCellValue(sheet, 11,1, newValue[10]);
+                //kommt in die Zelle 7, 7
+            }
+            else{
+                //eig sollte das eh nicht vorkommen, weil es davor schon ausgeschlossen ist.
+                resultLabelBasisinformation.setText("Basisinformationen unvollständig");
+            }
+
+            // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
+            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            evaluator.evaluateAll();
+
+            fileInputStream.close();
+
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(excelFilePath));
+            workbook.write(fileOutputStream);
+            fileOutputStream.close();
+            workbook.close();
+
+            resultLabelBasisinformation.setText("Basisinformation erfolgreich eingefügt");
+
+
+        } catch (NumberFormatException | IOException e) {
+            e.printStackTrace();
+            //  resultLabel.setText("Fehler bei der Aktualisierung von Zelle D" + 6);
+        }
     }
 
     public void writeToExcel(String[] newValue) {
@@ -129,17 +253,16 @@ public class StammblattController implements IAllExcelRegisterCards {
 
             // Überprüfen Sie, ob die Zeichenkette nicht leer ist und nicht null ist, bevor Sie sie parsen
             if (newValue != null && !newValue[0].isEmpty()) {
-                updateCellValue(sheet, 1, 8, newValue[0]); //Reihenfolge: firmenname, strasse, plz, ort, schule, oeffi
+                updateCellValue(sheet, 1, 8, newValue[0]); //Reihenfolge: firmenname, strasse, plz, ort, oeffi
                 updateCellValue(sheet, 2, 8, newValue[1]);
                 updateCellValue(sheet, 3, 8, newValue[2]);
                 updateCellValue(sheet, 4, 8, newValue[3]);
                 updateCellValue(sheet, 5, 8, newValue[4]);
-                updateCellValue(sheet, 6, 8, newValue[5]);
-                updateCellValue(sheet, 8, 8, newValue[6]);
+                updateCellValue(sheet, 7, 8, newValue[5]);
                 //kommt in die Zelle 7, 7
             } else {
 
-                System.out.println("Daten unvollständig");
+                System.out.println("Stammdaten unvollständig");
             }
 
             // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
@@ -172,6 +295,7 @@ public class StammblattController implements IAllExcelRegisterCards {
     // Kommentar Maria M: updateRangeofCells in UpdateKlasse hier stattdessen idealerweise aufrufen
     //Werte aktualisieren
     public void update(ActionEvent actionEvent) throws IOException {
+        updateBasisInformation();
         String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
         String sheetName = "Basisinformation";
 
@@ -184,55 +308,63 @@ public class StammblattController implements IAllExcelRegisterCards {
                 System.out.println("Sheet == NULL");
             }
 
-            //leere daten
+
+
+            //stammdaten anfang
             if (firmenname.getText().isEmpty() && strasse.getText().isEmpty() && plz.getText().isEmpty() && ort.getText().isEmpty() &&
-                    schule.getText().isEmpty() && oeffi.getText().isEmpty()) {
-                resultLabel.setText("Daten erforderlich zum Aktualisieren");
+                    oeffi.getText().isEmpty() && lage.getText().isEmpty()) {
+                resultLabelStammdaten.setText("Stammdaten leer");
                 return;
             }
-            //Reihenfolge: firmenname, strasse, plz, ort, schule, oeffi
+            //Reihenfolge: firmenname, strasse, plz, ort, oeffi
             if (!firmenname.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(firmenname.getText())) {
                 updateCellValue(sheet, 1, 8, firmenname.getText());
             } else if (!firmenname.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(firmenname.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabelStammdaten.setText("Gültige Stammdaten erforderlich");
                 System.out.println("Firma ungültig" + firmenname.getText());
                 return;
             }
             if (!strasse.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(strasse.getText())) {
                 updateCellValue(sheet, 2, 8, strasse.getText());
             } else if (!strasse.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(strasse.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabelStammdaten.setText("Gültige Daten erforderlich");
                 System.out.println("Strasse");
                 return;
             }
             if (!plz.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(plz.getText())) {
                 updateCellValue(sheet, 3, 8, plz.getText());
             } else if (!plz.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(plz.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabelStammdaten.setText("Gültige Daten erforderlich");
                 System.out.println("plz");
                 return;
             }
             if (!ort.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(ort.getText())) {
                 updateCellValue(sheet, 4, 8, ort.getText());
             } else if (!ort.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(ort.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabelStammdaten.setText("Gültige Daten erforderlich");
                 System.out.println("ort");
                 return;
             }
-            if (!schule.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(firmenname.getText())) {
-                updateCellValue(sheet, 5, 8, schule.getText());
-            } else if (!schule.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(schule.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
-                return;
-            }
-            if (!oeffi.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(firmenname.getText())) {
-                updateCellValue(sheet, 8, 8, oeffi.getText());
-            } else if (!oeffi.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(oeffi.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+
+            if (!lage.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(lage.getText())) {
+                updateCellValue(sheet, 5, 8, lage.getText());
+            } else if (!lage.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(lage.getText())) {
+                resultLabelStammdaten.setText("Gültige Daten erforderlich");
+                System.out.println("lage");
                 return;
             }
 
-            resultLabel.setText("Daten erfolgreich geändert. ");
+            //schule row: 5, coll: 8
+            if (!oeffi.getText().isEmpty() && !IAllExcelRegisterCards.isNumericStr(firmenname.getText())) {
+                updateCellValue(sheet, 7, 8, oeffi.getText());
+            } else if (!oeffi.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(oeffi.getText())) {
+                resultLabelStammdaten.setText("Gültige Daten erforderlich");
+                return;
+            }
+            //stammdaten ende
+
+
+            resultLabelStammdaten.setText("Stammdaten erfolgreich geändert. ");
             // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
             FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
             evaluator.evaluateAll();
@@ -247,6 +379,123 @@ public class StammblattController implements IAllExcelRegisterCards {
         } catch (IOException e) {
             e.printStackTrace(); // Handle or log the exception as needed
         }
+    }
+
+    private void updateBasisInformation() {
+        String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+        String sheetName = "Basisinformation";
+
+        try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+             Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+
+            Sheet sheet = workbook.getSheet(sheetName);
+            if (sheet == null) {
+                sheet = workbook.createSheet(sheetName);
+                System.out.println("Sheet == NULL");
+            }
+
+            //BASISINFORMATION ANFANG
+            //überprüfen, ob basisinformation daten leer sind
+            if (kaufpreis.getText().isEmpty() && groesse.getText().isEmpty() && nutzflaeche.getText().isEmpty() &&
+                    wohneinheiten.getText().isEmpty() && garage.getText().isEmpty() && aussenflaeche.getText().isEmpty()
+                    && verkaufserloes.getText().isEmpty() && gewinn.getText().isEmpty() && beginn.getText().isEmpty()
+                    && ende.getText().isEmpty() && roi.getText().isEmpty()) {
+                resultLabelBasisinformation.setText("Basisinformation leer");
+
+                return;
+            }
+
+            if (!kaufpreis.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
+                updateCellValue(sheet, 1, 1, kaufpreis.getText());
+
+
+            } else if (!IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            if (!groesse.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(groesse.getText())) {
+                updateCellValue(sheet, 2, 1, groesse.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(groesse.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            if (!nutzflaeche.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText())) {
+                updateCellValue(sheet, 3, 1, nutzflaeche.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            if (!wohneinheiten.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText())) {
+                updateCellValue(sheet, 4, 1, wohneinheiten.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            if (!garage.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(garage.getText())) {
+                updateCellValue(sheet, 5, 1, garage.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(garage.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            if (!aussenflaeche.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(aussenflaeche.getText())) {
+                updateCellValue(sheet, 6, 1, aussenflaeche.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(aussenflaeche.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            if (!verkaufserloes.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())) {
+                updateCellValue(sheet, 7, 1, verkaufserloes.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            if (!gewinn.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(gewinn.getText())) {
+                updateCellValue(sheet, 8, 1, gewinn.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(gewinn.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+
+            if (!beginn.getText().isEmpty()) { // Datum kann String + Double sein
+                updateCellValue(sheet, 9, 1, beginn.getText());
+            }
+
+            if (!ende.getText().isEmpty()) { // Datum kann String + Double sein
+                updateCellValue(sheet, 10, 1, ende.getText());
+            }
+
+            if (!roi.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(roi.getText())) {
+                updateCellValue(sheet, 11, 1, roi.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(roi.getText())) {
+                resultLabelBasisinformation.setText("Gültige Basisinformationen erforderlich");
+                return;
+            }
+
+            // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
+            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            evaluator.evaluateAll();
+
+            fileInputStream.close();
+
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(excelFilePath));
+            workbook.write(fileOutputStream);
+            fileOutputStream.close();
+            workbook.close();
+            resultLabelBasisinformation.setText("Basisinformation erfolgreich aktualisiert");
+
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle or log the exception as needed
+        }
+
     }
 
     //Maria M
@@ -265,7 +514,7 @@ public class StammblattController implements IAllExcelRegisterCards {
         fileChooser.setTitle("Bild auswählen");
 
         // Füge eine Filteroption für Bilddateien hinzu (optional)
-        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Bilder", "*.png", "*.jpg", "*.gif");
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Bilder", ".png", ".jpg", "*.gif");
         fileChooser.getExtensionFilters().add(imageFilter);
 
         // Zeige den FileChooser und erhalte das ausgewählte Bild
@@ -317,8 +566,8 @@ public class StammblattController implements IAllExcelRegisterCards {
 
             try {
                 // Füge eine neue Seite hinzu im Querformat hinzu
-                 PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-               // PDPage page = new PDPage();
+                PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                // PDPage page = new PDPage();
                 document.addPage(page);
 
                 // Lade das Bild
@@ -377,15 +626,13 @@ public class StammblattController implements IAllExcelRegisterCards {
 
             XWPFTable table = document.createTable();
 
-            String[][] headers = new String[7][1];
+            String[][] headers = new String[6][1];
             headers[0][0] = "Firmenname";
             headers[1][0] = "Strasse";
             headers[2][0] = "Postleitzahl";
             headers[3][0] = "Ort";
-            headers[4][0] = "Entfernung zur Schule";
-            headers[5][0] = "Lagebeschreibung";
-            headers[6][0] = "Öffentliche Verkehrsmittel";
-
+            headers[4][0] = "Lagebeschreibung";
+            headers[5][0] = "Öffentliche Verkehrsmittel";
 
 
             XWPFTableRow headerRow = table.getRow(0);
@@ -405,10 +652,9 @@ public class StammblattController implements IAllExcelRegisterCards {
 
                 for (int colIdx = 0; colIdx < 2; colIdx++) {
                     XWPFTableCell cell = dataRow.getCell(colIdx);
-                   if (cell == null) { //errorhandling
+                    if (cell == null) { //errorhandling
                         cell = dataRow.createCell();
                     }
-
 
                     if (row.getCell(colIdx) != null) {
 
@@ -428,4 +674,22 @@ public class StammblattController implements IAllExcelRegisterCards {
         }
     }
 
+    public void delete() {
+        //Bilder löschen
+        String filePath = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
+        try {
+            // Pfad zum PDF-Datei erstellen
+            Path path = Paths.get(filePath);
+
+            // Datei löschen
+            Files.deleteIfExists(path);
+
+            // System.out.println("Die Datei wurde erfolgreich gelöscht: " + filePath);
+            resultLabelStammdaten.setText("Bilder erfolgreich gelöscht");
+        } catch (IOException e) {
+            // Fehler behandeln, wenn das Löschen fehlschlägt
+            //  System.err.println("Fehler beim Löschen der Datei: " + e.getMessage());
+            resultLabelStammdaten.setText("Fehler beim Löschen der Datei");
+        }
+    }
 }
