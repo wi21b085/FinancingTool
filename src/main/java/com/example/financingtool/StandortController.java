@@ -48,7 +48,7 @@ public class StandortController implements IAllExcelRegisterCards {
     @FXML
     private Label dist;
     private String adCell;
-    private String plzCell;
+    private int plzCell;
     private String ortCell;
     private String adresse;
     @FXML
@@ -128,7 +128,7 @@ public class StandortController implements IAllExcelRegisterCards {
 
             row = sheet.getRow(3);
             cell = row.getCell(8);
-            plzCell = String.valueOf((int) cell.getNumericCellValue());
+            plzCell = Integer.parseInt(cell.getStringCellValue());
 
             row = sheet.getRow(4);
             cell = row.getCell(8);
