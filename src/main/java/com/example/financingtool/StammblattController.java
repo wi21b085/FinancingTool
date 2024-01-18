@@ -188,7 +188,7 @@ public class StammblattController implements IAllExcelRegisterCards {
     }
 
     public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-        BasisinformationController.executiveSummary=executiveSummary;
+        StammblattController.executiveSummary=executiveSummary;
     }
 
     private void writeToBasisInformationExcel(String[] newValue) {
