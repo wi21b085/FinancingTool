@@ -29,7 +29,7 @@ public class ExecutiveSummary {
 
     private static String wordFilePath = "src/main/resources/com/example/financingtool/ExecutiveSummary.docx";
     private static String staticText = "Executive Summary \n" +
-            "Ankauf der Liegenschaft “Braumüllergasse 21” (EZ 2169, KG 01401) in Form eines Asset Deals mit\n" +
+            "Ankauf der Liegenschaft “${strasse}” (EZ 2169, KG 01401) in Form eines Asset Deals mit\n" +
             "einer eigens gegründeten Projektgesellschaft\n" +
             "Kaufpreis: EUR ${kaufpreis},-\n" +
             "Bekanntgabe Bebauungsbestimmungen; sind angefordert; Widmung: ${wio} \n" +
@@ -56,6 +56,7 @@ public class ExecutiveSummary {
     private static XWPFDocument document;
     int countFilled=0;
     private String roi;
+    private String strasse;
 
 
     public static void initializeDocument() {
@@ -198,6 +199,8 @@ public class ExecutiveSummary {
             int rowIDxWohneinheiten=4;
             int rowIDxBaubeginn=9;
             int rowIDxFertigstellung=10;
+            int rowIDxStrasse=2;
+            int colIDxStrasse=8;
 
 
 
@@ -228,6 +231,10 @@ public class ExecutiveSummary {
                 Cell cellFf=rowFf.getCell(colIdx);
                 String ffCell=cellFf.getStringCellValue();
 
+                Row rowStrasse= sheet.getRow(rowIDxStrasse);
+                Cell cellStrasse=rowStrasse.getCell(colIDxStrasse);
+                String strasseCell=cellStrasse.getStringCellValue();
+
 
                 System.out.println(kaufpreisCell);
                 System.out.println(ggCell);
@@ -240,6 +247,7 @@ public class ExecutiveSummary {
                 this.wohneinheiten=weCell;
                 this.zielbaubeginn=bbCell;
                 this.zielfertigstellung=ffCell;
+                this.strasse=strasseCell;
 
 
                 //fk.setText(fkCell);
@@ -254,6 +262,7 @@ public class ExecutiveSummary {
 
     public void setDaten() {
         Map<String, String> dynamicValues = new HashMap<>();
+        dynamicValues.put("strasse", Objects.requireNonNullElse(this.strasse, "strasse"));
         dynamicValues.put("kaufpreis", Objects.requireNonNullElse(this.kaufpreis, "kaufpreis"));
         dynamicValues.put("grundstuecksgroesse", Objects.requireNonNullElse(this.grundstuecksgroesse, "grundstuecksgroesse"));
         dynamicValues.put("wohneinheiten", Objects.requireNonNullElse(this.wohneinheiten, "wohneinheiten"));
