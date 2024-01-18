@@ -38,7 +38,7 @@ public class WidmungController implements IAllExcelRegisterCards {
 
 
     public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-        BasisinformationController.executiveSummary=executiveSummary;
+        WidmungController.executiveSummary=executiveSummary;
     }
 
     @FXML

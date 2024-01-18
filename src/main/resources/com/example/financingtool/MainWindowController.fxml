@@ -16,10 +16,10 @@
                 <fx:include source="stammblatt.fxml"/>
                 <closable>false</closable>
             </Tab>
-            <!--<Tab fx:id="standort" text="Standort">
+            <Tab fx:id="standort" text="Standort">
                 <fx:include source="standort.fxml"/>
                 <closable>false</closable>
-            </Tab> -->
+            </Tab>
             <Tab fx:id="GIK" text="GIK">
                 <fx:include source="gik.fxml"/>
                 <closable>false</closable>
