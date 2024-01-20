@@ -19,7 +19,7 @@
             <TextField fx:id="rstFus" layoutX="160.0" layoutY="60.0" prefWidth="140.0" />
             <TextField fx:id="rstRad" layoutX="310.0" layoutY="60.0" prefWidth="140.0" />
 
-            <Label layoutX="20.0" layoutY="93.0" text="Öffis:" />
+            <Label layoutX="20.0" layoutY="93.0" text="Öff. Anbindung:" />
             <TextField fx:id="oefFus" layoutX="160.0" layoutY="90.0" prefWidth="140.0" />
             <TextField fx:id="oefRad" layoutX="310.0" layoutY="90.0" prefWidth="140.0" />
 
@@ -27,17 +27,14 @@
             <TextField fx:id="ezFus" layoutX="160.0" layoutY="120.0" prefWidth="140.0" />
             <TextField fx:id="ezRad" layoutX="310.0" layoutY="120.0" prefWidth="140.0" />
 
-            <Label layoutX="20.0" layoutY="153.0" text="Lagebeschreibungen:" />
-            <TextField fx:id="L1" layoutX="20.0" layoutY="180.0" prefWidth="430.0" />
-            <TextField fx:id="L2" layoutX="20.0" layoutY="210.0" prefWidth="430.0" />
-            <TextField fx:id="L3" layoutX="20.0" layoutY="240.0" prefWidth="430.0" />
-            <TextField fx:id="L4" layoutX="20.0" layoutY="270.0" prefWidth="430.0" />
-            <TextField fx:id="L5" layoutX="20.0" layoutY="300.0" prefWidth="430.0" />
-            <TextField fx:id="L6" layoutX="20.0" layoutY="330.0" prefWidth="430.0" />
+            <Button fx:id="maps" layoutX="160.0" layoutY="150.0" onAction="#openMaps" text="Google Maps öffnen" />
+
+            <Label layoutX="20.0" layoutY="183.0" text="Lagebeschreibungen (optional, max. 10 Zeilen):" />
+            <TextArea fx:id="L1" layoutX="20.0" layoutY="210.0" prefWidth="430.0" prefHeight="150.0" />
         </children>
     </Pane>
     <Pane fx:id="pane2" prefHeight="50.0" prefWidth="600.0">
-        <Label fx:id="resultLabel" layoutX="20.0" />
+        <Label fx:id="resultLabel" layoutX="20.0" layoutY="35.0" />
 
         <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
     </Pane>
