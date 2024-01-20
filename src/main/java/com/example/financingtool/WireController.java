@@ -74,14 +74,14 @@ public class WireController implements IAllExcelRegisterCards {
 
             // Werte ins Excel eintragen
             Sheet sheet = workbook.getSheet(sheetName);
-            sheet.getRow(3).getCell(1).setCellValue(Double.parseDouble(value[0])); // ev - B4
-            sheet.getRow(4).getCell(1).setCellValue(Double.parseDouble(value[2])); // av - B5
-            sheet.getRow(2).getCell(5).setCellValue(Double.parseDouble(value[4])); // wepr - F3
-            sheet.getRow(2).getCell(7).setCellValue(Double.parseDouble(value[5])); // wapr - H3
-            sheet.getRow(9).getCell(2).setCellValue(Double.parseDouble(value[1])); // eplz - C10
-            sheet.getRow(10).getCell(2).setCellValue(Double.parseDouble(value[3])); // aplz - C11
-            sheet.getRow(8).getCell(5).setCellValue(Double.parseDouble(value[6])); // pepr - F9
-            sheet.getRow(8).getCell(7).setCellValue(Double.parseDouble(value[7])); // papr - H9
+            sheet.getRow(4).getCell(1).setCellValue(Double.parseDouble(value[0])); // ev - B4
+            sheet.getRow(5).getCell(1).setCellValue(Double.parseDouble(value[2])); // av - B5
+            sheet.getRow(3).getCell(5).setCellValue(Double.parseDouble(value[4])); // wepr - F3
+            sheet.getRow(3).getCell(7).setCellValue(Double.parseDouble(value[5])); // wapr - H3
+            sheet.getRow(10).getCell(2).setCellValue(Double.parseDouble(value[1])); // eplz - C10
+            sheet.getRow(11).getCell(2).setCellValue(Double.parseDouble(value[3])); // aplz - C11
+            sheet.getRow(9).getCell(5).setCellValue(Double.parseDouble(value[6])); // pepr - F9
+            sheet.getRow(9).getCell(7).setCellValue(Double.parseDouble(value[7])); // papr - H9
 
             // Formeln aktualisieren
             FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
