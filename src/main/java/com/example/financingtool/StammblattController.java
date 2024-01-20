@@ -514,7 +514,7 @@ public class StammblattController implements IAllExcelRegisterCards {
         fileChooser.setTitle("Bild auswählen");
 
         // Füge eine Filteroption für Bilddateien hinzu (optional)
-        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Bilder", ".png", ".jpg", "*.gif");
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Bilder", "*.png", "*.jpg", "*.jpeg");
         fileChooser.getExtensionFilters().add(imageFilter);
 
         // Zeige den FileChooser und erhalte das ausgewählte Bild
@@ -556,6 +556,14 @@ public class StammblattController implements IAllExcelRegisterCards {
 
             PDDocument document;
 
+            File jlogo = new File(logoPath);
+            if (!jlogo.exists()) {
+                String pLogoPath = "src/main/resources/com/example/financingtool/logo.png";
+                File pLogo = new File(pLogoPath);
+                if(pLogo.exists()) {
+                    logoPath = pLogoPath;
+                }
+            }
             // Erstelle ein neues Dokument, wenn es nicht existiert
             if (Files.exists(Paths.get(existingPdfPath))) {
                 // Lade die vorhandene PDF
@@ -577,9 +585,29 @@ public class StammblattController implements IAllExcelRegisterCards {
                 if (image != null) {
                     // Füge das Bild auf der Seite hinzu
                     try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
-                        // image.getHeight(), image.getWidth()
-                        contentStream.drawImage(image, 50, 50, 500, 500);
-                        contentStream.drawImage(logo, 680, 450, 100, 100);
+                        float originalHeight = image.getHeight();
+                        float originalWidth = image.getWidth();
+                        float maxDimension = 500;
+                        float newWidth, newHeight;
+                        if (originalWidth > originalHeight) {
+                            newWidth = maxDimension;
+                            newHeight = (int) Math.round((double) originalHeight / originalWidth * maxDimension);
+                        } else {
+                            newWidth = (int) Math.round((double) originalWidth / originalHeight * maxDimension);
+                            newHeight = maxDimension;
+                        }
+                        contentStream.drawImage(image, 50, 50, newWidth, newHeight);
+                        originalHeight = logo.getHeight();
+                        originalWidth = logo.getWidth();
+                        maxDimension = 100;
+                        if (originalWidth > originalHeight) {
+                            newWidth = maxDimension;
+                            newHeight = (int) Math.round((double) originalHeight / originalWidth * maxDimension);
+                        } else {
+                            newWidth = (int) Math.round((double) originalWidth / originalHeight * maxDimension);
+                            newHeight = maxDimension;
+                        }
+                        contentStream.drawImage(logo, 680, 450, newWidth, newHeight);
                     }
 
                     // Speichere das aktualisierte PDF-Dokument

@@ -1,10 +1,11 @@
 package com.example.financingtool;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import javafx.scene.input.KeyEvent;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -33,17 +34,9 @@ public class StandortController implements IAllExcelRegisterCards {
     @FXML
     private TextField ezRad;
     @FXML
-    private TextField L1;
+    private TextArea L1;
     @FXML
-    private TextField L2;
-    @FXML
-    private TextField L3;
-    @FXML
-    private TextField L4;
-    @FXML
-    private TextField L5;
-    @FXML
-    private TextField L6;
+    private Button maps;
 
     @FXML
     private Label dist;
@@ -56,13 +49,77 @@ public class StandortController implements IAllExcelRegisterCards {
 
     @FXML
     protected void continueClick() {
-        check();
+        boolean fwb = check();
 
+        System.out.println(fwb);
+    }
+
+    @FXML
+    protected void openMaps() {
         executePy(adresse);
     }
 
-    private void check() {
+    private boolean check() {
+        try {
+            if (
+                    schFus.getText().isEmpty() || schRad.getText().isEmpty() ||
+                    rstFus.getText().isEmpty() || rstRad.getText().isEmpty() ||
+                    oefFus.getText().isEmpty() || oefRad.getText().isEmpty() ||
+                    ezFus.getText().isEmpty() || ezRad.getText().isEmpty()
+            ) {
+                resultLabel.setText("Stammdaten unvollständig");
+                return false;
+            } else if (
+                    IAllExcelRegisterCards.isNumericStr(schFus.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(schRad.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(rstFus.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(rstRad.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(oefFus.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(oefRad.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(ezFus.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(ezRad.getText())
+            ) {
+                resultLabel.setText("Daten wurden übernommen");
+                setCell(schFus, 2, 1);
+                setCell(schRad, 2, 2);
+                setCell(rstFus, 3, 1);
+                setCell(rstRad, 3, 2);
+                setCell(oefFus, 4, 1);
+                setCell(oefRad, 4, 2);
+                setCell(ezFus, 5, 1);
+                setCell(ezRad, 5, 2);
 
+                if(!L1.getText().isBlank() && L1.getText() != null) {
+                    String text = L1.getText();
+                    String[] textSplit = text.split("\n", 0);
+                    System.out.println(textSplit);
+                    int n = 2;
+                    for (String a : textSplit) {
+                        if(a.isEmpty())
+                            setCell("\n", n++, 5);
+                        else
+                            setCell(a, n++, 5);
+                    }
+                    if (textSplit.length < 8) {
+                        emptyCells(n);
+                    }
+                }
+                return true;
+            } else {
+                resultLabel.setText("Numerische Eingaben sind falsch.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void emptyCells(int n) {
+        for (int i = n; i < 10; i++) {
+            System.out.println(i);
+            setCell("\n", i, 5);
+        }
     }
 
     public void executePy(String name) {
@@ -98,7 +155,21 @@ public class StandortController implements IAllExcelRegisterCards {
     }
 
     public void initialize() {
+        // Add a key pressed event handler
+        L1.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // Get the current number of lines
+            int numberOfLines = L1.getParagraphs().size();
+
+            // Allow Enter key
+            if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                // Check if the number of lines is already at the limit
+                if (numberOfLines >= 8) {
+                    event.consume(); // Consume the event to prevent further input
+                }
+            }
+        });
         getAddress();
+        EventBus.getInstance().subscribe("updateAddress", this::updateAddress);
         schFus.setPromptText("zu Fuß");
         schRad.setPromptText("mit dem Fahrrad");
         rstFus.setPromptText("zu Fuß");
@@ -107,7 +178,18 @@ public class StandortController implements IAllExcelRegisterCards {
         oefRad.setPromptText("mit dem Fahrrad");
         ezFus.setPromptText("zu Fuß");
         ezRad.setPromptText("mit dem Fahrrad");
+        emptyCells(2);
         //resultLabel.setText("Testtext");
+    }
+
+    private void updateAddress(Object newValue) {
+        System.out.println(newValue.toString());
+        if(newValue.toString().isEmpty()){
+            getAddress();
+        }else {
+            adCell = newValue.toString();
+            distSet();
+        }
     }
 
     public void getAddress() {
@@ -124,7 +206,6 @@ public class StandortController implements IAllExcelRegisterCards {
             Cell cell = row.getCell(8);
             adCell = cell.getStringCellValue();
             //System.out.println(adCell);
-            dist.setText("Distanzen von '"+adCell+"' zu (Zahlen in Minuten):");
 
             row = sheet.getRow(3);
             cell = row.getCell(8);
@@ -134,7 +215,8 @@ public class StandortController implements IAllExcelRegisterCards {
             cell = row.getCell(8);
             ortCell = cell.getStringCellValue();
 
-            adresse = adCell + ", " + plzCell + " " + ortCell;
+            distSet();
+
             fileInputStream.close();
 
             workbook.close();
@@ -146,10 +228,23 @@ public class StandortController implements IAllExcelRegisterCards {
         }
     }
 
+    private void distSet() {
+        dist.setText("Distanzen von '"+adCell+"' zu (Zahlen in Minuten):");
+
+        adresse = adCell + ", " + plzCell + " " + ortCell;
+    }
+
     public void setCell(String tf, int row, int coll) {
-        String sheet = "Basisinformation";
+        String sheet = "Standort";
+        String[] area = new String[1];
+        area[0] = tf;
+        Update.updateRangeOfCellsString(area, row, row, coll, new Label(), sheet);
+    }
+
+    public void setCell(TextField tf, int row, int coll) {
+        String sheet = "Standort";
         String[] field = new String[1];
-        field[0] = tf;
-        Update.updateRangeOfCellsString(field, row, row, coll, new Label(), sheet);
+        field[0] = tf.getText();
+        Update.updateRangeOfCells(field, row, row, coll, new Label(), sheet);
     }
 }

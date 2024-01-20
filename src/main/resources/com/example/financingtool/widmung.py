@@ -1,10 +1,12 @@
 from selenium import webdriver
 from PIL import Image
-#from Screenshot import Screenshot_clipping
+from colorama import init, Fore, Back, Style
 import time
 import sys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+
+init(autoreset=True)
 
 driver = webdriver.Edge()
 driver.maximize_window()
@@ -57,6 +59,9 @@ driver.execute_script("document.querySelector('.map-buttons').style.display = 'n
 driver.execute_script("document.querySelector('#kachelButtons').style.display = 'none';")
 driver.execute_script("document.querySelector('#gugContainer').style.display = 'none';")
 driver.execute_script("document.querySelector('#scale').style.display = 'none';")
+print()
+print(Back.GREEN + Fore.BLACK + "Ausschnitt auswählen und Enter drücken...")
+input()
 driver.execute_script("document.querySelector('body').style.pointerEvents = 'none';")
 body=driver.find_element(By.TAG_NAME, "body")
 driver.execute_script("arguments[0].style.pointerEvents='none'", body)
@@ -81,7 +86,7 @@ def bounding_box_screenshot(bounding_box, filename):
     return base_image
 
 bounding_box = (1/4*w, 000, 3/4*w, h)
-bounding_box_screenshot(bounding_box, filename) # Screenshot the bounding box (400, 000, 800, 485)
+bounding_box_screenshot(bounding_box, filename) # Screenshot the bounding box (1/4th, 000, 3/4th, max-height)
 
 screenshot=Image.open(filename)
 screenshot.show()

@@ -114,28 +114,12 @@ public class WireController implements IAllExcelRegisterCards {
         }
 
         if (isPercentage) {
-            return isPercentage(input);
+            boolean isPercentageInRange = IAllExcelRegisterCards.testPercentageRange(input);
+            return isPercentageInRange;
         } else {
-            return isNumeric(input);
+            return IAllExcelRegisterCards.isNumericStr(input);
         }
     }
-    private boolean isNumeric(String str) {
-        // Überprüfen, ob der String eine Zahl ist
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-    private boolean isPercentage(String str) {
-        // Überprüfen, ob der String ein Prozentsatz ist
-        return str.endsWith("%") && isNumeric(str.substring(0, str.length() - 1));
-    }
-
-
-
-
 
 
 

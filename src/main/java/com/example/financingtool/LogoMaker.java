@@ -18,6 +18,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -90,7 +91,7 @@ public class LogoMaker extends Application {
         fileChooser.setTitle("Bild auswählen");
 
         // Füge eine Filteroption für JPEG-Bilddateien hinzu
-        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("JPEG-Bilder", "*.jpg", "*.jpeg");
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Bilder", "*.png", "*.jpg", "*.jpeg");
         fileChooser.getExtensionFilters().add(imageFilter);
 
         // Zeige den FileChooser und erhalte das ausgewählte Bild
@@ -99,16 +100,47 @@ public class LogoMaker extends Application {
         if (selectedFile != null) {
             try {
                 // Kopiere das ausgewählte Bild unter dem Namen "logo.jpg" nach "Pfad1"
-                String destinationPath = "src/main/resources/com/example/financingtool/logo.jpg";
-                Files.copy(selectedFile.toPath(), Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING);
+                String contentType = URLConnection.guessContentTypeFromName(selectedFile.getName());
+                if (contentType != null) {
+                    String pdestinationPath = "src/main/resources/com/example/financingtool/logo.png";
+                    String jdestinationPath = "src/main/resources/com/example/financingtool/logo.jpg";
+                    if (contentType.equals("image/jpeg")) {
+                        System.out.println("Das Logo ist ein JPEG-Bild.");
+                        Files.copy(selectedFile.toPath(), Paths.get(jdestinationPath), StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("Logo erfolgreich gespeichert");
+                        delPath(pdestinationPath);
+                    } else if (contentType.equals("image/png")) {
+                        System.out.println("Das Logo ist ein PNG-Bild.");
+                        Files.copy(selectedFile.toPath(), Paths.get(pdestinationPath), StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("Logo erfolgreich gespeichert.");
+                        delPath(jdestinationPath);
+                    } else {
+                        System.out.println("Das Logo ist weder ein PNG noch ein JPEG-Bild.");
+                    }
+                } else {
+                    System.out.println("Dateityp des Logos nicht ermittelbar.");
+                }
 
                 // Hier kannst du die generatePdf-Methode aufrufen und den Bildpfad übergeben
                 //generatePdf(destinationPath);
-                System.out.println("Logo erfolgreich gespeichert");
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void delPath(String destinationPath) {
+        File fileToDelete = new File(destinationPath);
+        if (fileToDelete.exists()) {
+            // File exists, attempt to delete it
+            if (fileToDelete.delete()) {
+                System.out.println("Altes Logo gelöscht.");
+            } else {
+                System.out.println("Altes Logo nicht löschbar.");
+            }
+        } else {
+            System.out.println("Altes Logo existiert nicht.");
         }
     }
 

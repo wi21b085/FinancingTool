@@ -46,8 +46,11 @@ public class WidmungController implements IAllExcelRegisterCards {
         boolean fwb = check();
 
         System.out.println(fwb);
-        if(fwb)
-            executePy(adresse.getText());
+    }
+
+    @FXML
+    protected void openWBO() {
+        executePy(adresse.getText());
     }
 
     private boolean check() {
