@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -99,7 +100,7 @@ public class StandortController implements IAllExcelRegisterCards {
                         else
                             setCell(a, n++, 5);
                     }
-                    if (textSplit.length < 10) {
+                    if (textSplit.length < 8) {
                         emptyCells(n);
                     }
                 }
@@ -115,7 +116,7 @@ public class StandortController implements IAllExcelRegisterCards {
     }
 
     private void emptyCells(int n) {
-        for (int i = n; i < 12; i++) {
+        for (int i = n; i < 10; i++) {
             System.out.println(i);
             setCell("\n", i, 5);
         }
@@ -154,6 +155,19 @@ public class StandortController implements IAllExcelRegisterCards {
     }
 
     public void initialize() {
+        // Add a key pressed event handler
+        L1.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            // Get the current number of lines
+            int numberOfLines = L1.getParagraphs().size();
+
+            // Allow Enter key
+            if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                // Check if the number of lines is already at the limit
+                if (numberOfLines >= 8) {
+                    event.consume(); // Consume the event to prevent further input
+                }
+            }
+        });
         getAddress();
         EventBus.getInstance().subscribe("updateAddress", this::updateAddress);
         schFus.setPromptText("zu Fuß");
