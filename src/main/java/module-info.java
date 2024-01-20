@@ -9,7 +9,6 @@ module com.example.financingtool {
     requires kernel;
     requires org.apache.pdfbox;
     requires org.apache.poi.poi;
-    requires com.aspose.words;
     requires java.desktop;
 
 
