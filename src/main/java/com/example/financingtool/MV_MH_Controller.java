@@ -1,9 +1,5 @@
 package com.example.financingtool;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -13,13 +9,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,11 +79,12 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                 if(numericTest) {
                     switch (tranchen) {
                         case 1:
-                            setCell(this.ik, 10, 1);
-                            setCell(this.ek, 10, 4);
-                            setCell(this.btvg, 12, 4);
-                            Update.updateRangeOfCells(vals, 11, 11, 4, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 11, 11, 3, new Label(), sheet);
+                            setCell(this.ik, 1, 9);
+                            setCell(this.ek, 1, 12);
+                            setCell(this.btvg, 3, 12);
+                            Update.updateRangeOfCells(vals, 2, 2, 12, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 2, 2, 11, new Label(), sheet);
+                            insertTranche(sheet);
                             break;
                         case 2:
                             setCell(this.ik, 1, 1);
@@ -94,27 +92,31 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                             setCell(this.btvg, 4, 4);
                             Update.updateRangeOfCells(vals, 2, 3, 4, new Label(), sheet);
                             Update.updateRangeOfCellsString(bez, 2, 3, 3, new Label(), sheet);
+                            insertTranche(sheet);
                             break;
                         case 3:
-                            setCell(this.ik, 18, 1);
-                            setCell(this.ek, 18, 4);
-                            setCell(this.btvg, 22, 4);
-                            Update.updateRangeOfCells(vals, 19, 21, 4, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 19, 21, 3, new Label(), sheet);
+                            setCell(this.ik, 1, 17);
+                            setCell(this.ek, 1, 20);
+                            setCell(this.btvg, 5, 20);
+                            Update.updateRangeOfCells(vals, 2, 4, 20, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 2, 4, 19, new Label(), sheet);
+                            insertTranche(sheet);
                             break;
                         case 4:
-                            setCell(this.ik, 28, 1);
-                            setCell(this.ek, 28, 4);
-                            setCell(this.btvg, 33, 4);
-                            Update.updateRangeOfCells(vals, 29, 32, 4, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 29, 32, 3, new Label(), sheet);
+                            setCell(this.ik, 1, 25);
+                            setCell(this.ek, 1, 28);
+                            setCell(this.btvg, 6, 28);
+                            Update.updateRangeOfCells(vals, 2, 5, 28, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 2, 5, 27, new Label(), sheet);
+                            insertTranche(sheet);
                             break;
                         case 5:
-                            setCell(this.ik, 39, 1);
-                            setCell(this.ek, 39, 4);
-                            setCell(this.btvg, 45, 4);
-                            Update.updateRangeOfCells(vals, 40, 44, 4, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 40, 44, 3, new Label(), sheet);
+                            setCell(this.ik, 1, 33);
+                            setCell(this.ek, 1, 36);
+                            setCell(this.btvg, 7, 36);
+                            Update.updateRangeOfCells(vals, 2, 6, 36, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 2, 6, 35, new Label(), sheet);
+                            insertTranche(sheet);
                             break;
                     }
                 }
@@ -123,6 +125,10 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
             System.out.println("Tranchen müssen ausgewählt sein!");;
         }
 
+    }
+
+    private void insertTranche(String sheet) {
+        Update.updateRangeOfCells(new String[]{tranche.getValue()}, 10, 10, 7, new Label(), sheet);
     }
 
     @FXML
@@ -186,6 +192,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     }
 
     public void initialize() throws Exception {
+        getFK();
         EventBus.getInstance().subscribe("updateFK", this::updateFKValue);
     }
 
@@ -194,7 +201,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
 
     }
 
-/*    public void getFK() throws Exception {
+  public void getFK() throws Exception {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Gesamtinvestitionskosten";
@@ -219,7 +226,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 
 
 

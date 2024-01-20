@@ -31,7 +31,6 @@ public class WidmungController implements IAllExcelRegisterCards {
 
     @FXML
     private Text adresse;
-    private String adCell;
     @FXML
     private Label resultLabel;
 
@@ -39,16 +38,19 @@ public class WidmungController implements IAllExcelRegisterCards {
 
 
     public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-        BasisinformationController.executiveSummary=executiveSummary;
+        WidmungController.executiveSummary=executiveSummary;
     }
 
     @FXML
-    protected void continueClick() {
+    protected void continueClick() { // button-klick führt check der eingaben durch und startet python-skript
         boolean fwb = check();
 
         System.out.println(fwb);
-        if(fwb)
-            executePy(adCell);
+    }
+
+    @FXML
+    protected void openWBO() {
+        executePy(adresse.getText());
     }
 
     private boolean check() {
@@ -60,7 +62,7 @@ public class WidmungController implements IAllExcelRegisterCards {
 
                 System.out.println(val);
                 setCell(val, 1, 14);
-                executiveSummary.setDatenausWidmung(val);
+              //  executiveSummary.setDatenausWidmung(val);
                 resultLabel.setText("");
             } else {
                 resultLabel.setText("Hinweis: Flächenwidmung oder Bauklasse nicht ausgewählt");
@@ -169,13 +171,18 @@ public class WidmungController implements IAllExcelRegisterCards {
     }
 
     public void initialize() {
-        //getAddress();
+        getAddress();
         EventBus.getInstance().subscribe("updateAddress", this::updateAddress);
-        bs.setPromptText("40% und/oder 45m");
+        bs.setPromptText("z.B. 40% und/oder 45m");
     }
 
     private void updateAddress(Object newValue) {
-        this.adresse.setText(newValue.toString());
+        System.out.println(newValue.toString());
+        if(newValue.toString().isEmpty()){
+            getAddress();
+        }else {
+            this.adresse.setText(newValue.toString());
+        }
     }
 
     public void getAddress() {
@@ -192,9 +199,9 @@ public class WidmungController implements IAllExcelRegisterCards {
 
             Row row = sheet.getRow(rowIdx);
             Cell cell = row.getCell(colIdx);
-            adCell = cell.getStringCellValue();
+
             //System.out.println(adCell);
-            adresse.setText(adCell);
+            adresse.setText(cell.getStringCellValue());
             fileInputStream.close();
 
             workbook.close();
@@ -212,4 +219,34 @@ public class WidmungController implements IAllExcelRegisterCards {
         field[0] = tf;
         Update.updateRangeOfCellsString(field, row, row, coll, new Label(), sheet);
     }
+
+   /*public String getAddress() {
+        String addressCell = null;
+        try {
+            String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+            String sheetName = "Basisinformation";
+            int rowIdx = 2;
+            int colIdx = 8;
+
+            // FileInputStream und Workbook hier erstellen
+            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+
+                Sheet sheet = workbook.getSheet(sheetName);
+
+                Row row = sheet.getRow(rowIdx);
+                Cell cell = row.getCell(colIdx);
+                addressCell = cell.getStringCellValue();
+                System.out.println(addressCell);
+
+                //fk.setText(fkCell);
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+                //resultLabel.setText("Fehler bei der Aktualisierung.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return addressCell;
+    }*/
 }

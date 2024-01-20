@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
@@ -108,7 +109,7 @@ public class ExcelToWordConverter {
             System.out.println("Ges");
             createGIKtable(sheet);
             //document.createParagraph().setPageBreak(true);
-           // createTable(document, sheet,0,5);
+            // createTable(document, sheet,0,5);
         }else if(sheetName.equals("Wirtschaftlichkeitsrechnung")){
             document.createParagraph().setPageBreak(true);
             createTable(document, sheet, 0,7);
@@ -245,12 +246,45 @@ public class ExcelToWordConverter {
             out.close();
 
             System.out.println("Data successfully exported from Excel to Word.");
+            mergePDFs();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    //-- nazia - bilder und rechnungspdf miteinander verbinden.
+    public static void mergePDFs(){
+        String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
+        String file2 = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.pdf";
+        String outputFile ="src/main/resources/com/example/financingtool/final.pdf";
+
+
+        try {
+            // Laden der ersten PDF-Datei
+            PDDocument pdfDocument1 = PDDocument.load(new java.io.File(file1));
+
+            // Laden der zweiten PDF-Datei
+            PDDocument pdfDocument2 = PDDocument.load(new java.io.File(file2));
+
+            // Kopieren aller Seiten von der ersten PDF-Datei zur Ausgabedatei
+            for (int i = 0; i < pdfDocument1.getNumberOfPages(); i++) {
+                PDPage page = pdfDocument1.getPage(i);
+                pdfDocument2.addPage(page);
+            }
+
+            // Speichern des Ergebnisses
+            pdfDocument2.save(outputFile);
+            System.out.println("Erfolgreiche Kombination der pdf's");
+
+            // Schließen der geöffneten Dokumente
+            pdfDocument1.close();
+            pdfDocument2.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void convertWordToPDF() {
         try {
             FileInputStream in = new FileInputStream(wordFilePath);
@@ -258,47 +292,55 @@ public class ExcelToWordConverter {
 
             PDDocument pdfDocument = new PDDocument();
 
-            PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+            List<XWPFParagraph> paragraphs = document.getParagraphs();
+            List<XWPFTable> tables = document.getTables();
+
+            for (int pageIndex = 0; pageIndex < Math.max(paragraphs.size(), tables.size()); pageIndex++) {
+                PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                pdfDocument.addPage(pdfPage);
+
+                PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
+
+                try {
 
 
-            PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
 
-            try {
-                List<XWPFParagraph> paragraphs = document.getParagraphs();
-                for (XWPFParagraph paragraph : paragraphs) {
-                    String text = paragraph.getText();
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-                    contentStream.beginText();
-                    contentStream.newLineAtOffset(20, pdfPage.getMediaBox().getHeight() - 20);
-                    contentStream.showText(text);
-                    contentStream.newLine();
-                    contentStream.endText();
+                    if (pageIndex < paragraphs.size()) {
+                        // Verarbeite den Text auf der aktuellen Seite
+                        String text = paragraphs.get(pageIndex).getText();
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(20, pdfPage.getMediaBox().getHeight() - 20);
+                        contentStream.showText(text);
+                        contentStream.newLine();
+                        contentStream.endText();
+                    }
+
+                    if (pageIndex < tables.size()) {
+                        // Verarbeite die Tabelle auf der aktuellen Seite
+                        XWPFTable table = tables.get(pageIndex);
+                        float margin = 20;
+                        float yStart = pdfPage.getMediaBox().getHeight() - margin;
+                        float tableWidth = pdfPage.getMediaBox().getWidth() - 2 * margin;
+                        float yPosition = yStart;
+                        float yBottom = margin;
+
+                        // Draw table on the PDF page
+                        drawPdfTable(pdfDocument, tableWidth, yStart, yBottom, table);
+                    }
+                } finally {
+                    contentStream.close();
                 }
-
-                List<XWPFTable> tables = document.getTables();
-                for (XWPFTable table : tables) {
-                    float margin = 20;
-                    float yStart = pdfPage.getMediaBox().getHeight() - margin;
-                    float tableWidth = pdfPage.getMediaBox().getWidth() - 2 * margin;
-                    float yPosition = yStart;
-                    float yBottom = margin;
-
-                    // Draw table on the PDF page
-                    drawPdfTable(pdfDocument, tableWidth, yStart, yBottom, table);
-
-                }
-
-            } finally {
-                contentStream.close();
-
-                // Verwenden Sie die gleiche Dateipfadvariable wie für das Word-Dokument
-                pdfDocument.save(pdfFilePath);
-                pdfDocument.close();
-                in.close();
             }
+
+            // Verwenden Sie die gleiche Dateipfadvariable wie für das Word-Dokument
+            pdfDocument.save(pdfFilePath);
+            pdfDocument.close();
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private static void drawPdfTable(PDDocument document, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
@@ -414,8 +456,7 @@ public class ExcelToWordConverter {
 
         // Button für die Konvertierung in Word im neuen Fenster
         javafx.scene.control.Button convertToWordButton = new javafx.scene.control.Button("Konvertierung in eine PDF");
-        convertToWordButton.setOnAction(e -> ExcelToWordConverter.convertWordToPDF());
-
+        convertToWordButton.setOnAction(e ->handleConvertToWordButtonClick());
 
         // Layout für das neue Fenster
         VBox newRoot = new VBox(10);
@@ -426,6 +467,14 @@ public class ExcelToWordConverter {
         newStage.setTitle("PDF Konvertierung");
         newStage.setScene(newScene);
         newStage.show();
+    }
+    private static void handleConvertToWordButtonClick() {
+        ExcelToWordConverter.convertWordToPDF();
+        executiveSummary.getBasDaten();
+        executiveSummary.getGikData();
+        executiveSummary.getWIODaten();
+        executiveSummary.getWireData();
+        executiveSummary.setDaten();
     }
 
 }

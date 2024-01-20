@@ -1,10 +1,12 @@
 from selenium import webdriver
 from PIL import Image
-#from Screenshot import Screenshot_clipping
+from colorama import init, Fore, Back, Style
 import time
 import sys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+
+init(autoreset=True)
 
 driver = webdriver.Edge()
 driver.maximize_window()
@@ -19,9 +21,17 @@ deny=driver.find_element(By.CLASS_NAME,"lssxud").click()
 #deny2=deny.find_element(By.XPATH, "./button")
 #deny2.click()
 
+print()
+print(Back.GREEN + Fore.BLACK + "Ausschnitt auswählen und Enter drücken...")
+input()
+
 time.sleep(2)
 
-driver.find_element(By.CLASS_NAME,"gYkzb").click()
+close=driver.find_element(By.CLASS_NAME,"gYkzb")
+
+button=close.find_element(By.XPATH, "./button").get_attribute("jsaction")
+if "drawer.open" not in button:
+    close.click()
 
 time.sleep(1)
 
@@ -35,9 +45,6 @@ driver.execute_script("document.querySelector('#QA0Szd').style.display = 'none';
 #driver.execute_script("arguments[0].style.pointerEvents='none'", body)
 
 time.sleep(1)
-print()
-print("Ausschnitt auswählen und Enter drücken...")
-input()
 
 element=driver.find_element(By.ID, "content-container")
 filename='src\\main\\resources\\com\\example\\financingtool\\standort.png'

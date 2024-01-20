@@ -14,28 +14,36 @@
         <TabPane prefWidth="1000">
             <Tab fx:id="stammblatt" text="Stammblatt" >
                 <fx:include source="stammblatt.fxml"/>
+                <closable>false</closable>
             </Tab>
-            <Tab fx:id="Basisinformation" text="Basisinformation">
-                <fx:include source="basisinformation.fxml"/>
+            <Tab fx:id="standort" text="Standort">
+                <fx:include source="standort.fxml"/>
+                <closable>false</closable>
             </Tab>
             <Tab fx:id="GIK" text="GIK">
                 <fx:include source="gik.fxml"/>
+                <closable>false</closable>
 
             </Tab>
             <Tab fx:id="MV_MH" text="MV_MH">
                 <fx:include source="MV_MH.fxml"/>
+                <closable>false</closable>
             </Tab>
             <Tab fx:id="Wire" text="Wirtschaftlichkeitsrechnung">
                 <fx:include source="wire.fxml"/>
+                <closable>false</closable>
             </Tab>
             <Tab fx:id="Widmung" text="Widmung">
                 <fx:include source="widmung.fxml"/>
+                <closable>false</closable>
             </Tab>
             <Tab fx:id="LogoMaker" text="LogoMaker">
                 <fx:include source="logo.fxml"/>
+                <closable>false</closable>
             </Tab>
             <Tab fx:id="converter" text="PDF Generator">
                 <Button fx:id="convert" mnemonicParsing="false" onAction="#convert" text="Konvertierung in pdf" />
+                <closable>false</closable>
             </Tab>
 
         </TabPane>

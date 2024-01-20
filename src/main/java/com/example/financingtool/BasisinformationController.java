@@ -1,5 +1,8 @@
+
 package com.example.financingtool;
 
+
+/*
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,7 +33,7 @@ public class BasisinformationController {
     private TextField garage;
 
     @FXML
-    private TextField gik;
+    private TextField aussenflaeche;
 
     @FXML
     private TextField verkaufserloes;
@@ -66,9 +69,10 @@ public class BasisinformationController {
 
     //firmennamen in das excel eintragen
     public void submit() {
+
         //leere werte
         if(kaufpreis.getText().isEmpty() || groesse.getText().isEmpty() || nutzflaeche.getText().isEmpty()
-                || wohneinheiten.getText().isEmpty() || garage.getText().isEmpty() || gik.getText().isEmpty()
+                || wohneinheiten.getText().isEmpty() || garage.getText().isEmpty() || aussenflaeche.getText().isEmpty()
                 || verkaufserloes.getText().isEmpty() || gewinn.getText().isEmpty() || beginn.getText().isEmpty()
                 ||ende.getText().isEmpty() || roi.getText().isEmpty() ){
             resultLabel.setText("Daten unvollständig");
@@ -80,7 +84,7 @@ public class BasisinformationController {
                  !IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText()) ||
                  !IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText()) ||
                  !IAllExcelRegisterCards.isNumericStr(garage.getText()) ||
-                 !IAllExcelRegisterCards.isNumericStr(gik.getText()) ||
+                 !IAllExcelRegisterCards.isNumericStr(aussenflaeche.getText()) ||
                  !IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText()) ||
                  !IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())
         ){
@@ -96,15 +100,15 @@ public class BasisinformationController {
             newValue[2] = nutzflaeche.getText();
             newValue[3] = wohneinheiten.getText();
             newValue[4] = garage.getText();
-            newValue[5] = gik.getText();
+            newValue[5] = aussenflaeche.getText();
             newValue[6] = verkaufserloes.getText();
             newValue[7] = gewinn.getText();
             newValue[8] = beginn.getText();
             newValue[9] = ende.getText();
             newValue[10] = roi.getText();
-            setExecutiveSummary(executiveSummary);
+          //  setExecutiveSummary(executiveSummary);
             System.out.println("Daten aus Basisinformation gesendet gesendet: ");
-            executiveSummary.setDatenausBas(kaufpreis.getText(),groesse.getText(),wohneinheiten.getText(),garage.getText(),beginn.getText(),ende.getText());
+           // executiveSummary.setDatenausBas(kaufpreis.getText(),groesse.getText(),wohneinheiten.getText(),garage.getText(),beginn.getText(),ende.getText());
 
             writeToExcel(newValue);
         }
@@ -182,72 +186,73 @@ public class BasisinformationController {
                 System.out.println("Sheet == NULL");
             }
 
-            //alle daten leer
+            //BASISINFORMATION ANFANG
+            //überprüfen, ob basisinformation daten leer sind
             if (kaufpreis.getText().isEmpty() && groesse.getText().isEmpty() && nutzflaeche.getText().isEmpty() &&
-                    wohneinheiten.getText().isEmpty() && garage.getText().isEmpty() && gik.getText().isEmpty()
+                    wohneinheiten.getText().isEmpty() && garage.getText().isEmpty() && aussenflaeche.getText().isEmpty()
                     && verkaufserloes.getText().isEmpty() && gewinn.getText().isEmpty() && beginn.getText().isEmpty()
                     && ende.getText().isEmpty() && roi.getText().isEmpty()) {
-                resultLabel.setText("Daten erforderlich zum Aktualisieren");
+                resultLabel.setText("Basisinformationen leer");
                 System.out.println("Alle Felder leer");
                 return;
             }
 
-            // Überprüfen, ob leer + Datentyp stimmt
+
             if (!kaufpreis.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
                 updateCellValue(sheet, 1, 1, kaufpreis.getText());
 
 
             } else if (!IAllExcelRegisterCards.isNumericStr(kaufpreis.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
             if (!groesse.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(groesse.getText())) {
                 updateCellValue(sheet, 2, 1, groesse.getText());
             } else if (!IAllExcelRegisterCards.isNumericStr(groesse.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
             if (!nutzflaeche.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText())) {
                 updateCellValue(sheet, 3, 1, nutzflaeche.getText());
             } else if (!IAllExcelRegisterCards.isNumericStr(nutzflaeche.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
             if (!wohneinheiten.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText())) {
                 updateCellValue(sheet, 4, 1, wohneinheiten.getText());
             } else if (!IAllExcelRegisterCards.isNumericStr(wohneinheiten.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
             if (!garage.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(garage.getText())) {
                 updateCellValue(sheet, 5, 1, garage.getText());
             } else if (!IAllExcelRegisterCards.isNumericStr(garage.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
-            if (!gik.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(gik.getText())) {
-                updateCellValue(sheet, 6, 1, gik.getText());
-            } else if (!IAllExcelRegisterCards.isNumericStr(gik.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+            if (!aussenflaeche.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(aussenflaeche.getText())) {
+                updateCellValue(sheet, 6, 1, aussenflaeche.getText());
+            } else if (!IAllExcelRegisterCards.isNumericStr(aussenflaeche.getText())) {
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
             if (!verkaufserloes.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())) {
                 updateCellValue(sheet, 7, 1, verkaufserloes.getText());
             } else if (!IAllExcelRegisterCards.isNumericStr(verkaufserloes.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
             if (!gewinn.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(gewinn.getText())) {
                 updateCellValue(sheet, 8, 1, gewinn.getText());
             } else if (!IAllExcelRegisterCards.isNumericStr(gewinn.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
@@ -263,14 +268,16 @@ public class BasisinformationController {
             if (!roi.getText().isEmpty() && IAllExcelRegisterCards.isNumericStr(roi.getText())) {
                 updateCellValue(sheet, 11, 1, roi.getText());
             } else if (!IAllExcelRegisterCards.isNumericStr(roi.getText())) {
-                resultLabel.setText("Gültige Daten erforderlich");
+                resultLabel.setText("Gültige Basisinformationen erforderlich");
                 return;
             }
 
+            //BASISINFORMATION ENDE
 
 
 
-                // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
+
+           // Automatische Auswertung der Formeln im gesamten Arbeitsblatt
             FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
             evaluator.evaluateAll();
 
@@ -290,11 +297,14 @@ public class BasisinformationController {
 
     }
 
-
+*/
 
   /*  public void weiter(ActionEvent actionEvent) {
         //ExcelToWordConverter.exportExcelToWord("Basisinformation");
 
-        Weiter.weiter(weiterButton, GIKtoExcel.class);
-    }*/
+        Weiter.weiter(weiterButton, aussenflaeche.toExcel.class);
+    }
 }
+*/
+
+
