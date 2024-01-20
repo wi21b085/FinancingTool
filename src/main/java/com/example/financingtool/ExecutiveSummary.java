@@ -96,7 +96,7 @@ public class ExecutiveSummary {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Gesamtinvestitionskosten";
-            int rowIdx = 13;
+            int rowIdx = 14;
             int colIdx = 4;
 
             // FileInputStream und Workbook hier erstellen
@@ -124,9 +124,9 @@ public class ExecutiveSummary {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Wirtschaftlichkeitsrechnung";
-            int rowIdxGewinn = 20;
-            int rowIdxROI=21;
-            int rowIdxVerkaufserloes=18;
+            int rowIdxGewinn = 21;
+            int rowIdxROI=22;
+            int rowIdxVerkaufserloes=19;
             int colIdx = 4;
 
             // FileInputStream und Workbook hier erstellen
@@ -193,13 +193,13 @@ public class ExecutiveSummary {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Basisinformation";
-            int rowIdxKaufpreis = 1;
+            int rowIdxKaufpreis = 2;
             int colIdx = 1;
-            int rowIdxGrundstuecksgroesse=2;
-            int rowIDxWohneinheiten=4;
-            int rowIDxBaubeginn=9;
-            int rowIDxFertigstellung=10;
-            int rowIDxStrasse=2;
+            int rowIdxGrundstuecksgroesse=3;
+            int rowIDxWohneinheiten=5;
+            int rowIDxBaubeginn=10;
+            int rowIDxFertigstellung=11;
+            int rowIDxStrasse=3;
             int colIDxStrasse=8;
 
 

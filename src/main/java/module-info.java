@@ -8,9 +8,9 @@ module com.example.financingtool {
     requires org.apache.poi.ooxml;
     requires kernel;
     requires org.apache.pdfbox;
-
-    requires io;
-    requires docx4j.core;
+    requires org.apache.poi.poi;
+    requires com.aspose.words;
+    requires java.desktop;
 
 
     opens com.example.financingtool to javafx.fxml;
