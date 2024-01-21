@@ -9,16 +9,20 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTShd;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPrInner;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STVerticalJc;
 
 
-
+//import java.awt.Color;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExcelToWordConverter {
@@ -41,6 +45,7 @@ public class ExcelToWordConverter {
 
     public static void exportExcelToWord() {
         try {
+
             FileInputStream excelFile = new FileInputStream(new File(excelFilePath));
             Workbook workbook = new XSSFWorkbook(excelFile);
 
@@ -72,6 +77,53 @@ public class ExcelToWordConverter {
             e.printStackTrace();
         }
     }
+    private static void addTableTitle(String tableName) {
+        if (document == null) {
+            initializeDocument();
+        }
+
+        // Add title to Word document
+        XWPFParagraph paragraph = document.createParagraph();
+        XWPFRun run = paragraph.createRun();
+        run.setBold(true);
+        run.setText("Titel für Tabelle: " + tableName);
+        paragraph.setSpacingBefore(10); // You can adjust the spacing as needed
+        paragraph.setSpacingAfter(10);
+
+        // Add title to PDF
+        addTextToFirstPage("Titel für Tabelle: " + tableName);
+    }
+
+    public static double getTranche() {
+        double trancheCell = 0;
+
+        try {
+            String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+            String sheetName = "Mittelverwendung - Mittelherkun";
+            int rowIdx = 11;
+            int colIdx = 7;
+
+            // FileInputStream und Workbook hier erstellen
+            try (FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+
+                Sheet sheet = workbook.getSheet(sheetName);
+
+                Row row = sheet.getRow(rowIdx);
+                Cell cell = row.getCell(colIdx);
+                trancheCell =  cell.getNumericCellValue();
+                System.out.println(trancheCell);
+                //fk.setText(fkCell);
+
+            } catch (NumberFormatException | IOException e) {
+                e.printStackTrace();
+                //resultLabel.setText("Fehler bei der Aktualisierung.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return trancheCell;
+    }
 
     private static void exportSheetToWord(Workbook workbook, String sheetName) throws FileNotFoundException {
         Sheet sheet = workbook.getSheet(sheetName);
@@ -89,29 +141,85 @@ public class ExcelToWordConverter {
         FileOutputStream out = new FileOutputStream(wordFilePath);
         if(sheetName.equals("Mittelverwendung - Mittelherkun")){
             System.out.println("Mittelverwendung");
-            createTable(document,sheet,0,5);
+            /*if(getTranche()==2) {
+                System.out.println("MVMH: 2");
+                createTable(document, sheet, 0, 5);
+            } else if (getTranche()==1) {
+                System.out.println("MVMH:1");
+                createTable(document,sheet,8,13);
+            }else if (getTranche()==3){
+                System.out.println("MVMH: 3");
+                createTable(document,sheet, 16, 21);
+            } else if (getTranche()==4) {
+                System.out.println("MVMH: 4");
+                createTable(document,sheet,24,29);
+            }else if (getTranche()==5){
+                System.out.println("MVMH: 5");
+                createTable(document,sheet,32,37);
+            }else{
+                System.out.println("Entschuldigung, etwas ist beim Generieren der Tabelle schiefgegeangen.");
+            }*/
+
+            double tranche = getTranche();
+            int startRow;
+            int endRow;
+
+            switch ((int) tranche) {
+                case 2:
+                    startRow = 0;
+                    endRow= 5;
+                    break;
+                case 1:
+                    startRow = 8;
+                    endRow=13;
+                    break;
+                case 3:
+                    startRow = 16;
+                    endRow=21;
+                    break;
+                case 4:
+                    startRow = 24;
+                    endRow=29;
+                    break;
+                case 5:
+                    startRow = 32;
+                    endRow=37;
+                    break;
+                default:
+                    System.out.println("Entschuldigung, etwas ist beim Generieren der Tabelle schiefgegangen.");
+                    return; // Hier könntest du weiteren Code hinzufügen oder die Methode verlassen, je nach Bedarf
+            }
+            addTableTitle("Mittelverwendung und Mittelherkunft");
+            createTable(document, sheet, startRow, endRow);
+
+
         }
 
         else if (sheetName.equals("Basisinformation")) {
             // Export columns A-C to Word
+            addTableTitle("Basisinformation");
             createTable(document, sheet, 0, 2);
 
             // Add a newline between the two tables
             document.createParagraph().setPageBreak(true);
             System.out.println("Bas");
             // Export columns H-I to Word
+            addTableTitle("Stammdaten");
             createTable(document, sheet, 7, 8);
 
             System.out.println("Widmung");
+            addTableTitle("Widmung");
             createTable(document,sheet,14,14);
             document.createParagraph().setPageBreak(true);
         }else if (sheetName.equals("Gesamtinvestitionskosten")) {
             System.out.println("Ges");
+            addTableTitle("Gesamtinvestitionskosten");
             createGIKtable(sheet);
             //document.createParagraph().setPageBreak(true);
             // createTable(document, sheet,0,5);
         }else if(sheetName.equals("Wirtschaftlichkeitsrechnung")){
             document.createParagraph().setPageBreak(true);
+            addTableTitle("Wirtschaftlichkeitsrechnung");
             createTable(document, sheet, 0,7);
         }
 
@@ -123,6 +231,26 @@ public class ExcelToWordConverter {
             e.printStackTrace();
         }
     }
+
+
+    private static void alternateTableColors(XWPFTable table) {
+        // Setzen Sie die gewünschte Hintergrundfarbe hier
+        String backgroundColor = "CCE5FF";
+
+        for (XWPFTableRow row : table.getRows()) {
+            for (XWPFTableCell cell : row.getTableCells()) {
+                CTTcPr tcPr = cell.getCTTc().isSetTcPr() ? cell.getCTTc().getTcPr() : cell.getCTTc().addNewTcPr();
+                CTShd shd = tcPr.isSetShd() ? tcPr.getShd() : tcPr.addNewShd();
+
+                // Setzen Sie die Hintergrundfarbe für jede Zelle
+                shd.setFill(backgroundColor);
+            }
+        }
+    }
+
+
+
+
 
 
     private static void createGIKtable(Sheet sheet){
@@ -164,6 +292,7 @@ public class ExcelToWordConverter {
     private static void createTable(XWPFDocument document, Sheet sheet, int startColumn, int endColumn) {
         // Create table in Word
         XWPFTable table = document.createTable();
+        alternateTableColors(table);
         XWPFTableRow headerRow = table.getRow(0);
 
         // Populate table header
@@ -173,6 +302,18 @@ public class ExcelToWordConverter {
                 cell = headerRow.createCell();
             }
             cell.setText(sheet.getRow(0).getCell(i).getStringCellValue());
+
+            // Formatieren Sie die erste Zeile als Überschrift
+            CTTcPr tcpr = cell.getCTTc().addNewTcPr();
+            CTTcPrInner inner = tcpr;
+            inner.addNewVAlign().setVal(STVerticalJc.CENTER);
+            cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+
+            // Setzen Sie die Schriftgröße der Überschrift
+            XWPFParagraph paragraph = cell.getParagraphs().get(0);
+            XWPFRun run = paragraph.getRuns().get(0);
+            run.setFontSize(20); // Hier können Sie die gewünschte Schriftgröße einstellen
+            run.setBold(true);   // Fett für die Überschrift
         }
 
         // Populate table with Excel data
@@ -208,6 +349,7 @@ public class ExcelToWordConverter {
             }
         }
     }
+
 
     public static void addTextToFirstPage(String text) {
         if (document == null) {
@@ -292,66 +434,59 @@ public class ExcelToWordConverter {
 
             PDDocument pdfDocument = new PDDocument();
 
-            List<XWPFParagraph> paragraphs = document.getParagraphs();
-            List<XWPFTable> tables = document.getTables();
-
-            for (int pageIndex = 0; pageIndex < Math.max(paragraphs.size(), tables.size()); pageIndex++) {
-                PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                pdfDocument.addPage(pdfPage);
-
-                PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
-
-                try {
+            PDPage pdfPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
 
 
+            PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage);
 
-                    if (pageIndex < paragraphs.size()) {
-                        // Verarbeite den Text auf der aktuellen Seite
-                        String text = paragraphs.get(pageIndex).getText();
-                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-                        contentStream.beginText();
-                        contentStream.newLineAtOffset(20, pdfPage.getMediaBox().getHeight() - 20);
-                        contentStream.showText(text);
-                        contentStream.newLine();
-                        contentStream.endText();
-                    }
-
-                    if (pageIndex < tables.size()) {
-                        // Verarbeite die Tabelle auf der aktuellen Seite
-                        XWPFTable table = tables.get(pageIndex);
-                        float margin = 20;
-                        float yStart = pdfPage.getMediaBox().getHeight() - margin;
-                        float tableWidth = pdfPage.getMediaBox().getWidth() - 2 * margin;
-                        float yPosition = yStart;
-                        float yBottom = margin;
-
-                        // Draw table on the PDF page
-                        drawPdfTable(pdfDocument, tableWidth, yStart, yBottom, table);
-                    }
-                } finally {
-                    contentStream.close();
+            try {
+                List<XWPFParagraph> paragraphs = document.getParagraphs();
+                for (XWPFParagraph paragraph : paragraphs) {
+                    String text = paragraph.getText();
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(20, pdfPage.getMediaBox().getHeight() - 20);
+                    contentStream.showText(text);
+                    contentStream.newLine();
+                    contentStream.endText();
                 }
-            }
 
-            // Verwenden Sie die gleiche Dateipfadvariable wie für das Word-Dokument
-            pdfDocument.save(pdfFilePath);
-            pdfDocument.close();
-            in.close();
+                List<XWPFTable> tables = document.getTables();
+                for (XWPFTable table : tables) {
+                    float margin = 20;
+                    float yStart = pdfPage.getMediaBox().getHeight() - margin;
+                    float tableWidth = pdfPage.getMediaBox().getWidth() - 2 * margin;
+                    float yPosition = yStart;
+                    float yBottom = margin;
+                    contentStream.close();
+                    //pdfDocument.save(pdfFilePath);
+                    pdfDocument.close();
+                    document.close();
+                    in.close();
+                    // Draw table on the PDF page
+                    drawPdfTable(pdfDocument, tableWidth, yStart, yBottom, table);
+
+                }
+
+            } finally {
+                contentStream.close();
+
+                // Verwenden Sie die gleiche Dateipfadvariable wie für das Word-Dokument
+                pdfDocument.save(pdfFilePath);
+                pdfDocument.close();
+                in.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static void drawPdfTable(PDDocument document, float tableWidth, float yStart, float yBottom, XWPFTable table) throws IOException {
         float margin = 20;
         float fontSize = 12;
         float cellMargin = 5f;
-        float pageHeight = PDRectangle.A4.getHeight() - 2 * margin;
 
         float yPosition = yStart;
-        float currentYPosition = yPosition;
-
         int rowIdx = 0;
         PDPageContentStream contentStream = null;
 
@@ -370,46 +505,77 @@ public class ExcelToWordConverter {
                 yPosition = yStart;
             }
 
+            float[] columnWidths = getColumnWidths(tableWidth, wordCells.size());
+
             for (int colIdx = 0; colIdx < wordCells.size(); colIdx++) {
                 XWPFTableCell wordCell = wordCells.get(colIdx);
 
-                float width = tableWidth / (float) wordCells.size();
+                float width = columnWidths[colIdx];
                 float height = calculateCellHeight(wordCell, fontSize);
                 String text = wordCell.getText();
 
-                // Manuelle Aufteilung von langen Wörtern bei Überlappung
-                String[] words = text.split("\\s+");
-                float currentWidth = 0;
+                // Zeichnen Sie vertikale Linien für die aktuelle Zelle
+                contentStream.moveTo(margin + colIdx * width, yPosition);
+                contentStream.lineTo(margin + colIdx * width, yPosition - maxHeight);
 
-                for (String word : words) {
-                    float wordWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(word) / 990 * fontSize;
+                // Überprüfen Sie den gesamten Zellentext
+                float cellTextWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(text) / 1000 * fontSize;
 
-                    if (currentWidth + wordWidth > width && currentWidth > 0) {
-                        yPosition -= maxHeight; // Neue Zeile
-                        currentWidth = 0;
+                // Überprüfen Sie, ob der Zellentext in die Zelle passt
+                if (cellTextWidth > width) {
+                    // Wenn der Zellentext nicht in die Zelle passt, zerlegen Sie ihn in mehrere Zeilen
+                    List<String> lines = splitTextToFitWidth(text, width, fontSize);
+
+                    for (String line : lines) {
+                        // Zeichnen Sie horizontale Linien für die neue Zeile
+                        contentStream.moveTo(margin, yPosition - height);
+                        contentStream.lineTo(margin + tableWidth, yPosition - height);
+                        contentStream.stroke();
+
+                        // Setzen Sie die Schriftgröße für die erste Zeile
+                        if (rowIdx == 0 && colIdx == 0) {
+                            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+                            //contentStream.setNonStrokingColor(Color.RED); // Ändern Sie die Farbe nach Bedarf
+                        } else {
+                            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+                            //contentStream.setNonStrokingColor(Color.BLACK); // Setzen Sie die Farbe für die restlichen Zellen
+                        }
+
+                        // Zeichnen Sie den Zellentext
+                        contentStream.beginText();
+                        contentStream.newLineAtOffset(margin + colIdx * width + cellMargin, yPosition - height + 3f);
+                        contentStream.showText(line);
+                        contentStream.endText();
+
+                        // Aktualisieren Sie die y-Position für die nächste Zeile
+                        yPosition -= height;
                     }
 
-                    // Prüfen, ob eine neue Seite benötigt wird
-                    if (yPosition - height < yBottom) {
-                        // Neue Seite erstellen und zum Dokument hinzufügen
-                        PDPage newPage = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
-                        document.addPage(newPage);
+                    // Aktualisieren Sie die y-Position für die nächste Zelle
+                    yPosition += maxHeight;
+                } else {
+                    // Wenn der Zellentext in die Zelle passt, zeichnen Sie horizontale Linien und den Zellentext
+                    contentStream.moveTo(margin, yPosition - height);
+                    contentStream.lineTo(margin + tableWidth, yPosition - height);
+                    contentStream.stroke();
 
-                        // Schließen Sie den vorherigen contentStream und erstellen Sie einen neuen für die neue Seite
-                        contentStream.close();
-                        contentStream = new PDPageContentStream(document, newPage, true, true);
+                    // Setzen Sie die Schriftgröße für die erste Zeile
+                    if (rowIdx == 0 && colIdx == 0) {
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
+                        //contentStream.setNonStrokingColor(Color.RED); // Ändern Sie die Farbe nach Bedarf
+                    } else {
                         contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
-                        yPosition = yStart;
+                        //contentStream.setNonStrokingColor(Color.BLACK); // Setzen Sie die Farbe für die restlichen Zellen
                     }
 
+                    // Zeichnen Sie den Zellentext
                     contentStream.beginText();
-                    contentStream.newLineAtOffset(margin + colIdx * width + cellMargin + currentWidth, yPosition - height);
-                    contentStream.showText(word);
+                    contentStream.newLineAtOffset(margin + colIdx * width + cellMargin, yPosition - height + 3f);
+                    contentStream.showText(text);
                     contentStream.endText();
-
-                    currentWidth += wordWidth;
                 }
 
+                // Aktualisieren Sie die Zellenhöhe
                 maxHeight = Math.max(maxHeight, height);
             }
 
@@ -437,6 +603,45 @@ public class ExcelToWordConverter {
             contentStream.close();
         }
     }
+
+    private static float[] getColumnWidths(float tableWidth, int numColumns) {
+        float[] columnWidths = new float[numColumns];
+        for (int i = 0; i < numColumns; i++) {
+            columnWidths[i] = tableWidth / (float) numColumns;
+        }
+        return columnWidths;
+    }
+
+    private static List<String> splitTextToFitWidth(String text, float maxWidth, float fontSize) throws IOException {
+        List<String> lines = new ArrayList<>();
+        String[] words = text.split("\\s+");
+        float currentWidth = 0;
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            float wordWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(word) / 1000 * fontSize;
+
+            if (currentWidth + wordWidth > maxWidth && currentWidth > 0) {
+                // Wenn das aktuelle Wort die verbleibende Breite überschreitet, starten Sie eine neue Zeile
+                lines.add(currentLine.toString());
+                currentLine = new StringBuilder();
+                currentWidth = 0;
+            }
+
+            // Fügen Sie das aktuelle Wort in die Zeile ein
+            currentLine.append(word).append(" ");
+            currentWidth += wordWidth;
+        }
+
+        // Fügen Sie die letzte Zeile hinzu, wenn vorhanden
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+
+        return lines;
+    }
+
+
 
 
 

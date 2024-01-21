@@ -8,6 +8,7 @@ module com.example.financingtool {
     requires org.apache.poi.ooxml;
     requires kernel;
     requires org.apache.pdfbox;
+    requires itextpdf;
 
 
     opens com.example.financingtool to javafx.fxml;
