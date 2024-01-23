@@ -70,13 +70,13 @@ public class StandortController implements IAllExcelRegisterCards {
                 resultLabel.setText("Distanzen unvollständig");
                 return false;
             } else if (
-                    IAllExcelRegisterCards.isNumericStr(schFus.getText()) ||
-                    IAllExcelRegisterCards.isNumericStr(schRad.getText()) ||
-                    IAllExcelRegisterCards.isNumericStr(rstFus.getText()) ||
-                    IAllExcelRegisterCards.isNumericStr(rstRad.getText()) ||
-                    IAllExcelRegisterCards.isNumericStr(oefFus.getText()) ||
-                    IAllExcelRegisterCards.isNumericStr(oefRad.getText()) ||
-                    IAllExcelRegisterCards.isNumericStr(ezFus.getText()) ||
+                    IAllExcelRegisterCards.isNumericStr(schFus.getText()) &&
+                    IAllExcelRegisterCards.isNumericStr(schRad.getText()) &&
+                    IAllExcelRegisterCards.isNumericStr(rstFus.getText()) &&
+                    IAllExcelRegisterCards.isNumericStr(rstRad.getText()) &&
+                    IAllExcelRegisterCards.isNumericStr(oefFus.getText()) &&
+                    IAllExcelRegisterCards.isNumericStr(oefRad.getText()) &&
+                    IAllExcelRegisterCards.isNumericStr(ezFus.getText()) &&
                     IAllExcelRegisterCards.isNumericStr(ezRad.getText())
             ) {
                 resultLabel.setText("Daten wurden übernommen");
@@ -106,7 +106,7 @@ public class StandortController implements IAllExcelRegisterCards {
                 }
                 return true;
             } else {
-                resultLabel.setText("Numerische Eingaben sind falsch.");
+                resultLabel.setText("Bitte nur numerische Distanzwerte!");
                 return false;
             }
         } catch (Exception e) {

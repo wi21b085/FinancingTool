@@ -37,6 +37,9 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     @FXML
     private ChoiceBox<String> tranche = new ChoiceBox<>();
 
+    @FXML
+    private Label resultLabel;
+
     //Maria M
     @FXML
     private Button weiterButton;
@@ -48,7 +51,10 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     @FXML
     protected void continueClick() {
         try {
-            if(!tranche.getValue().isEmpty()){
+            if(tranche.getValue().isEmpty()) {
+                resultLabel.setText("Bitte wählen Sie eine Tranche!");
+                return;
+            }
                 String sheet = "Mittelverwendung - Mittelherkun";
 
                 int tranchen = Integer.parseInt(tranche.getValue());
@@ -62,6 +68,10 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                         if(node instanceof TextField){
                             TextField text = (TextField) node;
                             if(text.getId().contains("text"+i)){
+                                if (text.getText().trim().isEmpty()) {
+                                    resultLabel.setText("Bitte füllen Sie alle Felder aus!");
+                                    return;
+                                }
                                 if (IAllExcelRegisterCards.isNumericStr(text.getText()) || text.getText().trim().isEmpty()) {
                                     vals[i] = text.getText();
                                 } else {
@@ -119,10 +129,12 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                             insertTranche(sheet);
                             break;
                     }
-                }
+                    resultLabel.setText("Daten wurden aktualisiert.");
+                } else {
+                    resultLabel.setText("Bitte nur numerische Werte.");
             }
         } catch (Exception e) {
-            System.out.println("Tranchen müssen ausgewählt sein!");;
+            resultLabel.setText("Tranchen müssen ausgewählt sein!");;
         }
 
     }
@@ -201,7 +213,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
 
     }
 
-  public void getFK() throws Exception {
+    public void getFK() throws Exception {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Gesamtinvestitionskosten";
@@ -235,7 +247,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
         ExcelToWordConverter.exportExcelToWord();
     }
 
- public void setCon() {
+    public void setCon() {
         GIKController.setMV_MH_Controller(this);
     }
 }

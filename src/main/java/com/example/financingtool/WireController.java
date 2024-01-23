@@ -72,13 +72,13 @@ public class WireController implements IAllExcelRegisterCards {
 
             // Werte ins Excel eintragen
             Sheet sheet = workbook.getSheet(sheetName);
-            sheet.getRow(4).getCell(1).setCellValue(Double.parseDouble(value[0])); // ev - B4
+            sheet.getRow(4).getCell(1).setCellValue(inputToDouble(value[0])); // ev - B4
           //  sheet.getRow(5).getCell(1).setCellValue(Double.parseDouble(value[2])); // av - B5
-            sheet.getRow(3).getCell(5).setCellValue(Double.parseDouble(value[4])); // wepr - F3
+            sheet.getRow(3).getCell(5).setCellValue(inputToDouble(value[4])); // wepr - F3
           //  sheet.getRow(3).getCell(7).setCellValue(Double.parseDouble(value[5])); // wapr - H3
-            sheet.getRow(10).getCell(2).setCellValue(Double.parseDouble(value[1])); // eplz - C10
-            sheet.getRow(11).getCell(2).setCellValue(Double.parseDouble(value[3])); // aplz - C11
-            sheet.getRow(9).getCell(5).setCellValue(Double.parseDouble(value[6])); // pepr - F9
+            sheet.getRow(10).getCell(2).setCellValue(inputToDouble(value[1])); // eplz - C10
+            sheet.getRow(11).getCell(2).setCellValue(inputToDouble(value[3])); // aplz - C11
+            sheet.getRow(9).getCell(5).setCellValue(inputToDouble(value[6])); // pepr - F9
            // sheet.getRow(9).getCell(7).setCellValue(Double.parseDouble(value[7])); // papr - H9
 
             // Formeln aktualisieren
@@ -95,14 +95,14 @@ public class WireController implements IAllExcelRegisterCards {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Fehler");
-            alert.setHeaderText("Ein Fehler ist aufgetreten");
-            alert.setContentText("Fehlermeldung: " + e.getMessage());
-            alert.showAndWait();
+            System.out.println("Ein Fehler ist aufgetreten!");
         }
 
+    }
+
+    private double inputToDouble(String input) {
+        String cleanedInput = input.replaceAll("[^\\d.]", "");
+        return Double.parseDouble(cleanedInput) / 100;
     }
 
     private boolean isValidInput(String input, boolean isPercentage) {
@@ -112,8 +112,7 @@ public class WireController implements IAllExcelRegisterCards {
         }
 
         if (isPercentage) {
-            boolean isPercentageInRange = IAllExcelRegisterCards.testPercentageRange(input);
-            return isPercentageInRange;
+            return input.matches("^\\d+(\\.\\d+)?%$");
         } else {
             return IAllExcelRegisterCards.isNumericStr(input);
         }

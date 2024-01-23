@@ -35,6 +35,7 @@
          </ChoiceBox>
       </children>
    </Pane>
+   <Label fx:id="resultLabel"/>
    <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
       <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Speichern" />
 
