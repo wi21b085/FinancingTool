@@ -46,6 +46,7 @@ public class ExcelToPDF {
 
                 Sheet sheet = sheetIterator.next();
                 if (sheet.getSheetName().equals("Basisinformation") ||
+                        sheet.getSheetName().equals("Standort") ||
                         sheet.getSheetName().equals("MVMH1") ||
                         sheet.getSheetName().equals("MVMH2") ||
                         sheet.getSheetName().equals("MVMH3") ||
@@ -57,6 +58,7 @@ public class ExcelToPDF {
                         if(!sheetIterator.hasNext())
                             return;
                     } while(sheet.getSheetName().equals("Basisinformation") ||
+                            sheet.getSheetName().equals("Standort") ||
                             sheet.getSheetName().equals("MVMH1") ||
                             sheet.getSheetName().equals("MVMH2") ||
                             sheet.getSheetName().equals("MVMH3") ||
@@ -107,19 +109,19 @@ public class ExcelToPDF {
                     table = new PdfPTable(1);
                     System.out.println("Sheet: " + sheet);
                     rowsAndColumns = new int[]{0, 11, 0, 0};
-                } else if (sheet.getSheetName().equals("Standort")) {
-                    for (int i = 0; i < 5; i++) {
+                } else if (sheet.getSheetName().equals("Lage")) {
+                    for (int i = 0; i < 3; i++) {
                         Paragraph emptyParagraph = new Paragraph(" ");
                         emptyParagraph.setSpacingAfter(12f); // Setze den Abstand nach dem Absatz
                         document.add(emptyParagraph);
                     }
                     String imagePath = "src/main/resources/com/example/financingtool/standort.png";
 
-                    insertImage(document, imagePath, 250, 150, 600);
+                    insertImage(document, imagePath, 250, 150, 400);
                     // Neue Seite vor Stammdaten
                     //  document.newPage();
-                    table = new PdfPTable(3);
-                    rowsAndColumns = new int[]{0, 6, 0, 2};
+                    table = new PdfPTable(5);
+                    rowsAndColumns = new int[]{0, 11, 0, 4};
                 }  else if (sheet.getSheetName().equals("Widmung")) {
                     for (int i = 0; i < 5; i++) {
                         Paragraph emptyParagraph = new Paragraph(" ");
@@ -220,8 +222,8 @@ public class ExcelToPDF {
                 if (sheet.getSheetName().equals("Executive Summary")) {
                     columnWidths = new float[]{30f};
                 }
-                else if  (sheet.getSheetName().equals("Standort")){
-                    columnWidths = new float[]{20f, 10f, 10f};
+                else if  (sheet.getSheetName().equals("Lage")){
+                    columnWidths = new float[]{20f, 10f, 10f, 10f, 10f};
                 }
                 else if  (sheet.getSheetName().equals("Widmung")){
                     columnWidths = new float[]{40f};
@@ -239,9 +241,9 @@ public class ExcelToPDF {
                     columnWidths = new float[]{5f, 0f, 35f, 7f, 7f, 5f, 15f};
                 }
 
-                if(sheet.getSheetName().equals("Standort")) {
+                if(sheet.getSheetName().equals("Lage")) {
                     table.setWidths(columnWidths);
-                    table.setTotalWidth(200);
+                    table.setTotalWidth(250);
                     table.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
                     table.setLockedWidth(true);
                 } else {
@@ -276,6 +278,8 @@ public class ExcelToPDF {
             float maxDimension = maxDim;
             float newWidth, newHeight;
             if (originalWidth > originalHeight) {
+                if(imagePath.contains("standort.png"))
+                    maxDimension = 490;
                 newWidth = maxDimension;
                 newHeight = (int) Math.round((double) originalHeight / originalWidth * maxDimension);
             } else {
@@ -299,7 +303,7 @@ public class ExcelToPDF {
         list.setIndentationLeft(10f);
         for (Row row : sheet) {
             if(rowsAndColumns[0] <= i && i++ <= rowsAndColumns[1]) {
-                if(sheet.getSheetName().equals("Widmung") || sheet.getSheetName().equals("Executive Summary")) {
+                if(sheet.getSheetName().equals("Widmung") || sheet.getSheetName().equals("Executive Summary")  || (sheet.getSheetName().equals("Lage") && i < 10)) {
                     for (Cell cell : row) {
 
                         String cellValue = getStringFormattedCell(dataFormatter, cell);
@@ -311,9 +315,27 @@ public class ExcelToPDF {
                             Paragraph p2 = new Paragraph(" ");
                             p2.setSpacingAfter(5f);
                             document.add(p2);
-                        } else
+                        } else {
+                            if(sheet.getSheetName().equals("Lage")) {
+                                list.setIndentationLeft(0);
+                                String[] arrayStrings = cellValue.split(" ");
+                                StringBuilder sBuffer = new StringBuilder();
+                                String tempString = "";
+                                String tempStringEarlier = "";
+                                for(String eachWord : arrayStrings){
+                                    tempStringEarlier = tempString;
+                                    tempString = tempString + eachWord + " ";
+                                    if(tempString.length() >= 45) {
+                                        sBuffer.append(tempStringEarlier+"\n");
+                                        tempString = eachWord + " ";
+                                        tempStringEarlier = "";
+                                    }
+                                }
+                                sBuffer.append(tempString);
+                                cellValue = sBuffer.toString().trim();
+                            }
                             list.add(new ListItem(cellValue, normal));
-
+                        }
                     }
                 } else if (row.getRowNum() >= 1 && row.getRowNum() <= rows) {
                     int j = 0;
@@ -323,7 +345,7 @@ public class ExcelToPDF {
 
                             if (sheet.getSheetName().equals("Basisinformation") && !cellValue.isEmpty() && table != null) {
                                 table.addCell(cellValue);
-                            } else if (sheet.getSheetName().equals("Standort")) {
+                            } else if (sheet.getSheetName().equals("Lage")) {
                                 if(cellValue.equals("zu Fuß")) {
                                     try {
                                         String imagePath = "src/main/resources/com/example/financingtool/fuss.jpg";
@@ -378,7 +400,7 @@ public class ExcelToPDF {
                                     } else {
                                         PdfPCell pcell = new PdfPCell(new Phrase(cellValue));
                                         pcell.setBorder(0);
-                                        pcell.setFixedHeight(15);
+                                        pcell.setFixedHeight(30);
                                         pcell.setHorizontalAlignment(Element.ALIGN_CENTER);
                                         table.addCell(pcell);
                                     }
@@ -489,7 +511,7 @@ public class ExcelToPDF {
             Image image = Image.getInstance(imagePath);
             image.scaleAbsolute(widHei[0], widHei[1]);
 
-            image.setAbsolutePosition(X, Y);
+            image.setAbsolutePosition(document.right()-widHei[0]+20, document.bottom()+400-widHei[1]);
             document.add(image);
 
 
