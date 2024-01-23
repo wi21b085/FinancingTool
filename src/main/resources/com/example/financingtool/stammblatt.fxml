@@ -23,23 +23,19 @@
             <Label layoutX="15.0" layoutY="200.0" text="Ort:" />
             <TextField fx:id="ort" layoutX="130.0" layoutY="200.0" />
 
-
-            <Label layoutX="15.0" layoutY="250.0" text="Lagebeschreibung:" />
-            <TextField fx:id="lage" layoutX="130.0" layoutY="250.0" />
+            <Label fx:id="resultLabel" />
 
 
-            <Label layoutX="15.0" layoutY="300.0" text="Öff. Anbindung:" />
-            <TextField fx:id="oeffi" layoutX="130.0" layoutY="300.0" />
+            <Button layoutX="15.0" layoutY="300.0" mnemonicParsing="false" onAction="#submitLogo" prefHeight="26.0" prefWidth="100.0" text="Logo wählen" />
 
-            <!-- Buttons -->
-            <Button onAction="#uploadImage" layoutX="15.0" layoutY="449.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Bild anhängen" />
-            <Button  onAction="#submit"  layoutX="144.0" layoutY="450.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Senden" />
-            <Button  onAction="#update"  layoutX="14.0" layoutY="497.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Aktualisieren" />
-            <Button onAction="#delete" layoutX="140.0" layoutY="496.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Bilder löschen" />
+            <Button layoutX="15.0" layoutY="349.0" mnemonicParsing="false" onAction="#uploadImage" prefHeight="26.0" prefWidth="98.0" text="Bild anhängen" />
+            <Button layoutX="144.0" layoutY="349.0" mnemonicParsing="false" onAction="#submit" prefHeight="26.0" prefWidth="100.0" text="Speichern" />
+            <Button layoutX="14.0" layoutY="400.0" mnemonicParsing="false" onAction="#update" prefHeight="26.0" prefWidth="98.0" text="Aktualisieren" />
+            <Button layoutX="140.0" layoutY="400.0" mnemonicParsing="false" onAction="#delete" prefHeight="26.0" prefWidth="100.0" text="Bilder löschen" />
 
             <!-- Labels -->
-            <Label layoutX="15.0" layoutY="550.0" fx:id="resultLabelBasisinformation" />
-            <Label layoutX="15.0" layoutY="580.0" fx:id="resultLabelStammdaten" />
+            <Label fx:id="resultLabelBasisinformation" layoutX="15.0" layoutY="550.0" />
+            <Label fx:id="resultLabelStammdaten" layoutX="15.0" layoutY="580.0" />
 
            <!--- BASISINFORMATION -->
             <Label fx:id="output1" layoutX="400" layoutY="50.0" text="Kaufpreis" />
@@ -60,27 +56,16 @@
             <Label fx:id="output7" layoutX="400.0" layoutY="300.0" text="Außenfläche" />
             <TextField fx:id="aussenflaeche" layoutX="600.0" layoutY="300.0" prefHeight="26.0" prefWidth="100.0" />
 
-            <Label fx:id="output8" layoutX="400.0" layoutY="350.0" text="Prognostizierter Verkaufserlös" />
-            <TextField fx:id="verkaufserloes" layoutX="600" layoutY="350.0" prefHeight="26.0" prefWidth="100.0" />
 
-            <Label fx:id="output6" layoutX="400.0" layoutY="400.0" text="Gewinn" />
-            <TextField fx:id="gewinn" layoutX="600.0" layoutY="400.0" prefHeight="26.0" prefWidth="100.0" />
+            <Label fx:id="output9" layoutX="400.0" layoutY="350.0" text="Ziel-Baubeginn" />
+            <TextField fx:id="beginn" layoutX="600.0" layoutY="350.0" prefHeight="26.0" prefWidth="100.0" />
 
-            <Label fx:id="output9" layoutX="400.0" layoutY="450.0" text="Ziel-Baubeginn" />
-            <TextField fx:id="beginn" layoutX="600.0" layoutY="450.0" prefHeight="26.0" prefWidth="100.0" />
-
-            <Label fx:id="output10" layoutX="400.0" layoutY="500.0" text="Ziel-Fertigstellung" />
-            <TextField fx:id="ende" layoutX="600.0" layoutY="500.0" prefHeight="26.0" prefWidth="100.0" />
-
-            <Label fx:id="output11" layoutX="400.0" layoutY="550.0" text="ROI" />
-            <TextField fx:id="roi" layoutX="600.0" layoutY="550.0" prefHeight="26.0" prefWidth="100.0" />
-
+            <Label fx:id="output10" layoutX="400.0" layoutY="400.0" text="Ziel-Fertigstellung" />
+            <TextField fx:id="ende" layoutX="600.0" layoutY="400.0" prefHeight="26.0" prefWidth="100.0" />
 
 
         </children>
             </Pane>
-
-
 
 
     <padding>

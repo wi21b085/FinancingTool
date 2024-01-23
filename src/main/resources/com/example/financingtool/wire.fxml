@@ -28,20 +28,15 @@
             <Label layoutX="15.0" layoutY="133.0" text="Eigennutzerpreis:" />
             <TextField fx:id="wepr" layoutX="150.0" layoutY="130.0" />
 
-            <Label layoutX="15.0" layoutY="183.0" text="Anlegerpreis:" />
-            <TextField fx:id="wapr" layoutX="150.0" layoutY="180.0" />
-
             <Label layoutX="310.0" layoutY="133.0" text="Eigennutzerpreis:" />
             <TextField fx:id="pepr" layoutX="430.0" layoutY="130.0" />
 
-            <Label layoutX="310.0" layoutY="183.0" text="Anlegerpreis:" />
-            <TextField fx:id="papr" layoutX="430.0" layoutY="180.0" />
 
         </children>
     </Pane>
 
     <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
-    <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
+        <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Speichern" />
     </Pane>
 
     <Label fx:id="resultLabel" />
@@ -50,4 +45,3 @@
     </padding>
 
 </VBox>
-

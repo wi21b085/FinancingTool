@@ -89,7 +89,7 @@
     <Pane fx:id="pane2" prefHeight="100.0" prefWidth="200.0">
         <Label fx:id="resultLabel" layoutX="10.0" />
 
-        <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Weiter" />
+        <Button layoutX="242.0" layoutY="35.0" onAction="#continueClick" text="Speichern" />
     </Pane>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

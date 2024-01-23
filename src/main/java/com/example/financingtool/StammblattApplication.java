@@ -1,4 +1,4 @@
-/*
+
 package com.example.financingtool;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -36,4 +36,3 @@ public class StammblattApplication extends Application {
 }
 
 
-*/

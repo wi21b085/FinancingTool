@@ -61,8 +61,10 @@ public class Update {
     }
     public static void updateCellValue(Sheet sheet, int rowIdx, int colIdx, double newValue) {
         Row row = sheet.getRow(rowIdx);
-        Cell cell = row.getCell(colIdx);
-        cell.setCellValue(newValue);
+        if (row != null ) {
+            Cell cell = row.getCell(colIdx);
+            cell.setCellValue(newValue);
+        }
     }
 
     public static void updateRangeOfCellsString(String[] newValues, int startRow, int endRow, int colIdx, Label resultLabel, String sheetName) {

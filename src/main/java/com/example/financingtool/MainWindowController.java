@@ -1,17 +1,13 @@
 package com.example.financingtool;
 
-import javafx.collections.ObservableList;
+import com.itextpdf.text.DocumentException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -79,8 +75,14 @@ public class MainWindowController implements Initializable {
 
     }
 
-    public void convert(ActionEvent actionEvent) {
-        ExcelToWordConverter.exportExcelToWord();
+    public void convert(ActionEvent actionEvent) throws DocumentException, IOException {
+       // ExcelToWordConverter.exportExcelToWord();
+      ExcelToPDF excel = new ExcelToPDF();
+        String excelpath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
+        String pdfpath = "src/main/resources/com/example/financingtool/tester.pdf";
+
+        excel.createpdf(pdfpath, excelpath);
+        System.out.print("Data succesfully stored at: ");
     }
 
 

@@ -79,43 +79,43 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                 if(numericTest) {
                     switch (tranchen) {
                         case 1:
-                            setCell(this.ik, 1, 9);
-                            setCell(this.ek, 1, 12);
-                            setCell(this.btvg, 3, 12);
-                            Update.updateRangeOfCells(vals, 2, 2, 12, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 2, 2, 11, new Label(), sheet);
+                            setCell(this.ik, 2, 9);
+                            setCell(this.ek, 2, 12);
+                            setCell(this.btvg, 4, 12);
+                            Update.updateRangeOfCells(vals, 3, 3, 12, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 3, 3, 11, new Label(), sheet);
                             insertTranche(sheet);
                             break;
                         case 2:
-                            setCell(this.ik, 1, 1);
-                            setCell(this.ek, 1, 4);
-                            setCell(this.btvg, 4, 4);
-                            Update.updateRangeOfCells(vals, 2, 3, 4, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 2, 3, 3, new Label(), sheet);
+                            setCell(this.ik, 2, 1);
+                            setCell(this.ek, 2, 4);
+                            setCell(this.btvg, 5, 4);
+                            Update.updateRangeOfCells(vals, 3, 4, 4, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 3, 4, 3, new Label(), sheet);
                             insertTranche(sheet);
                             break;
                         case 3:
-                            setCell(this.ik, 1, 17);
-                            setCell(this.ek, 1, 20);
-                            setCell(this.btvg, 5, 20);
-                            Update.updateRangeOfCells(vals, 2, 4, 20, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 2, 4, 19, new Label(), sheet);
+                            setCell(this.ik, 2, 17);
+                            setCell(this.ek, 2, 20);
+                            setCell(this.btvg, 6, 20);
+                            Update.updateRangeOfCells(vals, 3, 5, 20, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 3, 5, 19, new Label(), sheet);
                             insertTranche(sheet);
                             break;
                         case 4:
                             setCell(this.ik, 1, 25);
                             setCell(this.ek, 1, 28);
                             setCell(this.btvg, 6, 28);
-                            Update.updateRangeOfCells(vals, 2, 5, 28, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 2, 5, 27, new Label(), sheet);
+                            Update.updateRangeOfCells(vals, 3, 6, 28, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 3, 6, 27, new Label(), sheet);
                             insertTranche(sheet);
                             break;
                         case 5:
-                            setCell(this.ik, 1, 33);
-                            setCell(this.ek, 1, 36);
-                            setCell(this.btvg, 7, 36);
-                            Update.updateRangeOfCells(vals, 2, 6, 36, new Label(), sheet);
-                            Update.updateRangeOfCellsString(bez, 2, 6, 35, new Label(), sheet);
+                            setCell(this.ik, 2, 33);
+                            setCell(this.ek, 2, 36);
+                            setCell(this.btvg, 8, 36);
+                            Update.updateRangeOfCells(vals, 3, 7, 36, new Label(), sheet);
+                            Update.updateRangeOfCellsString(bez, 3, 7, 35, new Label(), sheet);
                             insertTranche(sheet);
                             break;
                     }
@@ -128,7 +128,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     }
 
     private void insertTranche(String sheet) {
-        Update.updateRangeOfCells(new String[]{tranche.getValue()}, 10, 10, 7, new Label(), sheet);
+        Update.updateRangeOfCells(new String[]{tranche.getValue()}, 11, 11, 7, new Label(), sheet);
     }
 
     @FXML

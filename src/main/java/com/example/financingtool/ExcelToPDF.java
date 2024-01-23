@@ -15,6 +15,8 @@ import java.util.Iterator;
 //import javax.swing.JFileChooser;
 //import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -536,7 +538,46 @@ public class ExcelToPDF {
         document.open();
         readNwrite(document, excelpath);
         document.close();
+        combinePdf();
     }
+
+    //pdf mit bilder kombinieren
+
+
+    public static void combinePdf() {
+
+        String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
+        String file2 = "src/main/resources/com/example/financingtool/tester.pdf";
+        String outputFile = "src/main/resources/com/example/financingtool/Financingtool.pdf";
+
+
+        //zweiPDF kombinieren
+        try {
+            // Laden der ersten PDF-Datei
+            PDDocument pdfDocument1 = PDDocument.load(new java.io.File(file1));
+
+            // Laden der zweiten PDF-Datei
+            PDDocument pdfDocument2 = PDDocument.load(new java.io.File(file2));
+
+            // Kopieren aller Seiten von der ersten PDF-Datei zur Ausgabedatei
+            for (int i = 0; i < pdfDocument1.getNumberOfPages(); i++) {
+                PDPage page = pdfDocument1.getPage(i);
+                pdfDocument2.addPage(page);
+            }
+
+            // Speichern des Ergebnisses
+            pdfDocument2.save(outputFile);
+            System.out.println("Erfolgreiche Kombination der pdf's");
+
+            // Schließen der geöffneten Dokumente
+            pdfDocument1.close();
+            pdfDocument2.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+        //
 
     public static double getTranche() {
         double trancheCell = 0;
@@ -569,320 +610,4 @@ public class ExcelToPDF {
         return trancheCell;
     }
 
-    /**
-     *
-     * @return
-     */
-//    public String[] choosefile() {
-//        //Choose File to Read
-//        JFileChooser fileChooser = new JFileChooser();
-//        fileChooser.setDialogTitle("Excel To PDF");
-//        //only choose excel file format
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
-//        fileChooser.setFileFilter(filter);
-//        fileChooser.showOpenDialog(null);
-//        File selectedfile = fileChooser.getCurrentDirectory();
-//        String[] ret = new String[2];
-//        ret[0] = fileChooser.getSelectedFile().getPath();
-//        ret[1] = selectedfile.getPath();
-//        return ret;
-//
-//    }
-}
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-//import com.itextpdf.text.Document;
-//import com.itextpdf.text.DocumentException;
-//import com.itextpdf.text.Element;
-//import com.itextpdf.text.Font;
-//import com.itextpdf.text.Font.FontFamily;
-//import com.itextpdf.text.Paragraph;
-//import com.itextpdf.text.pdf.PdfPTable;
-//import com.itextpdf.text.pdf.PdfWriter;
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.FileOutputStream;
-//import java.io.IOException;
-//import java.util.Iterator;
-//import java.util.Scanner;
-////import javax.swing.JFileChooser;
-////import javax.swing.filechooser.FileNameExtensionFilter;
-//import org.apache.poi.ss.usermodel.Cell;
-//import org.apache.poi.ss.usermodel.DataFormatter;
-//import org.apache.poi.ss.usermodel.Row;
-//import org.apache.poi.ss.usermodel.Sheet;
-//import org.apache.poi.ss.usermodel.Workbook;
-//import org.apache.poi.ss.usermodel.WorkbookFactory;
-//
-///**
-// *
-// * @author User
-// */
-//public class ExcelToPDF {
-//
-//    /**
-//     *
-//     * @param args
-//     * @throws FileNotFoundException
-//     * @throws DocumentException
-//     * @throws IOException
-//     */
-//    public static void main(String[] args) throws FileNotFoundException, DocumentException, IOException {
-//        String excelpath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
-//        ExcelToPDF excel = new ExcelToPDF();
-//        String pdfpath = "src/main/resources/com/example/financingtool/tester.pdf";
-//
-//        excel.createpdf(pdfpath, excelpath);
-//        System.out.print("Data succesfully stored at: ");
-//        System.out.println(pdfpath);
-//    }
-//
-//    /**
-//     *
-//     * @param document
-//     * @param excelpath
-//     * @throws IOException
-//     * @throws DocumentException
-//     */
-//    public void readNwrite(Document document, String excelpath) throws IOException, DocumentException {
-//        try (Workbook workbook = WorkbookFactory.create(new File(excelpath))) {
-//            Iterator<Sheet> sheetIterator = workbook.sheetIterator();
-//            int sheetnum = 0;
-//            while (sheetIterator.hasNext()) {
-//                Sheet sheet = sheetIterator.next();
-//                workbook.getSheetAt(sheetnum);
-//                sheetnum++;
-//
-//                DataFormatter dataFormatter = new DataFormatter();
-//
-//                PdfPTable table = new PdfPTable(7);
-//                Paragraph p;
-//                Font normal = new Font(FontFamily.TIMES_ROMAN, 12);
-//                boolean title = true;
-//
-//                for (Row row : sheet) {
-//                    if (row.getRowNum() >= 4 && row.getRowNum() <= 155) {
-//                        for (Cell cell : row) {
-//
-//                            String cellValue = dataFormatter.formatCellValue(cell);
-//                            table.addCell(cellValue);
-//                            System.out.println(cell.getRowIndex() + " " + cell.getColumnIndex());
-//                            System.out.print(cellValue + "\t");
-//
-//                        }
-//
-//                    } else if (row.getRowNum() < 4) {
-//                        for (Cell cell : row) {
-//
-//                            String cellValue = dataFormatter.formatCellValue(cell);
-//
-//                            p = new Paragraph(cellValue, title ? normal : normal);
-//                            p.setAlignment(Element.ALIGN_JUSTIFIED);
-//                            document.add(p);
-//                        }
-//
-//                    }
-//                }
-//                document.add(new Paragraph(" "));
-//                float[] columnWidths = new float[]{5f, 0f, 35f, 7f, 7f, 5f, 15f};
-//                table.setWidths(columnWidths);
-//                table.setTotalWidth(550);
-//                table.setLockedWidth(true);
-//                document.add(table);
-//                for (Row row : sheet) {
-//                    if (row.getRowNum() >154) {
-//                        for (Cell cell : row) {
-//
-//                            String cellValue = dataFormatter.formatCellValue(cell);
-//
-//                            p = new Paragraph(cellValue, title ? normal : normal);
-//                            p.setAlignment(Element.ALIGN_JUSTIFIED);
-//                            document.add(p);
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    /**
-//     *
-//     * @param pdfpath
-//     * @param excelpath
-//     * @throws DocumentException
-//     * @throws FileNotFoundException
-//     * @throws IOException
-//     */
-//    public void createpdf(String pdfpath, String excelpath) throws DocumentException, FileNotFoundException, IOException {
-//
-//        Document document = new Document();
-//        PdfWriter.getInstance(document, new FileOutputStream(pdfpath));
-//        document.open();
-//        readNwrite(document, excelpath);
-//        document.close();
-//    }
-//
-//    /**
-//     *
-//     * @return
-//     */
-////    public String[] choosefile() {
-////        //Choose File to Read
-////        JFileChooser fileChooser = new JFileChooser();
-////        fileChooser.setDialogTitle("Excel To PDF");
-////        //only choose excel file format
-////        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel", "xls", "xlsx");
-////        fileChooser.setFileFilter(filter);
-////        fileChooser.showOpenDialog(null);
-////        File selectedfile = fileChooser.getCurrentDirectory();
-////        String[] ret = new String[2];
-////        ret[0] = fileChooser.getSelectedFile().getPath();
-////        ret[1] = selectedfile.getPath();
-////        return ret;
-////    }
-//}
-
-//import com.spire.xls.FileFormat;
-//import com.spire.xls.Workbook;
-//
-//public class ExcelToPDF {
-//    public static void main(String[] args) {
-//
-//        //Create a Workbook instance
-//        Workbook workbook = new Workbook();
-//        //Load an Excel file
-//        workbook.loadFromFile("src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx");
-//
-//        //Fit all worksheets on one page (optional)
-//        workbook.getConverterSetting().setSheetFitToPage(true);
-//
-//        //Save the workbook to PDF
-//        workbook.saveToFile("src/main/resources/com/example/financingtool/iceTester.pdf", FileFormat.PDF);
-//    }
-//}
-
-//package com.example.financingtool;
-//
-//import org.apache.pdfbox.pdmodel.PDDocument;
-//import org.apache.pdfbox.pdmodel.PDPage;
-//import org.apache.pdfbox.pdmodel.PDPageContentStream;
-//import org.apache.pdfbox.pdmodel.common.PDRectangle;
-//import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
-//import org.apache.poi.ss.usermodel.*;
-//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-//import org.apache.poi.xwpf.usermodel.*;
-//import org.apache.fop.apps.*;
-//import java.io.*;
-//import java.util.List;
-//import javax.xml.transform.Result;
-//import javax.xml.transform.Source;
-//import javax.xml.transform.Transformer;
-//import javax.xml.transform.TransformerFactory;
-//import javax.xml.transform.sax.SAXResult;
-//import javax.xml.transform.stream.StreamSource;
-//
-//public class ExcelToPDF {
-//
-//    public static void main(String[] args) {
-//        try {
-//            // Convert Excel to DOCX
-//            convertExcelToDocx("src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx", "src/main/resources/com/example/financingtool/tester.docx");
-//
-//            // Convert DOCX to PDF
-//            convertDocxToPdf("src/main/resources/com/example/financingtool/tester.docx", "src/main/resources/com/example/financingtool/tester.pdf");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private static void convertExcelToDocx(String excelFilePath, String docxFilePath) throws Exception {
-//        Workbook workbook = WorkbookFactory.create(new File(excelFilePath));
-//        XWPFDocument document = new XWPFDocument();
-//
-//        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-//            Sheet sheet = workbook.getSheetAt(i);
-//            for (Row row : sheet) {
-//                XWPFParagraph paragraph = document.createParagraph();
-//                for (Cell cell : row) {
-//                    XWPFRun run = paragraph.createRun();
-//                    if(cell.getCellType() == CellType.NUMERIC)
-//                        run.setText(String.valueOf(cell.getNumericCellValue()));
-//                    else if (cell.getCellType() == CellType.STRING)
-//                        run.setText(cell.getStringCellValue());
-//                }
-//            }
-//        }
-//
-//        try (FileOutputStream out = new FileOutputStream(new File(docxFilePath))) {
-//            document.write(out);
-//        }
-//    }
-//    private static void convertDocxToPdf(String wordFilePath, String pdfFilePath) throws Exception {
-//        try (FileInputStream fis = new FileInputStream(wordFilePath);
-//             XWPFDocument document = new XWPFDocument(fis);
-//             PDDocument pdfDocument = new PDDocument()) {
-//
-//            for (XWPFPictureData picture : document.getAllPictures()) {
-//                XWPFPictureData pictureData = picture;
-//                PDPage pdfPage = new PDPage(PDRectangle.A4);
-//                pdfDocument.addPage(pdfPage);
-//                try (PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, pdfPage)) {
-//                    contentStream.drawImage(LosslessFactory.createFromImage(pdfDocument, pictureData.getData()), 50, 600);
-//                }
-//            }
-//
-//            pdfDocument.save(new FileOutputStream(pdfFilePath));
-//        }
-//    }
-
-//    private static void convertDocxToPdf(String docxFilePath, String pdfFilePath) throws Exception {
-//        // Configure FOP
-//        FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
-//        FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
-//        foUserAgent.getRendererOptions().put("pdf-a-mode", "PDF/A-1b");
-//
-//        // Create output stream for PDF
-//        OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(pdfFilePath)));
-//
-//        // Construct FOP with desired output format
-//        Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
-//
-//        // Load DOCX file and apply XSL-FO transformation
-//        FileInputStream docxInputStream = new FileInputStream(new File(docxFilePath));
-//        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//        Transformer transformer = transformerFactory.newTransformer();
-//        transformer.setParameter("versionParam", "1.0");
-//        Source xslt = new StreamSource(new ByteArrayInputStream(
-//                ("<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">"
-//                        + "<xsl:template match=\"/\">"
-//                        + "  <fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\">"
-//                        + "    <fo:layout-master-set>"
-//                        + "      <fo:simple-page-master master-name=\"A4\" margin=\"2cm\">"
-//                        + "        <fo:region-body/>"
-//                        + "      </fo:simple-page-master>"
-//                        + "    </fo:layout-master-set>"
-//                        + "    <fo:page-sequence master-reference=\"A4\">"
-//                        + "      <fo:flow flow-name=\"xsl-region-body\">"
-//                        + "        <fo:block>"
-//                        + "          <fo:external-graphic src=\"docx:" + docxFilePath + "\" content-type=\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\"/>"
-//                        + "        </fo:block>"
-//                        + "      </fo:flow>"
-//                        + "    </fo:page-sequence>"
-//                        + "  </fo:root>"
-//                        + "</xsl:template>"
-//                        + "</xsl:stylesheet>").getBytes()));
-//
-//        // Transform DOCX to PDF
-//        Result res = new SAXResult(fop.getDefaultHandler());
-//        transformer.transform(new StreamSource(docxInputStream), res);
-//
-//        // Close output streams
-//        out.close();
-//        docxInputStream.close();
-//    }
-//}
+   }

@@ -4,34 +4,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<ScrollPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.financingtool.GIKController" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
-  <VBox alignment="TOP_CENTER" spacing="20.0" minHeight="1500" minWidth="600">
-    <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="716.0" prefWidth="548.0" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.financingtool.GIKController">
+  <VBox alignment = "CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth= "-Infinity" prefHeight="400.0" prefWidth="600.0"  spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" >
+  <Pane fx:id= "pane" prefHeight="300.0" prefWidth="200.0" >
+  <children>
 
 
-    <Label fx:id="welcomeText" text="Welcome to Financing Tool!" />
-    <TextField fx:id="userInputField1" promptText="KB00 netto eingeben" />
-    <TextField fx:id="userInputField2" promptText="KB01 netto eingeben" />
-    <TextField fx:id="userInputField3" promptText="KB02 netto eingeben" />
-    <TextField fx:id="userInputField4" promptText="KB06 netto eingeben" />
-    <TextField fx:id="userInputField5" promptText="KB07 netto eingeben" />
-    <TextField fx:id="userInputField6" promptText="KB08 netto eingeben" />
-    <TextField fx:id="userInputField7" promptText="KB09 netto eingeben" />
-    <TextField fx:id="userInputField8" promptText="KB10 netto eingeben" />
-    <TextField fx:id="userInputField9" promptText="KB11 netto eingeben" />
-    <Button fx:id="updateRangeButton" text="Bereich aktualisieren" onAction="#updateRange" />
+  <Label layoutX ="250.0" layoutY="3.0" fx:id="welcomeText" text="Willkommen zum Financing Tool" />
+    <TextField fx:id="userInputField1" layoutX="80.0" layoutY="50.0"  maxWidth="300.0"  promptText="KB00 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="100.0" fx:id="userInputField2"   maxHeight="0.0" maxWidth="300.0" promptText="KB01 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="150.0" fx:id="userInputField3"  maxWidth="300.0" promptText="KB02 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="200.0" fx:id="userInputField4"  maxWidth="300.0" promptText="KB06 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="250.0"  fx:id="userInputField5" maxWidth="300.0" promptText="KB07 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="300.0"  fx:id="userInputField6"  maxWidth="300.0" promptText="KB08 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="350.0"  fx:id="userInputField7"  maxWidth="300.0" promptText="KB09 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="400.0"  fx:id="userInputField8"  maxWidth="300.0" promptText="KB10 netto eingeben" />
+    <TextField layoutX="80.0" layoutY="450.0" fx:id="userInputField9"  maxWidth="300.0" promptText="KB11 netto eingeben" />
+    <Button layoutX="80.0" layoutY="500.0"  fx:id="updateRangeButton" onAction="#updateRange" text="Bereich aktualisieren" />
 
-    <TextField fx:id="userInputFieldD2" promptText="UST Grund" />
-    <TextField fx:id="userInputFieldD3to9" promptText="Genereller UST" />
-    <TextField fx:id="userInputFieldD10" promptText="UST Finanzierung" />
-    <Button fx:id="updateButtonD" text="UST aktualisieren" onAction="#updateD" />
-    <Label fx:id="resultLabel" text="resultLabel" />
+    <TextField layoutX="400.0" layoutY="50.0" fx:id="userInputFieldD2" maxWidth="300.0" promptText="UST Grund" />
+    <TextField layoutX="400.0" layoutY="100.0" fx:id="userInputFieldD3to9" maxWidth="300.0" promptText="Genereller UST" />
+    <TextField layoutX="400.0" layoutY="150.0" fx:id="userInputFieldD10" maxWidth="300.0" promptText="UST Finanzierung" />
+    <Button layoutX="400.0" layoutY="200.0" fx:id="updateButtonD" onAction="#updateD" text="UST aktualisieren" />
+    <Label layoutX="400.0" layoutY="250.0" fx:id="resultLabel" text="" />
 
-   <!-- <Button fx:id="weiterButton" mnemonicParsing="false" onAction="#weiter" text="Weiter" />-->
-
+  </children>
+  </Pane>
   </VBox>
 </ScrollPane>
-

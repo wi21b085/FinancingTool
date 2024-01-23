@@ -120,7 +120,7 @@ public class GIKController implements IAllExcelRegisterCards{
             resultLabel.setText("Ein oder mehrere Werte sind ungültig.");
             valid=false;
         } else {
-            Update.updateRangeOfCells(newValues,1,9,1, resultLabel, sheetName);
+            Update.updateRangeOfCells(newValues,2,10,1, resultLabel, sheetName);
         }
 
         // Hole den Wert aus userInputField8
@@ -129,9 +129,9 @@ public class GIKController implements IAllExcelRegisterCards{
         setMV_MH_Controller(mvMhController);
         EventBus.getInstance().publish("updateFK", newValue);
 
-        updateD2 = validateAndUpdate(userInputFieldD2.getText(), 20, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 1, 3,resultLabel);
-        updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 19, 1, resultLabel);
-        updateD10 = validateAndUpdate(userInputFieldD10.getText(), 9, 3, resultLabel);
+        updateD2 = validateAndUpdate(userInputFieldD2.getText(), 21, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 2, 3,resultLabel);
+        updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 20, 1, resultLabel);
+        updateD10 = validateAndUpdate(userInputFieldD10.getText(), 10, 3, resultLabel);
 
 
         if (updateD2 && updateD3to9 && updateD10&valid==true) {
@@ -175,9 +175,9 @@ public class GIKController implements IAllExcelRegisterCards{
 //Funktion von hier nach oben hinzugefügt zusätzlich
     public void updateD(ActionEvent actionEvent) {
 
-         updateD2 = validateAndUpdate(userInputFieldD2.getText(), 20, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 1, 3,resultLabel);
-         updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 19, 1, resultLabel);
-         updateD10 = validateAndUpdate(userInputFieldD10.getText(), 9, 3, resultLabel);
+         updateD2 = validateAndUpdate(userInputFieldD2.getText(), 21, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 2, 3,resultLabel);
+         updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 20, 1, resultLabel);
+         updateD10 = validateAndUpdate(userInputFieldD10.getText(), 10, 3, resultLabel);
 
 
         if (updateD2 && updateD3to9 && updateD10) {
