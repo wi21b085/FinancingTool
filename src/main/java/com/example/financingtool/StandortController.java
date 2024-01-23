@@ -67,7 +67,7 @@ public class StandortController implements IAllExcelRegisterCards {
                     oefFus.getText().isEmpty() || oefRad.getText().isEmpty() ||
                     ezFus.getText().isEmpty() || ezRad.getText().isEmpty()
             ) {
-                resultLabel.setText("Stammdaten unvollständig");
+                resultLabel.setText("Distanzen unvollständig");
                 return false;
             } else if (
                     IAllExcelRegisterCards.isNumericStr(schFus.getText()) ||
