@@ -126,6 +126,7 @@ public class GIKController implements IAllExcelRegisterCards{
         }
         else if (countNonNumeric > 0) {
             resultLabel.setText("Ein oder mehrere Werte sind ungültig.");
+            System.out.println("nicht numerisch");
             valid=false;
         } else {
             Update.updateRangeOfCells(newValues,2,10,1, resultLabel, sheetName);
@@ -145,8 +146,8 @@ public class GIKController implements IAllExcelRegisterCards{
             System.out.println(errorText);
             resultLabel.setText("Mindestens ein Wert muss eingetragen sein!");
         }
-        else if (valid=true) {
-            resultLabel.setText("Daten erfolgreich aktualisiert 1");
+        else if (valid==true) {
+            resultLabel.setText("Daten erfolgreich aktualisiert");
           getCellData();
 
          //   executiveSummary.setDatenausGIK(gik);
@@ -190,12 +191,18 @@ public class GIKController implements IAllExcelRegisterCards{
          updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 20, 1, resultLabel);
          updateD10 = validateAndUpdate(userInputFieldD10.getText(), 10, 3, resultLabel);
 
-        if ((userInputField1.getText().trim().isEmpty()&&userInputField2.getText().trim().isEmpty()&&userInputField3.getText().trim().isEmpty()) || atLeastOneValueFilled==false) {
+        if ((userInputFieldD2.getText().trim().isEmpty()&&userInputFieldD3to9.getText().trim().isEmpty()&&userInputFieldD10.getText().trim().isEmpty())) {
             resultLabel.setText("Es muss mindestens ein Wert eingetragen sein");
         }
-        else if (updateD2 && updateD3to9 && updateD10) {
-            resultLabel.setText("Daten erfolgreich aktualisiert2");
+
+         else if(updateD2 && updateD3to9 && updateD10) {
+            resultLabel.setText("Daten erfolgreich aktualisiert");
+        } else if (updateD2==false||updateD3to9==false||updateD10==false) {
+             resultLabel.setText("Achtung, die Eingabe muss valide Werte enthalten.");
+
         }
+
+
     }
 
     private void updateCellD(int rowIdx, int colIdx, String newValue) {
