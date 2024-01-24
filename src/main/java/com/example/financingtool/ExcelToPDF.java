@@ -5,10 +5,11 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 //import java.util.Scanner;
@@ -17,7 +18,6 @@ import java.util.Iterator;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -49,6 +49,8 @@ public class ExcelToPDF {
                 Sheet sheet = sheetIterator.next();
                 if (sheet.getSheetName().equals("Basisinformation") ||
                         sheet.getSheetName().equals("Standort") ||
+                        sheet.getSheetName().equals("GIK_Kalkulation") ||
+                        sheet.getSheetName().equals("WIRE_Kalkulation") ||
                         sheet.getSheetName().equals("MVMH1") ||
                         sheet.getSheetName().equals("MVMH2") ||
                         sheet.getSheetName().equals("MVMH3") ||
@@ -61,6 +63,8 @@ public class ExcelToPDF {
                             return;
                     } while(sheet.getSheetName().equals("Basisinformation") ||
                             sheet.getSheetName().equals("Standort") ||
+                            sheet.getSheetName().equals("GIK_Kalkulation") ||
+                            sheet.getSheetName().equals("WIRE_Kalkulation") ||
                             sheet.getSheetName().equals("MVMH1") ||
                             sheet.getSheetName().equals("MVMH2") ||
                             sheet.getSheetName().equals("MVMH3") ||
@@ -75,12 +79,12 @@ public class ExcelToPDF {
                 Paragraph p = new Paragraph();
                 // Füge das Logo oben rechts auf jeder Seite ein
 
-                String logoPath = "src/main/resources/com/example/financingtool/logo.jpg";
+                String logoPath = "src/main/resources/com/example/financingtool/images/logo.jpg";
                 File jpeg = new File(logoPath);
                 if (jpeg.exists()) {
                     insertLogo(document, logoPath);
                 } else {
-                    insertLogo(document, "src/main/resources/com/example/financingtool/logo.png");
+                    insertLogo(document, "src/main/resources/com/example/financingtool/images/logo.png");
                 }
 
 
@@ -117,7 +121,7 @@ public class ExcelToPDF {
                         emptyParagraph.setSpacingAfter(12f); // Setze den Abstand nach dem Absatz
                         document.add(emptyParagraph);
                     }
-                    String imagePath = "src/main/resources/com/example/financingtool/standort.png";
+                    String imagePath = "src/main/resources/com/example/financingtool/images/standort.png";
 
                     insertImage(document, imagePath, 250, 150, 400);
                     // Neue Seite vor Stammdaten
@@ -130,7 +134,7 @@ public class ExcelToPDF {
                         emptyParagraph.setSpacingAfter(12f); // Setze den Abstand nach dem Absatz
                         document.add(emptyParagraph);
                     }
-                    String imagePath = "src/main/resources/com/example/financingtool/adresse.png";
+                    String imagePath = "src/main/resources/com/example/financingtool/images/adresse.png";
 
                     insertImage(document, imagePath, 400, 100, 400);
                     // Neue Seite vor Stammdaten
@@ -187,7 +191,7 @@ public class ExcelToPDF {
                         document.add(emptyParagraph);
                     }
                     table = new PdfPTable(8);
-                    rowsAndColumns = new int[]{0, 22, 0, 7};
+                    rowsAndColumns = new int[]{0, 27, 0, 7};
                 }
 //                else if (!sheet.getSheetName().equals("Mittelverwendung - Mittelherkun")){
 //                    //wird nicht geprinted.
@@ -226,29 +230,31 @@ public class ExcelToPDF {
                 }
                 else if  (sheet.getSheetName().equals("Lage")){
                     columnWidths = new float[]{20f, 10f, 10f, 10f, 10f};
+                    table.setWidths(columnWidths);
+                    table.setTotalWidth(250);
+                    table.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
+                    table.setLockedWidth(true);
                 }
                 else if  (sheet.getSheetName().equals("Widmung")){
                     columnWidths = new float[]{40f};
                 }
                 else if (sheet.getSheetName().equals("Gesamtinvestitionskosten")) {
-                    columnWidths = new float[]{10f, 3f, 3f, 3f, 3f, 3f};
+                    columnWidths = new float[]{9f, 3f, 3f, 3f, 3f, 3f};
                 }
                 else if (sheet.getSheetName().equals("Mittelverwendung - Mittelherkun")){
                     columnWidths = new float[]{10f, 5f, 5f, 10f, 5f, 5f};
                 }
                 else if (sheet.getSheetName().equals("Wirtschaftlichkeitsrechnung")){
-                    columnWidths = new float[]{8f, 5f, 6f, 10f, 6f, 6f, 6f, 6f};
+                    columnWidths = new float[]{10f, 6f, 3f, 4f, 6f, 6f, 6f, 6f};
+                    table.setWidths(columnWidths);
+                    table.setTotalWidth(800);
+                    table.setLockedWidth(true);
                 }
                 else {
                     columnWidths = new float[]{5f, 0f, 35f, 7f, 7f, 5f, 15f};
                 }
 
-                if(sheet.getSheetName().equals("Lage")) {
-                    table.setWidths(columnWidths);
-                    table.setTotalWidth(250);
-                    table.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
-                    table.setLockedWidth(true);
-                } else {
+                if(!sheet.getSheetName().equals("Lage") && !sheet.getSheetName().equals("Wirtschaftlichkeitsrechnung")) {
                     table.setWidths(columnWidths);
                     table.setTotalWidth(650);
                     table.setLockedWidth(true);
@@ -308,7 +314,8 @@ public class ExcelToPDF {
                 if(sheet.getSheetName().equals("Widmung") || sheet.getSheetName().equals("Executive Summary")  || (sheet.getSheetName().equals("Lage") && i < 10)) {
                     for (Cell cell : row) {
 
-                        String cellValue = getStringFormattedCell(dataFormatter, cell);
+                        String[] res = getStringFormattedCell(dataFormatter, cell);
+                        String cellValue = res[0];
                         p = new Paragraph(cellValue, title ? new Font(FontFamily.HELVETICA, 18) : normal);
                         title = false;
                         p.setAlignment(Element.ALIGN_JUSTIFIED);
@@ -336,21 +343,40 @@ public class ExcelToPDF {
                                 sBuffer.append(tempString);
                                 cellValue = sBuffer.toString().trim();
                             }
-                            list.add(new ListItem(cellValue, normal));
+                            if(!cellValue.trim().isEmpty()) {
+                                if(sheet.getSheetName().equals("Widmung")) {
+                                    String[] arrayStrings = cellValue.split(" ");
+                                    StringBuilder sBuffer = new StringBuilder();
+                                    String tempString = "";
+                                    String tempStringEarlier = "";
+                                    for (String eachWord : arrayStrings) {
+                                        tempStringEarlier = tempString;
+                                        tempString = tempString + eachWord + " ";
+                                        if (tempString.length() >= 50) {
+                                            sBuffer.append(tempStringEarlier + "\n");
+                                            tempString = eachWord + " ";
+                                            tempStringEarlier = "";
+                                        }
+                                    }
+                                    sBuffer.append(tempString);
+                                    cellValue = sBuffer.toString().trim();
+                                }
+                                list.add(new ListItem(cellValue, normal));
+                            }
                         }
                     }
                 } else if (row.getRowNum() >= 1 && row.getRowNum() <= rows) {
                     int j = 0;
                     for (Cell cell : row) {
                         if (rowsAndColumns[2] <= j && j++ <= rowsAndColumns[3]) {
-                            String cellValue = getStringFormattedCell(dataFormatter, cell);
-
+                            String[] res = getStringFormattedCell(dataFormatter, cell);
+                            String cellValue = res[0];
                             if (sheet.getSheetName().equals("Basisinformation") && !cellValue.isEmpty() && table != null) {
                                 table.addCell(cellValue);
                             } else if (sheet.getSheetName().equals("Lage")) {
                                 if(cellValue.equals("zu Fuß")) {
                                     try {
-                                        String imagePath = "src/main/resources/com/example/financingtool/fuss.jpg";
+                                        String imagePath = "src/main/resources/com/example/financingtool/icons/fuss.jpg";
 
                                         insertIcon(table, imagePath, 18);
                                     } catch (IOException e) {
@@ -358,7 +384,7 @@ public class ExcelToPDF {
                                     }
                                 } else if(cellValue.equals("mit dem Fahrrad")) {
                                     try {
-                                        String imagePath = "src/main/resources/com/example/financingtool/rad.png";
+                                        String imagePath = "src/main/resources/com/example/financingtool/icons/rad.png";
 
                                         insertIcon(table, imagePath, 30);
                                     } catch (IOException e) {
@@ -369,7 +395,7 @@ public class ExcelToPDF {
                                         table.addCell(cellValue + " Min.");
                                     }else if(cellValue.equals("Schulen")) {
                                         try {
-                                            String imagePath = "src/main/resources/com/example/financingtool/schule.jpg";
+                                            String imagePath = "src/main/resources/com/example/financingtool/icons/schule.jpg";
 
                                             insertIcon(table, imagePath, 25);
                                         } catch (IOException e) {
@@ -377,7 +403,7 @@ public class ExcelToPDF {
                                         }
                                     }else if(cellValue.equals("Restaurants")) {
                                         try {
-                                            String imagePath = "src/main/resources/com/example/financingtool/essen.png";
+                                            String imagePath = "src/main/resources/com/example/financingtool/icons/essen.png";
 
                                             insertIcon(table, imagePath, 22);
                                         } catch (IOException e) {
@@ -385,7 +411,7 @@ public class ExcelToPDF {
                                         }
                                     }else if(cellValue.contains("Verkehr")) {
                                         try {
-                                            String imagePath = "src/main/resources/com/example/financingtool/zug.png";
+                                            String imagePath = "src/main/resources/com/example/financingtool/icons/zug.png";
 
                                             insertIcon(table, imagePath, 25);
                                         } catch (IOException e) {
@@ -393,7 +419,7 @@ public class ExcelToPDF {
                                         }
                                     }else if(cellValue.contains("handel")) {
                                         try {
-                                            String imagePath = "src/main/resources/com/example/financingtool/einkauf.jpg";
+                                            String imagePath = "src/main/resources/com/example/financingtool/icons/einkauf.jpg";
 
                                             insertIcon(table, imagePath, 25);
                                         } catch (IOException e) {
@@ -408,7 +434,22 @@ public class ExcelToPDF {
                                     }
                                 }
                             }else if (!sheet.getSheetName().equals("Basisinformation")) {
-                                table.addCell(cellValue);
+                                PdfPCell pcell = new PdfPCell(new Phrase(cellValue));
+                                if(i == 2 || (sheet.getSheetName().equals("Wirtschaftlichkeitsrechnung") && (i == 10 || i == 20))) {
+                                    pcell.setBorder(0);
+                                    pcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                }
+                                if(res[1].equals("true")) {
+                                    pcell.setBorder(0);
+                                } else if(sheet.getSheetName().contains("MVMH")) {
+                                    if(isNumericDouble(cellValue)) {
+                                        pcell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                    } else {
+                                        pcell.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
+                                    }
+                                } else
+                                    pcell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                table.addCell(pcell);
                             }
 
 
@@ -436,8 +477,10 @@ public class ExcelToPDF {
         document.add(list);
     }
 
-    private String getStringFormattedCell(DataFormatter dataFormatter, Cell cell) {
+    private String[] getStringFormattedCell(DataFormatter dataFormatter, Cell cell) {
         String cellValue;
+        String check = "false";
+        String[] res = new String[2];
         if (cell.getCellType() == CellType.FORMULA) {
             if (cell.getCachedFormulaResultType() == CellType.ERROR) {
                 cellValue = "";
@@ -460,8 +503,12 @@ public class ExcelToPDF {
             }
         } else {
             cellValue = dataFormatter.formatCellValue(cell);
+            if(!cellValue.trim().isBlank())
+                check = "true";
         }
-        return cellValue;
+        res[0] = cellValue;
+        res[1] = check;
+        return res;
     }
 
     private void insertIcon(PdfPTable table, String imagePath, int maxDim) throws BadElementException, IOException {
@@ -481,6 +528,18 @@ public class ExcelToPDF {
         }
         try {
             int d = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isNumericDouble(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
         } catch (NumberFormatException nfe) {
             return false;
         }
@@ -549,28 +608,31 @@ public class ExcelToPDF {
         String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
         String file2 = "src/main/resources/com/example/financingtool/tester.pdf";
         String outputFile = "src/main/resources/com/example/financingtool/Financingtool.pdf";
+        String outputFile2 = "../Financing Tool.pdf";
 
 
         //zweiPDF kombinieren
         try {
-            // Laden der ersten PDF-Datei
-            PDDocument pdfDocument1 = PDDocument.load(new java.io.File(file1));
-
             // Laden der zweiten PDF-Datei
-            PDDocument pdfDocument2 = PDDocument.load(new java.io.File(file2));
+            PDDocument pdfDocument2 = PDDocument.load(new File(file2));
 
-            // Kopieren aller Seiten von der ersten PDF-Datei zur Ausgabedatei
-            for (int i = 0; i < pdfDocument1.getNumberOfPages(); i++) {
-                PDPage page = pdfDocument1.getPage(i);
-                pdfDocument2.addPage(page);
+            if (Files.exists(Paths.get(file1))) {
+                // Laden der ersten PDF-Datei
+                PDDocument pdfDocument1 = PDDocument.load(new File(file1));
+
+                // Kopieren aller Seiten von der ersten PDF-Datei zur Ausgabedatei
+                for (int i = 0; i < pdfDocument1.getNumberOfPages(); i++) {
+                    PDPage page = pdfDocument1.getPage(i);
+                    pdfDocument2.addPage(page);
+                }
+                pdfDocument1.close();
             }
-
             // Speichern des Ergebnisses
             pdfDocument2.save(outputFile);
-            System.out.println("Erfolgreiche Kombination der pdf's");
+            pdfDocument2.save(outputFile2);
+            System.out.println("Erfolgreiche Kombination der PDFs");
 
             // Schließen der geöffneten Dokumente
-            pdfDocument1.close();
             pdfDocument2.close();
 
         } catch (IOException e) {

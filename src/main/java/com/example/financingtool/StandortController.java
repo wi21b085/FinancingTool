@@ -51,7 +51,7 @@ public class StandortController implements IAllExcelRegisterCards {
     protected void continueClick() {
         boolean fwb = check();
 
-        System.out.println(fwb);
+        //System.out.println(fwb);
     }
 
     @FXML
@@ -92,7 +92,7 @@ public class StandortController implements IAllExcelRegisterCards {
                 if(!L1.getText().isBlank() && L1.getText() != null) {
                     String text = L1.getText();
                     String[] textSplit = text.split("\n", 0);
-                    System.out.println(textSplit);
+                    //System.out.println(textSplit);
                     int n = 2;
                     for (String a : textSplit) {
                         if(a.isEmpty())
@@ -100,7 +100,7 @@ public class StandortController implements IAllExcelRegisterCards {
                         else
                             setCell(a, n++, 5);
                     }
-                    if (textSplit.length < 8) {
+                    if (textSplit.length < 6) {
                         emptyCells(n);
                     }
                 }
@@ -116,8 +116,8 @@ public class StandortController implements IAllExcelRegisterCards {
     }
 
     private void emptyCells(int n) {
-        for (int i = n; i < 10; i++) {
-            System.out.println(i);
+        for (int i = n; i < 8; i++) {
+            //System.out.println(i);
             setCell("\n", i, 5);
         }
     }
@@ -163,7 +163,7 @@ public class StandortController implements IAllExcelRegisterCards {
             // Allow Enter key
             if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
                 // Check if the number of lines is already at the limit
-                if (numberOfLines >= 8) {
+                if (numberOfLines >= 6) {
                     event.consume(); // Consume the event to prevent further input
                 }
             }

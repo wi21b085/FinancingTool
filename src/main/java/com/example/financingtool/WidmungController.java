@@ -88,7 +88,7 @@ public class WidmungController implements IAllExcelRegisterCards {
                 String bb = bbVal(bb1);
                 setCell(bb, 3, 14);
             } else {
-                setCell("\n", 3, 14);
+                setCell(" ", 3, 14);
             }
 
             if (bb2.getValue() != null) {
@@ -96,15 +96,15 @@ public class WidmungController implements IAllExcelRegisterCards {
 
                 if(bb1.getValue() != null && !bb1.getValue().isEmpty()){
                     if(bb1.getValue().contains(bb2.getValue()))
-                        setCell("\n", 4, 14);
+                        setCell(" ", 4, 14);
                     else
                         setCell(bb, 4, 14);
                 } else {
                     setCell(bb, 3, 14);
-                    setCell("\n", 4, 14);
+                    setCell(" ", 4, 14);
                 }
             } else {
-                setCell("\n", 4, 14);
+                setCell(" ", 4, 14);
             }
             return true;
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class WidmungController implements IAllExcelRegisterCards {
             case "ÖZ" -> "ÖZ = Grundflächen für öffentliche Zwecke (Enteignung möglich)";
             case "BB" -> "BB = Besondere Bestimmungen";
             case "G" -> "G = Gärtnerische Ausgestaltung";
-            default -> "\n";
+            default -> " ";
         };
         System.out.println(bb);
         return bb;

@@ -17,8 +17,8 @@
          <TextField fx:id="ik" layoutX="130.0" layoutY="30.0" />
          <Label layoutX="300.0" layoutY="33.0" text="Eigenkapital:" />
          <TextField fx:id="ek" layoutX="400.0" layoutY="30.0" />
-         <Label layoutX="15.0" layoutY="83.0" text="Finanzierungskosten:" />
-         <Text fx:id="fk" layoutX="249.0" layoutY="97.0" text="text" id="specificfkID" />
+         <Label layoutX="15.0" layoutY="83.0" text="Finanzierungskosten: EUR " />
+         <Text fx:id="fk" layoutX="155.0" layoutY="96.0" text="text" id="specificfkID" />
          <Label layoutX="300.0" layoutY="83.0" text="BTVG Erlöse:" />
          <TextField fx:id="btvg" layoutX="400.0" layoutY="80.0" />
          <Label layoutX="220.0" layoutY="125.0" text="Fremdkapital Tranchen-Anzahl:" />

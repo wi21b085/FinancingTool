@@ -495,13 +495,13 @@ public class StammblattController implements IAllExcelRegisterCards {
         try {
             String existingPdfPath = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
             String outputPdfPath = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
-            String logoPath = "src/main/resources/com/example/financingtool/logo.jpg";
+            String logoPath = "src/main/resources/com/example/financingtool/images/logo.jpg";
 
             PDDocument document;
 
             File jlogo = new File(logoPath);
             if (!jlogo.exists()) {
-                String pLogoPath = "src/main/resources/com/example/financingtool/logo.png";
+                String pLogoPath = "src/main/resources/com/example/financingtool/images/logo.png";
                 File pLogo = new File(pLogoPath);
                 if(pLogo.exists()) {
                     logoPath = pLogoPath;
@@ -607,8 +607,8 @@ public class StammblattController implements IAllExcelRegisterCards {
                 // Kopiere das ausgewählte Bild unter dem Namen "logo.jpg" nach "Pfad1"
                 String contentType = URLConnection.guessContentTypeFromName(selectedFile.getName());
                 if (contentType != null) {
-                    String pdestinationPath = "src/main/resources/com/example/financingtool/logo.png";
-                    String jdestinationPath = "src/main/resources/com/example/financingtool/logo.jpg";
+                    String pdestinationPath = "src/main/resources/com/example/financingtool/images/logo.png";
+                    String jdestinationPath = "src/main/resources/com/example/financingtool/images/logo.jpg";
                     if (contentType.equals("image/jpeg")) {
                         System.out.println("Das Logo ist ein JPEG-Bild.");
                         Files.copy(selectedFile.toPath(), Paths.get(jdestinationPath), StandardCopyOption.REPLACE_EXISTING);

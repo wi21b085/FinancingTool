@@ -73,7 +73,7 @@ public class GIKController implements IAllExcelRegisterCards{
     private Button updateButtonD;
     private String errorNotNumeric="Achtung, die Werte müssen numerisch sein";
 
-    private String sheetName = "Gesamtinvestitionskosten";
+    private String sheetName = "GIK_Kalkulation";
 
     static MV_MH_Controller mvMhController = new MV_MH_Controller();
     static ExecutiveSummary executiveSummary = new ExecutiveSummary();

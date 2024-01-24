@@ -7,6 +7,8 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.IndexedCell?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 <AnchorPane fx:controller="com.example.financingtool.MainWindowController"
             xmlns:fx="http://javafx.com/fxml" >
 
@@ -20,12 +22,16 @@
                 <fx:include source="standort.fxml"/>
                 <closable>false</closable>
             </Tab>
-            <Tab fx:id="GIK" text="GIK">
+            <Tab fx:id="Widmung" text="Widmung">
+                <fx:include source="widmung.fxml"/>
+                <closable>false</closable>
+            </Tab>
+            <Tab fx:id="GIK" text="Investitionskosten">
                 <fx:include source="gik.fxml"/>
                 <closable>false</closable>
 
             </Tab>
-            <Tab fx:id="MV_MH" text="MV_MH">
+            <Tab fx:id="MV_MH" text="Mittel">
                 <fx:include source="MV_MH.fxml"/>
                 <closable>false</closable>
             </Tab>
@@ -33,14 +39,13 @@
                 <fx:include source="wire.fxml"/>
                 <closable>false</closable>
             </Tab>
-            <Tab fx:id="Widmung" text="Widmung">
-                <fx:include source="widmung.fxml"/>
-                <closable>false</closable>
-            </Tab>
 
-            <Tab fx:id="converter" text="PDF Generator">
-                <Button layoutX="350.0" layoutY="350.0" mnemonicParsing="false" fx:id="convert" onAction="#convert"  prefHeight="26.0" prefWidth="200.0" text="Konvertierung in pdf" />
-                <closable>false</closable>
+            <Tab fx:id="converter" text="PDF">
+                <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0">
+                    <Pane fx:id="pane" prefHeight="300.0" prefWidth="200.0">
+                        <Button layoutX="250.0" layoutY="50.0" mnemonicParsing="false" fx:id="convert" onAction="#convert"  prefHeight="26.0" prefWidth="200.0" text="PDF aus Daten erstellen" />
+                    </Pane>
+                </VBox>
             </Tab>
 
         </TabPane>

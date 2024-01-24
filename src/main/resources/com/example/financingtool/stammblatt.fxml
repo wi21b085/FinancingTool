@@ -13,7 +13,7 @@
             <Label layoutX="15.0" layoutY="50.0" text="Firmenname:" />
             <TextField fx:id="firmenname" layoutX="130.0" layoutY="50.0" />
 
-            <Label layoutX="15.0" layoutY="100.0" text="Strasse:" />
+            <Label layoutX="15.0" layoutY="100.0" text="Adresse:" />
             <TextField fx:id="strasse" layoutX="130.0" layoutY="100.0" />
 
             <Label layoutX="15.0" layoutY="150.0" text="Postleitzahl:" />
@@ -28,17 +28,17 @@
 
             <Button layoutX="15.0" layoutY="300.0" mnemonicParsing="false" onAction="#submitLogo" prefHeight="26.0" prefWidth="100.0" text="Logo wählen" />
 
-            <Button layoutX="15.0" layoutY="349.0" mnemonicParsing="false" onAction="#uploadImage" prefHeight="26.0" prefWidth="98.0" text="Bild anhängen" />
-            <Button layoutX="144.0" layoutY="349.0" mnemonicParsing="false" onAction="#submit" prefHeight="26.0" prefWidth="100.0" text="Speichern" />
-            <Button layoutX="14.0" layoutY="400.0" mnemonicParsing="false" onAction="#update" prefHeight="26.0" prefWidth="98.0" text="Aktualisieren" />
-            <Button layoutX="140.0" layoutY="400.0" mnemonicParsing="false" onAction="#delete" prefHeight="26.0" prefWidth="100.0" text="Bilder löschen" />
+            <Button layoutX="15.0" layoutY="350.0" mnemonicParsing="false" onAction="#uploadImage" prefHeight="26.0" prefWidth="100.0" text="Bild anhängen" />
+            <Button layoutX="150.0" layoutY="400.0" mnemonicParsing="false" onAction="#submit" prefHeight="26.0" prefWidth="100.0" text="Speichern" />
+            <Button layoutX="15.0" layoutY="400.0" mnemonicParsing="false" onAction="#update" prefHeight="26.0" prefWidth="100.0" text="Aktualisieren" />
+            <Button layoutX="150.0" layoutY="350.0" mnemonicParsing="false" onAction="#delete" prefHeight="26.0" prefWidth="100.0" text="Bilder löschen" />
 
             <!-- Labels -->
             <Label fx:id="resultLabelBasisinformation" layoutX="15.0" layoutY="550.0" />
             <Label fx:id="resultLabelStammdaten" layoutX="15.0" layoutY="580.0" />
 
            <!--- BASISINFORMATION -->
-            <Label fx:id="output1" layoutX="400" layoutY="50.0" text="Kaufpreis" />
+            <Label fx:id="output1" layoutX="400" layoutY="50.0" text="Kaufpreis in €" />
             <TextField fx:id="kaufpreis" layoutX="600.0" layoutY="50.0" prefHeight="26.0" prefWidth="100.0" />
 
             <Label fx:id="output2" layoutX="400" layoutY="100.0" text="Grundstücksgröße in m²" />
@@ -53,14 +53,14 @@
             <Label fx:id="output5" layoutX="400.0" layoutY="250.0" text="Garagenstellplätze" />
             <TextField fx:id="garage" layoutX="600.0" layoutY="250.0" prefHeight="26.0" prefWidth="100.0" />
 
-            <Label fx:id="output7" layoutX="400.0" layoutY="300.0" text="Außenfläche" />
+            <Label fx:id="output7" layoutX="400.0" layoutY="300.0" text="Außenfläche in m²" />
             <TextField fx:id="aussenflaeche" layoutX="600.0" layoutY="300.0" prefHeight="26.0" prefWidth="100.0" />
 
 
-            <Label fx:id="output9" layoutX="400.0" layoutY="350.0" text="Ziel-Baubeginn" />
+            <Label fx:id="output9" layoutX="400.0" layoutY="350.0" text="Ziel-Baubeginn (Quartal/Jahr)" />
             <TextField fx:id="beginn" layoutX="600.0" layoutY="350.0" prefHeight="26.0" prefWidth="100.0" />
 
-            <Label fx:id="output10" layoutX="400.0" layoutY="400.0" text="Ziel-Fertigstellung" />
+            <Label fx:id="output10" layoutX="400.0" layoutY="400.0" text="Ziel-Fertigstellung (Quartal/Jahr)" />
             <TextField fx:id="ende" layoutX="600.0" layoutY="400.0" prefHeight="26.0" prefWidth="100.0" />
 
 

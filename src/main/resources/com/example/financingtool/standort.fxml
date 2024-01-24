@@ -29,7 +29,7 @@
 
             <Button fx:id="maps" layoutX="160.0" layoutY="150.0" onAction="#openMaps" text="Google Maps öffnen" />
 
-            <Label layoutX="20.0" layoutY="183.0" text="Lagebeschreibungen (optional, max. 8 Zeilen):" />
+            <Label layoutX="20.0" layoutY="183.0" text="Lagebeschreibungen (optional, max. 6 Zeilen):" />
             <TextArea fx:id="L1" layoutX="20.0" layoutY="210.0" prefWidth="430.0" prefHeight="150.0" />
         </children>
     </Pane>

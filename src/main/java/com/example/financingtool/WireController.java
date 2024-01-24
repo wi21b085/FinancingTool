@@ -46,8 +46,11 @@ public class WireController implements IAllExcelRegisterCards {
             String peprText = pepr.getText();
 
 
-            if (!isValidInput(evText, true) || !isValidInput(eplzText, false) || !isValidInput(avText, true)
-                    || !isValidInput(aplzText, false) || !isValidInput(weprText, false)
+            if (!isValidInput(evText, true)
+                    || !isValidInput(eplzText, false)
+                    || !isValidInput(avText, true)
+                    || !isValidInput(aplzText, false)
+                    || !isValidInput(weprText, false)
                     || !isValidInput(peprText, false) ) {
                 resultLabel.setText("Ungültige Eingabe! Stellen Sie sicher, dass alle Felder vollständig ausgefüllt sind und gültige Daten enthalten!");
             }
@@ -65,7 +68,7 @@ public class WireController implements IAllExcelRegisterCards {
 
             // Excel-Datei laden
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
-            String sheetName = "Wirtschaftlichkeitsrechnung";
+            String sheetName = "WIRE_Kalkulation";
             FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
             Workbook workbook = new XSSFWorkbook(fileInputStream);
             fileInputStream.close();
@@ -74,11 +77,11 @@ public class WireController implements IAllExcelRegisterCards {
             Sheet sheet = workbook.getSheet(sheetName);
             sheet.getRow(4).getCell(1).setCellValue(inputToDouble(value[0])); // ev - B4
           //  sheet.getRow(5).getCell(1).setCellValue(Double.parseDouble(value[2])); // av - B5
-            sheet.getRow(3).getCell(5).setCellValue(inputToDouble(value[4])); // wepr - F3
+            sheet.getRow(3).getCell(5).setCellValue(Double.parseDouble(value[4])); // wepr - F3
           //  sheet.getRow(3).getCell(7).setCellValue(Double.parseDouble(value[5])); // wapr - H3
-            sheet.getRow(10).getCell(2).setCellValue(inputToDouble(value[1])); // eplz - C10
-            sheet.getRow(11).getCell(2).setCellValue(inputToDouble(value[3])); // aplz - C11
-            sheet.getRow(9).getCell(5).setCellValue(inputToDouble(value[6])); // pepr - F9
+            sheet.getRow(10).getCell(2).setCellValue(Double.parseDouble(value[1])); // eplz - C10
+            sheet.getRow(11).getCell(2).setCellValue(Double.parseDouble(value[3])); // aplz - C11
+            sheet.getRow(9).getCell(5).setCellValue(Double.parseDouble(value[6])); // pepr - F9
            // sheet.getRow(9).getCell(7).setCellValue(Double.parseDouble(value[7])); // papr - H9
 
             // Formeln aktualisieren

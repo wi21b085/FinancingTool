@@ -69,7 +69,7 @@ driver.execute_script("arguments[0].style.pointerEvents='none'", body)
 time.sleep(2)
 
 element=driver.find_element(By.ID, "mapImage")
-filename='src\\main\\resources\\com\\example\\financingtool\\adresse.png'
+filename='src\\main\\resources\\com\\example\\financingtool\\images\\adresse.png'
 element.screenshot(filename)
 
 bild=Image.open(filename)

@@ -216,8 +216,8 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     public void getFK() throws Exception {
         try {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
-            String sheetName = "Gesamtinvestitionskosten";
-            int rowIdx = 9;
+            String sheetName = "GIK_Kalkulation";
+            int rowIdx = 10;
             int colIdx = 1;
 
             // FileInputStream und Workbook hier erstellen
@@ -229,7 +229,7 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
                 Row row = sheet.getRow(rowIdx);
                 Cell cell = row.getCell(colIdx);
                 String fkCell = Double.toString(cell.getNumericCellValue());
-                System.out.println(fkCell);
+                //System.out.println(fkCell);
                 fk.setText(fkCell);
             } catch (NumberFormatException | IOException e) {
                 e.printStackTrace();

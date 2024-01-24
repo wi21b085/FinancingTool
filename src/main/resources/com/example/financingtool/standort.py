@@ -47,7 +47,7 @@ driver.execute_script("document.querySelector('#QA0Szd').style.display = 'none';
 time.sleep(1)
 
 element=driver.find_element(By.ID, "content-container")
-filename='src\\main\\resources\\com\\example\\financingtool\\standort.png'
+filename='src\\main\\resources\\com\\example\\financingtool\\images\\standort.png'
 element.screenshot(filename)
 
 time.sleep(1)
