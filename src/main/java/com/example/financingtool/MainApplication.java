@@ -32,7 +32,7 @@ public class MainApplication extends Application {
 
         // Setze die Szene
         Scene scene = new Scene(root, 850, 700);
-        primaryStage.setTitle("FinancingTool");
+        primaryStage.setTitle("Financing Tool");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -1,7 +1,7 @@
 package com.example.financingtool;
 
 //import com.itextpdf.kernel.color.Lab;
-/*import javafx.application.Application;
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,7 +25,7 @@ public class GIKtoExcel extends Application  implements IAllExcelRegisterCards{
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GIKtoExcel.class.getResource("gik.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gik.fxml"));
         ScrollPane scrollPane = fxmlLoader.load();
         VBox root = (VBox) scrollPane.getContent();
 
@@ -41,4 +41,3 @@ public class GIKtoExcel extends Application  implements IAllExcelRegisterCards{
     }
 
 }
-*/

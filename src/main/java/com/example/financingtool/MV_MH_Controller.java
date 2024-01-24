@@ -241,13 +241,4 @@ public class MV_MH_Controller implements IAllExcelRegisterCards {
     }
 
 
-
-    public void weiterMariaM(ActionEvent actionEvent) {
-        //Weiter.weiter(weiterButton,Textfeld.class);
-        ExcelToWordConverter.exportExcelToWord();
-    }
-
-    public void setCon() {
-        GIKController.setMV_MH_Controller(this);
-    }
 }

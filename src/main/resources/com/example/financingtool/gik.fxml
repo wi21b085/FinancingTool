@@ -13,11 +13,11 @@
     <Label layoutX ="250.0" layoutY="3.0" fx:id="welcomeText" text="Bitte Kostenbereiche und Steuersätze eingeben" />
     <Label layoutX="15.0" layoutY="50.0" text="Grund:" />
     <TextField fx:id="userInputField1" layoutX="120.0" layoutY="50.0"  maxWidth="300.0"  promptText="KB00 netto eingeben" />
-    <Label layoutX="15.0" layoutY="100.0" text="Aufschliessung:" />
+    <Label layoutX="15.0" layoutY="100.0" text="Aufschließung:" />
     <TextField layoutX="120.0" layoutY="100.0" fx:id="userInputField2"   maxHeight="0.0" maxWidth="300.0" promptText="KB01 netto eingeben" />
     <Label layoutX="15.0" layoutY="150.0" text="Bauwerk-Rohbau:" />
     <TextField layoutX="120.0" layoutY="150.0" fx:id="userInputField3"  maxWidth="300.0" promptText="KB02 bis KB05 netto eingeben" />
-    <Label layoutX="15.0" layoutY="200.0" text="Aussenanlagen:" />
+    <Label layoutX="15.0" layoutY="200.0" text="Außenanlagen:" />
     <TextField layoutX="120.0" layoutY="200.0" fx:id="userInputField4"  maxWidth="300.0" promptText="KB06 netto eingeben" />
     <Label layoutX="15.0" layoutY="250" text="Honorare:" />
     <TextField layoutX="120.0" layoutY="250.0"  fx:id="userInputField5" maxWidth="300.0" promptText="KB07 netto eingeben" />
@@ -30,7 +30,7 @@
     <Label layoutX="15.0" layoutY="450.0" text="Finanzierung:" />
     <TextField layoutX="120.0" layoutY="450.0" fx:id="userInputField9"  maxWidth="300.0" promptText="KB11 netto eingeben" />
     <Button layoutX="80.0" layoutY="500.0"  fx:id="updateRangeButton" onAction="#updateRange" text="Bereich aktualisieren" />
-    <Label layoutX="335" layoutY="50.0" text="Ust Grund:" />
+    <Label layoutX="335" layoutY="50.0" text="USt Grund:" />
     <TextField layoutX="440.0" layoutY="50.0" fx:id="userInputFieldD2" maxWidth="300.0" promptText="USt Grund" />
     <Label layoutX="335" layoutY="100.0" text="Genereller USt:" />
     <TextField layoutX="440.0" layoutY="100.0" fx:id="userInputFieldD3to9" maxWidth="300.0" promptText="Genereller USt" />

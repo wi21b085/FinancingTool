@@ -34,12 +34,7 @@ public class WidmungController implements IAllExcelRegisterCards {
     @FXML
     private Label resultLabel;
 
-    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
 
-
-    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-        WidmungController.executiveSummary=executiveSummary;
-    }
 
     @FXML
     protected void continueClick() { // button-klick führt check der eingaben durch und startet python-skript
@@ -192,7 +187,7 @@ public class WidmungController implements IAllExcelRegisterCards {
             int rowIdx = 2;
             int colIdx = 8;
 
-            FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+            FileInputStream fileInputStream = new FileInputStream(excelFilePath);
             Workbook workbook = new XSSFWorkbook(fileInputStream);
 
             Sheet sheet = workbook.getSheet(sheetName);

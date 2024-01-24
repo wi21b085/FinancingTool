@@ -76,7 +76,6 @@ public class MainWindowController implements Initializable {
     }
 
     public void convert(ActionEvent actionEvent) throws DocumentException, IOException {
-       // ExcelToWordConverter.exportExcelToWord();
       ExcelToPDF excel = new ExcelToPDF();
         String excelpath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
         String pdfpath = "src/main/resources/com/example/financingtool/tester.pdf";

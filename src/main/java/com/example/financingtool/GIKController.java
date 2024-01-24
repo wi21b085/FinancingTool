@@ -76,15 +76,7 @@ public class GIKController implements IAllExcelRegisterCards{
     private String sheetName = "GIK_Kalkulation";
 
     static MV_MH_Controller mvMhController = new MV_MH_Controller();
-    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
 
-
-    public static void setMV_MH_Controller(MV_MH_Controller mvMhController) {
-        GIKController.mvMhController = mvMhController;
-    }
-    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-       GIKController.executiveSummary=executiveSummary;
-    }
 
     @FXML
     public void initialize() {
@@ -126,7 +118,7 @@ public class GIKController implements IAllExcelRegisterCards{
         // Hole den Wert aus userInputField8
         String newValue = userInputField9.getText();
         System.out.println(userInputField9.getText());
-        setMV_MH_Controller(mvMhController);
+
         EventBus.getInstance().publish("updateFK", newValue);
 
         updateD2 = validateAndUpdate(userInputFieldD2.getText(), 21, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 2, 3,resultLabel);
