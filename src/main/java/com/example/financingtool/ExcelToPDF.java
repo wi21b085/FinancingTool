@@ -16,13 +16,16 @@ import java.util.Iterator;
 //import javax.swing.JFileChooser;
 //import javax.swing.filechooser.FileNameExtensionFilter;
 
+import javafx.application.Application;
+import javafx.application.HostServices;
+import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
-public class ExcelToPDF {
+public class ExcelToPDF extends Application {
     public static void main(String[] args) throws DocumentException, IOException {
         String excelpath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
         ExcelToPDF excel = new ExcelToPDF();
@@ -231,7 +234,7 @@ public class ExcelToPDF {
                 else if  (sheet.getSheetName().equals("Lage")){
                     columnWidths = new float[]{20f, 10f, 10f, 10f, 10f};
                     table.setWidths(columnWidths);
-                    table.setTotalWidth(250);
+                    table.setTotalWidth(290);
                     table.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
                     table.setLockedWidth(true);
                 }
@@ -316,7 +319,7 @@ public class ExcelToPDF {
 
                         String[] res = getStringFormattedCell(dataFormatter, cell);
                         String cellValue = res[0];
-                        p = new Paragraph(cellValue, title ? new Font(FontFamily.HELVETICA, 18) : normal);
+                        p = new Paragraph(cellValue, title ? new Font(FontFamily.HELVETICA, 18, Font.BOLD) : normal);
                         title = false;
                         p.setAlignment(Element.ALIGN_JUSTIFIED);
                         if(n++ == 0) {
@@ -465,7 +468,7 @@ public class ExcelToPDF {
 
                             String cellValue = dataFormatter.formatCellValue(cell);
 
-                            p = new Paragraph(cellValue, title ? new Font(FontFamily.HELVETICA, 18) : normal);
+                            p = new Paragraph(cellValue, title ? new Font(FontFamily.HELVETICA, 18, Font.BOLD) : normal);
                             title = false;
                             p.setAlignment(Element.ALIGN_JUSTIFIED);
                             document.add(p);
@@ -597,13 +600,18 @@ public class ExcelToPDF {
         document.open();
         readNwrite(document, excelpath);
         document.close();
-        combinePdf();
+        String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
+        if (Files.exists(Paths.get(file1))) {
+            combinePdfDuo();
+        } else {
+            combinePdfSolo();
+        }
     }
 
     //pdf mit bilder kombinieren
 
 
-    public static void combinePdf() {
+    public void combinePdfDuo() {
 
         String file1 = "src/main/resources/com/example/financingtool/Stammblattimg.pdf";
         String file2 = "src/main/resources/com/example/financingtool/tester.pdf";
@@ -613,20 +621,50 @@ public class ExcelToPDF {
 
         //zweiPDF kombinieren
         try {
+            // Laden der ersten PDF-Datei
+            PDDocument pdfDocument1 = PDDocument.load(new File(file1));
+
             // Laden der zweiten PDF-Datei
             PDDocument pdfDocument2 = PDDocument.load(new File(file2));
 
-            if (Files.exists(Paths.get(file1))) {
-                // Laden der ersten PDF-Datei
-                PDDocument pdfDocument1 = PDDocument.load(new File(file1));
-
-                // Kopieren aller Seiten von der ersten PDF-Datei zur Ausgabedatei
-                for (int i = 0; i < pdfDocument1.getNumberOfPages(); i++) {
-                    PDPage page = pdfDocument1.getPage(i);
-                    pdfDocument2.addPage(page);
-                }
-                pdfDocument1.close();
+            // Kopieren aller Seiten von der ersten PDF-Datei zur Ausgabedatei
+            for (int i = 0; i < pdfDocument1.getNumberOfPages(); i++) {
+                PDPage page = pdfDocument1.getPage(i);
+                pdfDocument2.addPage(page);
             }
+
+            // Speichern des Ergebnisses
+            pdfDocument2.save(outputFile);
+            pdfDocument2.save(outputFile2);
+            System.out.println("Erfolgreiche Kombination der pdf's");
+
+            // Schließen der geöffneten Dokumente
+            pdfDocument1.close();
+            pdfDocument2.close();
+            try {
+                File file = new File(outputFile2);
+                HostServices hostServices = getHostServices();
+                hostServices.showDocument(file.getAbsolutePath());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void combinePdfSolo() {
+
+        String file2 = "src/main/resources/com/example/financingtool/tester.pdf";
+        String outputFile = "src/main/resources/com/example/financingtool/Financingtool.pdf";
+        String outputFile2 = "../Financing Tool.pdf";
+
+        //zweiPDF kombinieren
+        try {
+
+            // Laden der zweiten PDF-Datei
+            PDDocument pdfDocument2 = PDDocument.load(new File(file2));
+
             // Speichern des Ergebnisses
             pdfDocument2.save(outputFile);
             pdfDocument2.save(outputFile2);
@@ -635,11 +673,17 @@ public class ExcelToPDF {
             // Schließen der geöffneten Dokumente
             pdfDocument2.close();
 
+            try {
+                File file = new File(outputFile2);
+                HostServices hostServices = getHostServices();
+                hostServices.showDocument(file.getAbsolutePath());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-        //
 
     public static double getTranche() {
         double trancheCell = 0;
@@ -672,4 +716,8 @@ public class ExcelToPDF {
         return trancheCell;
     }
 
-   }
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // muss wegen Application eingefügt sein
+    }
+}

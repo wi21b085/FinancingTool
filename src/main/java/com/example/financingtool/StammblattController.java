@@ -81,7 +81,6 @@ public class StammblattController implements IAllExcelRegisterCards {
     private static final String SHEET_NAME = "Basisinformationen";
 
     //basisinformation
-    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
 
     static WidmungController widmungController=new WidmungController();
 
@@ -89,8 +88,7 @@ public class StammblattController implements IAllExcelRegisterCards {
         StammblattController.widmungController=widmungController;
     }
 
-    public void onHelloButtonClick(ActionEvent actionEvent) {
-    }
+
 
     //firmennamen in das excel eintragen
     public void submit() {
@@ -164,17 +162,13 @@ public class StammblattController implements IAllExcelRegisterCards {
             newValue[5] = aussenflaeche.getText();
             newValue[6] = beginn.getText();
             newValue[7] = ende.getText();
-            setExecutiveSummary(executiveSummary);
             System.out.println("Daten aus Basisinformation gesendet gesendet: ");
-            executiveSummary.setDatenausBas(kaufpreis.getText(),groesse.getText(),wohneinheiten.getText(),garage.getText(),beginn.getText(),ende.getText());
 
             writeToBasisInformationExcel(newValue);
         }
     }
 
-    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-        StammblattController.executiveSummary=executiveSummary;
-    }
+
 
     private void writeToBasisInformationExcel(String[] newValue) {
         try {
@@ -533,6 +527,7 @@ public class StammblattController implements IAllExcelRegisterCards {
                         float maxDimension = 500;
                         float newWidth, newHeight;
                         if (originalWidth > originalHeight) {
+                            maxDimension = 600;
                             newWidth = maxDimension;
                             newHeight = (int) Math.round((double) originalHeight / originalWidth * maxDimension);
                         } else {
@@ -612,18 +607,18 @@ public class StammblattController implements IAllExcelRegisterCards {
                     if (contentType.equals("image/jpeg")) {
                         System.out.println("Das Logo ist ein JPEG-Bild.");
                         Files.copy(selectedFile.toPath(), Paths.get(jdestinationPath), StandardCopyOption.REPLACE_EXISTING);
-                        System.out.println("Logo erfolgreich gespeichert");
+                        resultLabelBasisinformation.setText("Logo erfolgreich gespeichert");
                         delPath(pdestinationPath);
                     } else if (contentType.equals("image/png")) {
                         System.out.println("Das Logo ist ein PNG-Bild.");
                         Files.copy(selectedFile.toPath(), Paths.get(pdestinationPath), StandardCopyOption.REPLACE_EXISTING);
-                        System.out.println("Logo erfolgreich gespeichert.");
+                        resultLabelBasisinformation.setText("Logo erfolgreich gespeichert");
                         delPath(jdestinationPath);
                     } else {
-                        System.out.println("Das Logo ist weder ein PNG noch ein JPEG-Bild.");
+                        resultLabelBasisinformation.setText("Das Logo ist weder ein PNG noch ein JPEG-Bild");
                     }
                 } else {
-                    System.out.println("Dateityp des Logos nicht ermittelbar.");
+                    resultLabelBasisinformation.setText("Dateityp des Logos nicht ermittelbar");
                 }
 
                 // Hier kannst du die generatePdf-Methode aufrufen und den Bildpfad übergeben

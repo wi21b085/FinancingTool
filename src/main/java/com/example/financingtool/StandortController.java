@@ -188,6 +188,7 @@ public class StandortController implements IAllExcelRegisterCards {
             getAddress();
         }else {
             adCell = newValue.toString();
+            getAddress();
             distSet();
         }
     }
@@ -197,7 +198,7 @@ public class StandortController implements IAllExcelRegisterCards {
             String excelFilePath = "src/main/resources/com/example/financingtool/SEPJ-Rechnungen.xlsx";
             String sheetName = "Basisinformation";
 
-            FileInputStream fileInputStream = new FileInputStream(new File(excelFilePath));
+            FileInputStream fileInputStream = new FileInputStream(excelFilePath);
             Workbook workbook = new XSSFWorkbook(fileInputStream);
 
             Sheet sheet = workbook.getSheet(sheetName);

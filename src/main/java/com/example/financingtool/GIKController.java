@@ -76,16 +76,7 @@ public class GIKController implements IAllExcelRegisterCards{
     private String sheetName = "GIK_Kalkulation";
     boolean atLeastOneValueFilled=false;
     static MV_MH_Controller mvMhController = new MV_MH_Controller();
-    static ExecutiveSummary executiveSummary = new ExecutiveSummary();
 
-
-
-    public static void setMV_MH_Controller(MV_MH_Controller mvMhController) {
-        GIKController.mvMhController = mvMhController;
-    }
-    public static void setExecutiveSummary(ExecutiveSummary executiveSummary) {
-       GIKController.executiveSummary=executiveSummary;
-    }
 
     @FXML
     public void initialize() {
@@ -126,7 +117,6 @@ public class GIKController implements IAllExcelRegisterCards{
         }
         else if (countNonNumeric > 0) {
             resultLabel.setText("Ein oder mehrere Werte sind ungültig.");
-            System.out.println("nicht numerisch");
             valid=false;
         } else {
             Update.updateRangeOfCells(newValues,2,10,1, resultLabel, sheetName);
@@ -135,7 +125,7 @@ public class GIKController implements IAllExcelRegisterCards{
         // Hole den Wert aus userInputField8
         String newValue = userInputField9.getText();
         System.out.println(userInputField9.getText());
-        setMV_MH_Controller(mvMhController);
+
         EventBus.getInstance().publish("updateFK", newValue);
 
        // updateD2 = validateAndUpdate(userInputFieldD2.getText(), 21, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 2, 3,resultLabel);
@@ -200,8 +190,6 @@ public class GIKController implements IAllExcelRegisterCards{
              resultLabel.setText("Achtung, die Eingabe muss valide Werte enthalten.");
 
         }
-
-
     }
 
     private void updateCellD(int rowIdx, int colIdx, String newValue) {
