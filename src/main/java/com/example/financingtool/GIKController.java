@@ -74,9 +74,10 @@ public class GIKController implements IAllExcelRegisterCards{
     private String errorNotNumeric="Achtung, die Werte müssen numerisch sein";
 
     private String sheetName = "GIK_Kalkulation";
-
+    boolean atLeastOneValueFilled=false;
     static MV_MH_Controller mvMhController = new MV_MH_Controller();
     static ExecutiveSummary executiveSummary = new ExecutiveSummary();
+    String errorText;
 
 
     public static void setMV_MH_Controller(MV_MH_Controller mvMhController) {
@@ -103,7 +104,11 @@ public class GIKController implements IAllExcelRegisterCards{
         String[] newValues = new String[9];
         int countNonNumeric = 0;
         String nonNumericValue = "";
+        boolean atLeastOneValueFilled=false;
         for (int i = 0; i < 9; i++) {
+            if (!userInputFields[i].getText().isEmpty()) {
+                atLeastOneValueFilled = true;
+            }
             if (IAllExcelRegisterCards.isNumericStr(userInputFields[i].getText()) || userInputFields[i].getText().trim().isEmpty()) {
                 newValues[i] = userInputFields[i].getText();
                 // Setze das Fehlerlabel auf leer, da keine Fehlermeldung vorliegt
@@ -116,7 +121,10 @@ public class GIKController implements IAllExcelRegisterCards{
 
             }
         }
-        if (countNonNumeric > 0) {
+        if(!atLeastOneValueFilled){
+            valid=false;
+        }
+        else if (countNonNumeric > 0) {
             resultLabel.setText("Ein oder mehrere Werte sind ungültig.");
             valid=false;
         } else {
@@ -129,13 +137,16 @@ public class GIKController implements IAllExcelRegisterCards{
         setMV_MH_Controller(mvMhController);
         EventBus.getInstance().publish("updateFK", newValue);
 
-        updateD2 = validateAndUpdate(userInputFieldD2.getText(), 21, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 2, 3,resultLabel);
-        updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 20, 1, resultLabel);
-        updateD10 = validateAndUpdate(userInputFieldD10.getText(), 10, 3, resultLabel);
+       // updateD2 = validateAndUpdate(userInputFieldD2.getText(), 21, 1, resultLabel) && validateAndUpdate(userInputFieldD2.getText(), 2, 3,resultLabel);
+       // updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 20, 1, resultLabel);
+       // updateD10 = validateAndUpdate(userInputFieldD10.getText(), 10, 3, resultLabel);
 
-
-        if (updateD2 && updateD3to9 && updateD10&valid==true) {
-            resultLabel.setText("Daten erfolgreich aktualisiert.");
+        if(!atLeastOneValueFilled){
+            System.out.println(errorText);
+            resultLabel.setText("Mindestens ein Wert muss eingetragen sein!");
+        }
+        else if (valid=true) {
+            resultLabel.setText("Daten erfolgreich aktualisiert 1");
           getCellData();
 
          //   executiveSummary.setDatenausGIK(gik);
@@ -179,9 +190,11 @@ public class GIKController implements IAllExcelRegisterCards{
          updateD3to9 = validateAndUpdate(userInputFieldD3to9.getText(), 20, 1, resultLabel);
          updateD10 = validateAndUpdate(userInputFieldD10.getText(), 10, 3, resultLabel);
 
-
-        if (updateD2 && updateD3to9 && updateD10) {
-            resultLabel.setText("Daten erfolgreich aktualisiert.");
+        if ((userInputField1.getText().trim().isEmpty()&&userInputField2.getText().trim().isEmpty()&&userInputField3.getText().trim().isEmpty()) || atLeastOneValueFilled==false) {
+            resultLabel.setText("Es muss mindestens ein Wert eingetragen sein");
+        }
+        else if (updateD2 && updateD3to9 && updateD10) {
+            resultLabel.setText("Daten erfolgreich aktualisiert2");
         }
     }
 
@@ -260,6 +273,5 @@ public class GIKController implements IAllExcelRegisterCards{
         return false;
     }
 
-    public void weiter(ActionEvent actionEvent) {
-    }
+
 }
