@@ -77,7 +77,7 @@ public class GIKController implements IAllExcelRegisterCards{
     boolean atLeastOneValueFilled=false;
     static MV_MH_Controller mvMhController = new MV_MH_Controller();
     static ExecutiveSummary executiveSummary = new ExecutiveSummary();
-    String errorText;
+
 
 
     public static void setMV_MH_Controller(MV_MH_Controller mvMhController) {
@@ -143,7 +143,6 @@ public class GIKController implements IAllExcelRegisterCards{
        // updateD10 = validateAndUpdate(userInputFieldD10.getText(), 10, 3, resultLabel);
 
         if(!atLeastOneValueFilled){
-            System.out.println(errorText);
             resultLabel.setText("Mindestens ein Wert muss eingetragen sein!");
         }
         else if (valid==true) {
